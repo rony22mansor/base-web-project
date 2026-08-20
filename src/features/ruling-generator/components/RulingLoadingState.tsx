@@ -19,7 +19,7 @@ export function RulingLoadingState() {
       aria-busy="true"
     >
       <div className="flex flex-col items-center gap-3 py-8 text-center">
-        <Loader2 className="text-primary size-8 animate-spin" />
+        <Loader2 className="text-text-tertiary size-8 animate-spin" />
         <h2 className="text-lg font-semibold">{t("title")}</h2>
         <p className="text-muted-foreground max-w-md text-sm">
           {t("subtitle")}

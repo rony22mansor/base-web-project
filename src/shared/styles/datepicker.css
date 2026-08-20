@@ -1,164 +1,116 @@
-/* Calendar container */
+/* =============================================================================
+   react-datepicker — repainted as a Notion popover. Every colour here used to
+   be a hard-coded dark hex (plus a maroon "primary" from another project), so
+   the calendar stayed dark on a light page. It now reads from the design tokens
+   and follows light/dark automatically.
+   ============================================================================= */
+
 .react-datepicker {
-  background-color: #1e1e1e;
-  /* خلفية داكنة */
-  border: 0px solid #333 !important;
-  color: #fff !important;
+  background-color: var(--popover);
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg, 8px);
+  box-shadow:
+    0 6px 24px rgba(15, 15, 15, 0.1),
+    0 2px 6px rgba(15, 15, 15, 0.06);
+  color: var(--popover-foreground) !important;
+  font-family: inherit;
 }
 
-/* Header (أيام الأسبوع + الشهر) */
-.react-datepicker__header {
-  background-color: #2a2a2a !important;
-  border-bottom: 1px solid #444 !important;
+.react-datepicker__header,
+.react-datepicker-time__header {
+  background-color: transparent !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--foreground) !important;
 }
 
 .react-datepicker__current-month,
-.react-datepicker__day-name {
-  color: #fff !important;
-}
-
-/* أيام الشهر */
-.react-datepicker__day {
-  color: #ddd !important;
-}
-
-.react-datepicker__day:hover {
-  background-color: #333 !important;
-  color: #fff !important;
-}
-
-/* اليوم المحدد */
-.react-datepicker__day--selected,
-.react-datepicker__day--keyboard-selected {
-  background-color: #4a151f !important;
-  /* لون primary */
-  color: white !important;
-}
-
-/* أيام خارج الشهر */
-.react-datepicker__day--outside-month {
-  color: #555 !important;
-}
-
-.dark-datepicker {
-  background-color: #1e1e1e !important;
-  color: #fff !important;
-}
-
-.react-datepicker__day--disabled {
-  color: #444 !important;
-  /* غير فعّالة */
-  cursor: not-allowed !important;
-  opacity: 0.5;
-  /* بيعطي إحساس إنها معطلة */
-}
-
-/* ====== TIME PICKER DARK THEME ====== */
-
-/* الحاوية العامة */
-.react-datepicker-time__header {
-  background-color: #2a2a2a !important;
-  color: #fff !important;
-  border-bottom: 1px solid #444 !important;
-}
-
-/* النص العلوي في رأس الوقت (ساعات / دقائق) */
 .react-datepicker-time__header span {
-  color: #fff !important;
+  color: var(--foreground) !important;
+  font-weight: 600;
 }
 
-/* الحاوية التي تحتوي على قائمة الأوقات */
-.react-datepicker__time-container {
-  background-color: #1e1e1e !important;
-  border-left: 1px solid #333 !important;
+.react-datepicker__day-name {
+  color: var(--text-secondary) !important;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
-/* Scroll list */
-.react-datepicker__time-box {
-  background-color: #1e1e1e !important;
-  border-radius: 0 6px 6px 0;
-}
-
-/* عنصر الوقت الواحد */
+.react-datepicker__day,
 .react-datepicker__time-list-item {
-  color: #ddd !important;
-  background-color: transparent !important;
-  padding: 6px 10px !important;
+  color: var(--foreground) !important;
+  border-radius: var(--radius-sm, 4px);
+  transition: background-color 120ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-/* عند المرور بالماوس */
-.react-datepicker__time-list-item:hover {
-  background-color: #333 !important;
-  color: #fff !important;
+.react-datepicker__day:hover,
+.react-datepicker__time-list-item:hover,
+.react-datepicker__month-option:hover,
+.react-datepicker__year-option:hover {
+  background-color: var(--hover) !important;
+  color: var(--foreground) !important;
 }
 
-/* الوقت المحدد */
-.react-datepicker__time-list-item--selected {
-  background-color: #4a151f !important;
-  /* لون primary */
-  color: white !important;
+.react-datepicker__day--today {
+  font-weight: 600;
 }
 
-/* الوقت المعطل */
+/* Selection uses Notion's blue tag rather than a solid fill. */
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__time-list-item--selected,
+.react-datepicker__year-option--selected_year,
+.react-datepicker__month-option--selected_month {
+  background-color: var(--link-bg) !important;
+  color: var(--link) !important;
+  font-weight: 600;
+}
+
+.react-datepicker__day--outside-month {
+  color: var(--text-tertiary) !important;
+}
+
+.react-datepicker__day--disabled,
 .react-datepicker__time-list-item--disabled {
-  color: #444 !important;
+  color: var(--text-tertiary) !important;
   cursor: not-allowed !important;
   opacity: 0.5;
 }
 
-/* تعديل شريط التمرير */
-.react-datepicker__time-list::-webkit-scrollbar {
-  width: 6px;
+.react-datepicker__time-container,
+.react-datepicker__time-box,
+.react-datepicker__time {
+  background-color: var(--popover) !important;
+  border-inline-start: 1px solid var(--border) !important;
 }
 
-.react-datepicker__time-list::-webkit-scrollbar-thumb {
-  background-color: #444;
-  border-radius: 3px;
-}
-
-.react-datepicker__time-list::-webkit-scrollbar-thumb:hover {
-  background-color: #666;
-}
-
-/* لجعل المكون متوافق مع الوضع الداكن العام */
-.dark-datepicker .react-datepicker__time-container,
-.dark-datepicker .react-datepicker__time-box,
-.dark-datepicker .react-datepicker__time-list-item {
-  background-color: #1e1e1e !important;
-  color: #fff !important;
+.react-datepicker__time-list-item {
+  padding: 6px 10px !important;
 }
 
 .react-datepicker__year-dropdown,
 .react-datepicker__month-dropdown {
-  background-color: #1e1e1e !important;
-  border: 1px solid #333 !important;
-  border-radius: 6px !important;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  background-color: var(--popover) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md, 6px) !important;
+  box-shadow:
+    0 6px 24px rgba(15, 15, 15, 0.1),
+    0 2px 6px rgba(15, 15, 15, 0.06);
 }
 
-
-/* العنصر المحدد حاليًا */
-.react-datepicker__year-option--selected_year,
-.react-datepicker__month-option--selected_month {
-  background-color: #4a151f !important;
-  /* لون primary */
-  color: #fff !important;
-  font-weight: 600;
-}
-
-/* زر الانتقال للأعلى أو الأسفل داخل القائمة */
+.react-datepicker__navigation-icon::before,
 .react-datepicker__navigation--years-upcoming,
 .react-datepicker__navigation--years-previous {
-  border-color: #fff !important;
+  border-color: var(--text-secondary) !important;
 }
 
-/* عند المرور على أسهم التنقل */
+.react-datepicker__navigation:hover .react-datepicker__navigation-icon::before,
 .react-datepicker__navigation--years-upcoming:hover,
 .react-datepicker__navigation--years-previous:hover {
-  border-color: #ffb3b3 !important;
+  border-color: var(--foreground) !important;
 }
-.react-datepicker__month-option:hover,
-.react-datepicker__year-option:hover {
-  background-color: #B9A87BB6 !important;
-  color: #ffffff !important;
+
+.react-datepicker__triangle {
+  display: none;
 }

@@ -1,5 +1,5 @@
 /**
- * Central endpoint registry for the Monsef Python (RAG) backend.
+ * Central endpoint registry for the MONSIF Python (RAG) backend.
  *
  * NOTE: these paths are provisional — they mirror the feature domains described
  * in CLAUDE_monsif.md, but the Python API contract is not finalized yet.

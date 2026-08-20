@@ -15,8 +15,8 @@ export function RulingErrorState({
   const t = useTranslations("rulingGenerator.error");
 
   return (
-    <div className="border-destructive/40 bg-destructive/5 flex flex-col items-center gap-4 rounded-xl border p-10 text-center">
-      <span className="bg-destructive/10 text-destructive flex size-12 items-center justify-center rounded-full">
+    <div className="bg-tag-red flex flex-col items-center gap-3 rounded-md p-10 text-center">
+      <span className="text-tag-red-fg flex size-10 items-center justify-center">
         <AlertTriangle className="size-6" />
       </span>
       <h2 className="text-lg font-semibold">{t("title")}</h2>

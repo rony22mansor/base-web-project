@@ -24,7 +24,7 @@ export interface NavItem {
   icon: LucideIcon;
 }
 
-/** The four Monsef feature areas, in sidebar order. */
+/** The four MONSIF feature areas, in sidebar order. */
 export const MAIN_NAV: NavItem[] = [
   {
     titleKey: "rulingGenerator",

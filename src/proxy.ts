@@ -5,7 +5,7 @@ import { routing } from "./core/i18n/routing";
 const intlMiddleware = createMiddleware(routing);
 
 /**
- * Locale negotiation only. Monsef has no auth yet (see CLAUDE_monsif.md) — when
+ * Locale negotiation only. MONSIF has no auth yet (see CLAUDE_monsif.md) — when
  * it lands, the route guard belongs here, alongside token handling in apiClient.
  */
 export default async function proxy(req: NextRequest) {

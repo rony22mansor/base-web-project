@@ -9,6 +9,11 @@ interface BasePageProps {
   containerClassName?: string;
 }
 
+/**
+ * Standard page body. The generous top padding and centred, capped column are
+ * Notion's block-editor rhythm — content sits in a narrow measure with a lot of
+ * air above it rather than filling the viewport edge to edge.
+ */
 export function BasePage({
   children,
   className,
@@ -23,11 +28,11 @@ export function BasePage({
     >
       <div
         className={cn(
-          "flex-1 overflow-y-auto overflow-x-hidden  md:p-6 lg:p-8",
+          "flex-1 overflow-x-hidden overflow-y-auto px-4 pt-8 pb-16 md:px-8 md:pt-12 lg:px-12",
           className,
         )}
       >
-        <div className=" w-full max-w-10xl">{children}</div>
+        <div className="mx-auto w-full max-w-4xl">{children}</div>
       </div>
     </main>
   );

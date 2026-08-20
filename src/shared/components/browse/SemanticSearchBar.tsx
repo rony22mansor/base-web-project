@@ -98,15 +98,16 @@ export function SemanticSearchBar({
     <div className="bg-background shrink-0 border-t">
       <form
         onSubmit={submit}
-        className="mx-auto flex w-full max-w-5xl flex-col gap-1.5 px-4 py-3 md:px-6 lg:px-8"
+        className="mx-auto flex w-full max-w-4xl flex-col gap-1.5 px-4 py-3 md:px-6 lg:px-8"
       >
         <div
           className={cn(
-            "focus-within:border-primary bg-card flex items-end gap-2 rounded-xl border px-3 py-2 transition-colors",
-            errorKey && "border-destructive",
+            "bg-input-filled-color flex items-end gap-2 rounded-md border px-2.5 py-1.5 transition-colors duration-120 ease-gentle",
+            "focus-within:border-link focus-within:ring-2 focus-within:ring-ring/35",
+            errorKey && "border-destructive focus-within:ring-destructive/30",
           )}
         >
-          <Search className="text-muted-foreground mt-2 size-4 shrink-0" />
+          <Search className="text-text-tertiary mt-2.5 size-4 shrink-0" />
 
           <textarea
             {...queryField}
@@ -118,7 +119,7 @@ export function SemanticSearchBar({
             onKeyDown={handleKeyDown}
             aria-label={placeholder}
             aria-invalid={Boolean(errorKey)}
-            className="placeholder:text-muted-foreground max-h-40 min-h-11 flex-1 resize-none bg-transparent py-2 text-sm leading-relaxed outline-none"
+            className="placeholder:text-placeHolder max-h-40 min-h-11 flex-1 resize-none bg-transparent py-2 text-sm leading-relaxed outline-none"
           />
 
           {activeQuery && (
@@ -151,7 +152,7 @@ export function SemanticSearchBar({
 
         <p
           className={cn(
-            "text-muted-foreground px-1 text-xs",
+            "text-text-tertiary px-1 text-xs",
             errorKey && "text-destructive",
           )}
         >

@@ -35,14 +35,14 @@
 }
 
 .animate-slideInRight {
-  animation: slideInRight 0.8s ease-in-out;
+  animation: slideInRight 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 .animate-slideInLeft {
-  animation: slideInLeft 0.8s ease-in-out;
+  animation: slideInLeft 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 .animate-slideOutRight {
-  animation: slideOutRight 0.8s ease-in-out;
+  animation: slideOutRight 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 .animate-slideOutLeft {
-  animation: slideOutLeft 0.8s ease-in-out;
+  animation: slideOutLeft 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }

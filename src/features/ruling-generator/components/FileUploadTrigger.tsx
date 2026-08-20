@@ -63,7 +63,7 @@ export function FileUploadTrigger({
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={disabled || isExtracting}
-        className="text-muted-foreground hover:text-primary flex w-fit items-center gap-2 text-sm underline-offset-4 transition-colors hover:underline disabled:cursor-not-allowed disabled:opacity-60"
+        className="text-muted-foreground hover:text-link flex w-fit items-center gap-2 text-sm underline-offset-4 transition-colors hover:underline disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isExtracting ? (
           <Spinner size={14} color="text-muted-foreground" />

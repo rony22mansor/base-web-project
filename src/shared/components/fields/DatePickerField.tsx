@@ -63,9 +63,12 @@ export function DatePickerField({
   const pickLocale =  enUS;
 
   return (
-    <div className="w-full mb-2">
+    <div className="mb-3 w-full">
       {label && (
-        <Label className="mb-3" isActive={datePickerIsOpen}>
+        <Label
+          className="mb-1.5 block text-[13px] font-medium"
+          isActive={datePickerIsOpen}
+        >
           {label} {required && <span className="text-destructive">*</span>}
         </Label>
       )}
@@ -92,25 +95,30 @@ export function DatePickerField({
             <Popover open={datePickerIsOpen} onOpenChange={setDatePickerIsOpen}>
               <PopoverTrigger asChild>
                 <Button
+                  variant="outline"
                   className={cn(
-                    "file:text-foreground h-11 hover:bg-card placeholder:text-muted selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 rounded-lg border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm items-center justify-start!  !ps-3",
-                    datePickerIsOpen ? "border-white" : "",
-                    error?.message ? "border-destructive" : "",
-                    "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive ",
-                    classNameExtra
+                    "bg-input-filled-color h-9 w-full min-w-0 justify-start! rounded-sm border border-input !ps-3 text-base font-normal md:text-sm",
+                    "hover:bg-input-filled-color hover:border-border-strong",
+                    datePickerIsOpen && "border-link ring-2 ring-ring/35",
+                    error?.message && "border-destructive",
+                    classNameExtra,
                   )}
                   disabled={disabled}
                 >
                   <span className="flex items-center gap-2 ">
                     <FiCalendar
-                      className={`h-4 w-4 ${datePickerIsOpen ? "text-white" : "text-muted"
-                        }`}
+                      className={cn(
+                        "h-4 w-4",
+                        datePickerIsOpen
+                          ? "text-foreground"
+                          : "text-text-tertiary",
+                      )}
                     />
-                    <div className="h-5 w-px bg-muted"></div>
+                    <div className="bg-border h-5 w-px" />
                     {dateValue ? (
                       <span>{format(dateValue, "yyyy-MM-dd")}</span>
                     ) : (
-                      <span className="text-muted">{placeholder}</span>
+                      <span className="text-placeHolder">{placeholder}</span>
                     )}
 
                     {dateValue && !disabled && (
@@ -160,8 +168,7 @@ export function DatePickerField({
                   yearDropdownItemNumber={130}
                   disabled={disabled}
                   placeholderText={placeholder}
-                  calendarClassName="dark-datepicker"
-                  className={`w-full p-9 border rounded  ${classNameExtra} ${error ? "border-destructive" : "border-input"
+                                    className={`w-full p-9 border rounded  ${classNameExtra} ${error ? "border-destructive" : "border-input"
                     }`}
                 />
               </PopoverContent>
@@ -171,12 +178,9 @@ export function DatePickerField({
       />
 
       {error && error.message && (
-        <p className="mt-2 text-sm font-medium text-destructive">
+        <p className="text-destructive mt-1.5 text-[13px]">
           {tError(error.message)}
         </p>
-        // <p className="mt-2 text-sm font-medium text-destructive">
-        //   {(error.message as string) ?? ""}
-        // </p>
       )}
     </div>
   );

@@ -26,7 +26,7 @@ export function ContractTemplateCard({
   return (
     <Card className="h-full gap-3 p-4">
       <div className="flex items-start gap-3">
-        <span className="bg-primary/10 text-primary mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg">
+        <span className="bg-accent text-text-secondary mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-sm">
           <FileSignature className="size-4" />
         </span>
 
@@ -34,7 +34,7 @@ export function ContractTemplateCard({
           <div className="flex flex-wrap items-center gap-2">
             {/* Template content — rendered exactly as the API returned it. */}
             <h3 className="font-semibold">{template.name}</h3>
-            <span className="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs">
+            <span className="bg-tag-gray text-tag-gray-fg rounded-sm px-1.5 py-0.5 text-xs font-medium">
               {tTypes(template.type)}
             </span>
             {template.score !== undefined && (

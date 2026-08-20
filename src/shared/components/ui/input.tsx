@@ -2,15 +2,24 @@ import * as React from "react";
 
 import { cn } from "@/src/core/utils/utils";
 
+/**
+ * Notion's text input: 36px tall, 4px radius, a hairline border that firms up
+ * on hover and turns blue with a 2px halo on focus. It previously had no focus
+ * treatment at all, which left keyboard users with no visible target.
+ */
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input
       type={type}
       data-slot="input"
       className={cn(
-        "file:text-foreground h-11 placeholder:text-placeHolder ps-4 selection:bg-primary selection:text-primary-foreground dark:bg-input/30  flex w-full min-w-0 rounded-lg border bg-input-filled-color text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50  md:text-sm ",
-        "",
-        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+        "bg-input-filled-color text-foreground placeholder:text-placeHolder selection:bg-link-bg file:text-foreground",
+        "flex h-9 w-full min-w-0 rounded-sm border border-input ps-3 pe-3 text-base md:text-sm",
+        "transition-[color,border-color,box-shadow] duration-120 ease-gentle outline-none",
+        "hover:border-border-strong focus-visible:border-link focus-visible:ring-2 focus-visible:ring-ring/35",
+        "file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium",
+        "disabled:bg-muted disabled:text-text-tertiary disabled:pointer-events-none disabled:cursor-not-allowed",
+        "aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
         className,
       )}
       {...props}

@@ -23,16 +23,16 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="container mx-auto px-4 py-16 min-h-screen  flex items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center px-4 py-16">
       <div className="max-w-md mx-auto text-center">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-4">
+        <h2 className="mb-3 text-2xl font-semibold">
         {t('message')}
         </h2>
-        <p className="text-slate-700 dark:text-slate-300 mb-8">
+        <p className="text-text-secondary mb-8 text-sm">
           {error.message || "An unexpected error occurred"}
         </p>
-        <div className="flex gap-4 justify-center">
-          <Button onClick={reset}>Try again</Button>
+        <div className="flex justify-center gap-2">
+          <Button onClick={reset}>{t("retry")}</Button>
           <Button
             variant="outline"
             onClick={() => (window.location.href = "/")}

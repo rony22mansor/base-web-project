@@ -202,13 +202,17 @@ function InnerSelect({
             "relative flex items-center",
             classNameInputExtra,
             currentError && "border-destructive",
-            selectIsOpen ? "border-white" : ""
+            selectIsOpen && "border-link ring-2 ring-ring/35"
           )}
         >
           {Icon && (
             <>
-              <Icon className={cn(selectIsOpen ? "text-white" : "")} />
-              <span className="mx-1 bg-muted h-5 w-0.5" />
+              <Icon
+                className={cn(
+                  selectIsOpen ? "text-foreground" : "text-text-tertiary",
+                )}
+              />
+              <span className="bg-border mx-1 h-5 w-px" />
             </>
           )}
 

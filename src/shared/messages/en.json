@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Monsef",
+    "name": "MONSIF",
     "tagline": "AI legal assistant for Syrian law"
   },
   "nav": {
@@ -22,12 +22,13 @@
     "search": "Search",
     "loading": "Loading…",
     "comingSoon": "Coming soon",
-    "comingSoonDescription": "This feature has not been built yet."
+    "comingSoonDescription": "This feature has not been built yet.",
+    "workspace": "Workspace"
   },
   "home": {
-    "greeting": "Welcome to Monsef",
+    "greeting": "Welcome to MONSIF",
     "subtitle": "Search Syrian laws and case law, or get a preliminary ruling for your case.",
-    "disclaimer": "Monsef is an AI-assisted tool and is not a substitute for qualified legal advice.",
+    "disclaimer": "MONSIF is an AI-assisted tool and is not a substitute for qualified legal advice.",
     "openFeature": "Open"
   },
   "features": {
@@ -54,7 +55,10 @@
   },
   "login": {
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "title": "Sign in",
+    "subtitle": "Sign in to continue to MONSIF.",
+    "submit": "Sign in"
   },
   "notFound": {
     "title": "Page Not Found",
@@ -63,7 +67,8 @@
   },
   "error": {
     "message": "Something went wrong!",
-    "action": "Go Home"
+    "action": "Go Home",
+    "retry": "Try again"
   },
   "validationErrors": {
     "required": "This field is required",
@@ -82,7 +87,7 @@
   },
   "rulingGenerator": {
     "title": "Preliminary Ruling Generator",
-    "subtitle": "Describe the incident in detail and Monsef will analyse it and propose a preliminary ruling with its legal basis.",
+    "subtitle": "Describe the incident in detail and MONSIF will analyse it and propose a preliminary ruling with its legal basis.",
     "form": {
       "descriptionLabel": "Incident description",
       "descriptionPlaceholder": "Explain what happened in detail: the parties, when and where, the sequence of events, and any available evidence or reports…",
@@ -104,7 +109,7 @@
     },
     "loading": {
       "title": "Analysing your case…",
-      "subtitle": "Monsef is searching the relevant laws and case law. This may take a few seconds."
+      "subtitle": "MONSIF is searching the relevant laws and case law. This may take a few seconds."
     },
     "result": {
       "rulingTitle": "Preliminary ruling",
@@ -128,7 +133,7 @@
     },
     "noMatch": {
       "title": "No sufficient legal basis found",
-      "description": "Monsef found no laws or precedents matching this incident with enough confidence. To avoid an inaccurate ruling, no result is shown.",
+      "description": "MONSIF found no laws or precedents matching this incident with enough confidence. To avoid an inaccurate ruling, no result is shown.",
       "hint": "Try rephrasing with more detail: the acts committed, the standing of each party, and the resulting consequences.",
       "retry": "Edit description"
     },
@@ -223,7 +228,7 @@
   },
   "contractTemplates": {
     "title": "Contract Templates",
-    "description": "Browse the template library by type, or describe the agreement you need and let Monsef find the closest template.",
+    "description": "Browse the template library by type, or describe the agreement you need and let MONSIF find the closest template.",
     "searchPlaceholder": "e.g. a one-year lease for a shop with an option to renew…",
     "filters": {
       "type": "Type"

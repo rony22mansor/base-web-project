@@ -87,7 +87,7 @@ export function RulingResultView({
         </section>
       )}
 
-      <details className="text-muted-foreground rounded-xl border p-4 text-sm">
+      <details className="text-muted-foreground rounded-md border p-4 text-sm">
         <summary className="cursor-pointer font-medium">
           {t("yourDescription")}
         </summary>

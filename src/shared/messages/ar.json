@@ -22,7 +22,8 @@
     "search": "بحث",
     "loading": "جارٍ التحميل…",
     "comingSoon": "قيد التطوير",
-    "comingSoonDescription": "هذه الميزة لم تُبنَ بعد."
+    "comingSoonDescription": "هذه الميزة لم تُبنَ بعد.",
+    "workspace": "مساحة العمل"
   },
   "home": {
     "greeting": "أهلاً بك في منصف",
@@ -54,7 +55,10 @@
   },
   "login": {
     "email": "البريد الالكتروني",
-    "password": "كلمة المرور"
+    "password": "كلمة المرور",
+    "title": "تسجيل الدخول",
+    "subtitle": "سجّل دخولك لمتابعة استخدام MONSIF.",
+    "submit": "تسجيل الدخول"
   },
   "notFound": {
     "title": "الصفحة غير موجودة",
@@ -63,7 +67,8 @@
   },
   "error": {
     "message": "حدث خطأ ما!",
-    "action": "العودة للرئيسية"
+    "action": "العودة للرئيسية",
+    "retry": "أعد المحاولة"
   },
   "validationErrors": {
     "required": "هذا الحقل مطلوب",

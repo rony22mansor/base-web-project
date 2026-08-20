@@ -14,6 +14,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -26,6 +27,7 @@ import {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const locale = useLocale();
   const t = useTranslations("nav");
+  const tCommon = useTranslations("common");
   const pathname = usePathname();
   const { isMobile, setOpenMobile } = useSidebar();
 
@@ -39,12 +41,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar side={side} collapsible="icon" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="p-1.5">
         <SidebarLogo />
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="p-1.5">
+          {/* Notion labels its sidebar sections in small uppercase type. */}
+          <SidebarGroupLabel>{tCommon("workspace")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {MAIN_NAV.map((item) => {
@@ -57,7 +61,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       tooltip={{ children: label, side: tooltipSide }}
                     >
                       <Link href={item.url} onClick={closeOnMobile}>
-                        <item.icon className="size-4" />
+                        <item.icon className="size-4 opacity-70" />
                         <span>{label}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -71,8 +75,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarRail />
 
-      <SidebarFooter>
-        <SidebarSeparator />
+      <SidebarFooter className="p-1.5">
+        <SidebarSeparator className="mx-0" />
         <SidebarMenu>
           <SidebarMenuItem>
             <LocaleSwitcher />

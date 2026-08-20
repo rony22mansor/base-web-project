@@ -26,7 +26,7 @@ export function CaseCard({ legalCase }: { legalCase: LegalCase }) {
         aria-expanded={isOpen}
         className="hover:bg-accent/50 flex w-full flex-1 items-start gap-3 p-4 text-start transition-colors"
       >
-        <span className="bg-primary/10 text-primary mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg">
+        <span className="bg-accent text-text-secondary mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-sm">
           <Landmark className="size-4" />
         </span>
 
@@ -95,7 +95,7 @@ export function CaseCard({ legalCase }: { legalCase: LegalCase }) {
               {legalCase.citedArticles.map((article) => (
                 <span
                   key={article}
-                  className="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs"
+                  className="bg-tag-gray text-tag-gray-fg rounded-sm px-1.5 py-0.5 text-xs font-medium"
                 >
                   {article}
                 </span>

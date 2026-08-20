@@ -47,11 +47,13 @@ export function BrowseScreen({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex-1 overflow-y-auto px-4 pt-4 md:px-6 md:pt-6 lg:px-8">
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 pb-6">
+      <div className="flex-1 overflow-y-auto px-4 pt-8 md:px-6 md:pt-12 lg:px-8">
+        <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 pb-6">
           <header className="flex flex-col gap-2">
-            <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-            <p className="text-muted-foreground max-w-2xl text-sm">
+            <h1 className="text-[32px] leading-tight font-bold tracking-tight">
+              {title}
+            </h1>
+            <p className="text-text-secondary max-w-2xl text-sm">
               {description}
             </p>
           </header>
@@ -60,7 +62,7 @@ export function BrowseScreen({
 
           {/* Absent while loading and on error — the grid says so itself. */}
           {total !== undefined && (
-            <p className="text-muted-foreground text-xs" aria-live="polite">
+            <p className="text-text-tertiary text-xs" aria-live="polite">
               {activeQuery
                 ? t("summary.searchResults", { count: total })
                 : t("summary.browsing", { count: total })}

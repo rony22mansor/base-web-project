@@ -2,7 +2,7 @@ import { Loader2 } from "lucide-react";
 
 export default function Spinner({
   size = 24,
-  color = "text-white",
+  color = "text-text-secondary",
 }: {
   size?: number;
   color?: string;

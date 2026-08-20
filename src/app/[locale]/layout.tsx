@@ -1,4 +1,3 @@
-import { Assets } from "@/src/assets/assets";
 import { routing } from "@/src/core/i18n/routing";
 import QueryProvider from "@/src/core/providers/QueryProvider";
 import { ThemeProvider } from "@/src/core/providers/ThemeProvider";
@@ -30,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t("name"),
     description: t("tagline"),
     icons: {
-      icon: `${basePath}/logo.svg`,
+      icon: `${basePath}/logo.png`,
     },
   };
 }
@@ -54,14 +53,13 @@ export default async function RootLayout({
       suppressHydrationWarning
       className={cairoSans.className}
       dir={setDirection(locale)}
-      style={{ backgroundImage: `url(${Assets.basebgImage.src})` }}
     >
       <body className="relative flex h-screen flex-col overflow-y-hidden">
         <QueryProvider>
           <NextIntlClientProvider locale={locale}>
             <ThemeProvider
               attribute="class"
-              defaultTheme="dark"
+              defaultTheme="light"
               enableSystem
               disableTransitionOnChange
             >
@@ -73,7 +71,7 @@ export default async function RootLayout({
                 closeOnClick={false}
                 closeButton={false}
                 rtl={setDirection(locale) === "rtl"}
-                theme="dark"
+                theme="colored"
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover

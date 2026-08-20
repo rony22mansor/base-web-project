@@ -6,9 +6,15 @@ import { ConfidenceLevel } from "../enums/rulingEnums";
 import { toConfidenceLevel, toPercentage } from "../helpers/confidence";
 
 const LEVEL_STYLES: Record<ConfidenceLevel, { bar: string; text: string }> = {
-  [ConfidenceLevel.High]: { bar: "bg-emerald-500", text: "text-emerald-600 dark:text-emerald-400" },
-  [ConfidenceLevel.Medium]: { bar: "bg-amber-500", text: "text-amber-600 dark:text-amber-400" },
-  [ConfidenceLevel.Low]: { bar: "bg-destructive", text: "text-destructive" },
+  [ConfidenceLevel.High]: {
+    bar: "bg-tag-green-fg",
+    text: "text-tag-green-fg",
+  },
+  [ConfidenceLevel.Medium]: {
+    bar: "bg-tag-yellow-fg",
+    text: "text-tag-yellow-fg",
+  },
+  [ConfidenceLevel.Low]: { bar: "bg-tag-red-fg", text: "text-tag-red-fg" },
 };
 
 export function ConfidenceScore({ confidence }: { confidence: number }) {
@@ -28,7 +34,7 @@ export function ConfidenceScore({ confidence }: { confidence: number }) {
 
       <div className="flex items-center gap-3">
         <div
-          className="bg-muted h-2 flex-1 overflow-hidden rounded-full"
+          className="bg-accent h-1.5 flex-1 overflow-hidden rounded-full"
           role="progressbar"
           aria-valuenow={percentage}
           aria-valuemin={0}

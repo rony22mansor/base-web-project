@@ -42,7 +42,7 @@ class ApiClientFactory {
   }
 
   /**
-   * Auth is still TBD for Monsef (see CLAUDE_monsif.md). This is inert until a
+   * Auth is still TBD for MONSIF (see CLAUDE_monsif.md). This is inert until a
    * token exists — when auth lands, token injection and refresh belong HERE,
    * not in a feature.
    */

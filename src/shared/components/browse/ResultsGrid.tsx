@@ -53,7 +53,7 @@ export function ResultsGrid<T>({
         aria-label={t("states.loading")}
       >
         {Array.from({ length: SKELETON_COUNT }, (_, index) => (
-          <Skeleton key={index} className="h-40 rounded-xl" />
+          <Skeleton key={index} className="h-36 rounded-md" />
         ))}
       </div>
     );
@@ -61,12 +61,12 @@ export function ResultsGrid<T>({
 
   if (isError) {
     return (
-      <div className="border-destructive/40 bg-destructive/5 flex flex-col items-center gap-4 rounded-xl border p-10 text-center">
-        <span className="bg-destructive/10 text-destructive flex size-12 items-center justify-center rounded-full">
+      <div className="bg-tag-red flex flex-col items-center gap-3 rounded-md p-10 text-center">
+        <span className="text-tag-red-fg flex size-10 items-center justify-center">
           <AlertTriangle className="size-6" />
         </span>
-        <h2 className="text-lg font-semibold">{t("states.errorTitle")}</h2>
-        <p className="text-muted-foreground max-w-lg text-sm">
+        <h2 className="text-base font-semibold">{t("states.errorTitle")}</h2>
+        <p className="text-text-secondary max-w-lg text-sm">
           {errorMessage || t("states.errorDescription")}
         </p>
         <Button variant="outline" onClick={() => onRetry()}>
@@ -78,12 +78,12 @@ export function ResultsGrid<T>({
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed p-10 text-center">
-        <span className="bg-muted text-muted-foreground flex size-12 items-center justify-center rounded-full">
+      <div className="flex flex-col items-center gap-3 rounded-md border border-dashed p-10 text-center">
+        <span className="bg-accent text-text-secondary flex size-10 items-center justify-center rounded-full">
           <SearchX className="size-6" />
         </span>
-        <h2 className="text-lg font-semibold">{emptyTitle}</h2>
-        <p className="text-muted-foreground max-w-lg text-sm">
+        <h2 className="text-base font-semibold">{emptyTitle}</h2>
+        <p className="text-text-secondary max-w-lg text-sm">
           {emptyDescription}
         </p>
       </div>

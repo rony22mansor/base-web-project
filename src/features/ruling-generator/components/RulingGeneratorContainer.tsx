@@ -49,10 +49,12 @@ export function RulingGeneratorContainer() {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4 md:p-0">
+    <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
       <header className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground max-w-2xl text-sm">
+        <h1 className="text-[32px] leading-tight font-bold tracking-tight">
+          {t("title")}
+        </h1>
+        <p className="text-text-secondary max-w-2xl text-sm">
           {t("subtitle")}
         </p>
       </header>

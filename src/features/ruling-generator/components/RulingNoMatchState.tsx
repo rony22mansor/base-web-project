@@ -13,7 +13,7 @@ export function RulingNoMatchState({ onRetry }: { onRetry: () => void }) {
   const t = useTranslations("rulingGenerator.noMatch");
 
   return (
-    <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed p-10 text-center">
+    <div className="flex flex-col items-center gap-4 rounded-md border border-dashed p-10 text-center">
       <span className="bg-muted text-muted-foreground flex size-12 items-center justify-center rounded-full">
         <SearchX className="size-6" />
       </span>

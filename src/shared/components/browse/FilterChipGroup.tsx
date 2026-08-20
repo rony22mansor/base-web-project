@@ -33,10 +33,10 @@ export function FilterChipGroup<TValue extends string>({
 }: FilterChipGroupProps<TValue>) {
   const chip = (isActive: boolean) =>
     cn(
-      "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+      "rounded-sm px-2 py-1 text-xs font-medium transition-colors duration-120 ease-gentle",
       isActive
-        ? "border-primary bg-primary text-primary-foreground"
-        : "hover:bg-accent text-muted-foreground border-transparent bg-muted",
+        ? "bg-tag-blue text-tag-blue-fg"
+        : "bg-tag-gray text-tag-gray-fg hover:bg-accent hover:text-foreground",
     );
 
   return (
@@ -45,7 +45,7 @@ export function FilterChipGroup<TValue extends string>({
       role="group"
       aria-label={label}
     >
-      <span className="text-muted-foreground me-1 text-xs font-semibold">
+      <span className="notion-label me-1 text-[11px]">
         {label}
       </span>
 

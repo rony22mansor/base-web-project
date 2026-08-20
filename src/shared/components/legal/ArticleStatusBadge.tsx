@@ -4,11 +4,11 @@ import { ArticleStatus } from "@/src/core/enums/legalDomain";
 import { cn } from "@/src/core/utils/utils";
 import { useTranslations } from "next-intl";
 
+/** Notion's named tag colours: green = in force, yellow = amended, red = repealed. */
 const STATUS_STYLES: Record<ArticleStatus, string> = {
-  [ArticleStatus.Regular]:
-    "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
-  [ArticleStatus.Amended]: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-  [ArticleStatus.Repealed]: "bg-destructive/10 text-destructive",
+  [ArticleStatus.Regular]: "bg-tag-green text-tag-green-fg",
+  [ArticleStatus.Amended]: "bg-tag-yellow text-tag-yellow-fg",
+  [ArticleStatus.Repealed]: "bg-tag-red text-tag-red-fg",
 };
 
 /**
@@ -29,7 +29,7 @@ export function ArticleStatusBadge({
   return (
     <span
       className={cn(
-        "rounded-full px-2 py-0.5 text-xs font-medium",
+        "inline-flex items-center rounded-sm px-1.5 py-0.5 text-xs font-medium",
         STATUS_STYLES[status],
         className,
       )}

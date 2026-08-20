@@ -27,7 +27,7 @@ export function LawArticleCard({ article }: { article: LawArticle }) {
         aria-expanded={isOpen}
         className="hover:bg-accent/50 flex w-full flex-1 items-start gap-3 p-4 text-start transition-colors"
       >
-        <span className="bg-primary/10 text-primary mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg">
+        <span className="bg-accent text-text-secondary mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-sm">
           <ScrollText className="size-4" />
         </span>
 

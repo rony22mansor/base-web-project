@@ -15,7 +15,7 @@ export function CaseCategoryBadge({
   const t = useTranslations("legal.caseCategory");
 
   return (
-    <span className={cn("bg-muted rounded-full px-2 py-0.5", className)}>
+    <span className={cn("bg-tag-gray text-tag-gray-fg inline-flex items-center rounded-sm px-1.5 py-0.5 text-xs font-medium", className)}>
       {t(category)}
     </span>
   );

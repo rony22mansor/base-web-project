@@ -139,17 +139,17 @@ const FilleField = <T extends Record<string, any>>({
 
   const labelAsInputStyle = `${
     error?.message ? "border-destructive" : ""
-  }  h-11 !ps-13  flex w-full min-w-0 rounded-lg border  `;
+  }  bg-input-filled-color flex h-9 w-full min-w-0 items-center rounded-sm border !ps-13 transition-colors hover:border-border-strong`;
 
   return (
-    <div className={cn("w-full mb-2 relative", classNameWrapper)}>
+    <div className={cn("relative mb-3 w-full", classNameWrapper)}>
       {!hidden && (
         <>
           {label && (
             <Label
               className={cn(
-                `mb-3 ${labelExtraClassName} transition-colors`,
-                isActive ? "text-white" : "text-muted",
+                `mb-1.5 block ${labelExtraClassName ?? ""} transition-colors`,
+                isActive ? "text-foreground" : "text-text-secondary",
               )}
             >
               {label}
@@ -160,7 +160,7 @@ const FilleField = <T extends Record<string, any>>({
             onClick={() => inputRef.current?.click()}
             className={cn(
               "cursor-pointer items-center",
-              disabled ? "text-placeHolder opacity-50" : "text-muted",
+              disabled ? "text-placeHolder opacity-50" : "text-text-secondary",
               labelAsInputStyle,
             )}
           >
@@ -169,24 +169,25 @@ const FilleField = <T extends Record<string, any>>({
             {fileName ? (
               <IoIosCheckmarkCircleOutline
                 className={cn(
-                  "absolute text-white h-5 w-5 mb-1",
+                  "text-tag-green-fg absolute h-4 w-4",
                   isRTL ? "right-3" : "left-3",
                 )}
               />
             ) : (
               <Upload
                 className={cn(
-                  "absolute text-muted h-4 w-4 mb-1",
+                  "text-text-tertiary absolute h-4 w-4",
                   isRTL ? "right-3" : "left-3",
                 )}
               />
             )}
 
             <span
-              className={`absolute ${
+              aria-hidden
+              className={`bg-border absolute ${
                 isRTL ? "right-10" : "left-10"
-              } bg-muted h-5 w-0.5`}
-            ></span>
+              } h-5 w-px`}
+            />
           </div>
         </>
       )}

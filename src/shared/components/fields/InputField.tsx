@@ -2,7 +2,6 @@
 import { InputModeType } from "@/src/core/types/InputModeType";
 import { cn } from "@/src/core/utils/utils";
 import { Eye, EyeOff, LucideIcon } from "lucide-react";
-import { useLocale } from "next-intl";
 import { useValidationMessage } from "@/src/core/i18n/validationMessages";
 import { useState } from "react";
 import {
@@ -78,10 +77,8 @@ const InputField = <T extends Record<string, any>>({
   ...props
 }: InputFieldProps<T>) => {
   const tError = useValidationMessage();
-  const locale = useLocale();
   const [showPassword, setShowPassword] = useState(false);
   const { isActive, handleFocus, handleBlur } = useIsActive(defaultValue);
-  const isRTL = locale === "ar";
   const isPasswordField = type === "password";
   const inputType = isPasswordField
     ? showPassword
@@ -97,7 +94,7 @@ const InputField = <T extends Record<string, any>>({
   return (
     <div
       className={cn(
-        "w-full mb-2 ",
+        "mb-3 w-full",
         type === "hidden" ? "hidden" : "",
         classNameWrapper,
       )}
@@ -107,8 +104,8 @@ const InputField = <T extends Record<string, any>>({
           {label && (
             <Label
               className={cn(
-                `mb-3 ${labelExtraClassName} transition-colors`,
-                isActive ? "text-foreground/80" : "text-text-secondary",
+                `mb-1.5 block text-[13px] font-medium ${labelExtraClassName ?? ""} transition-colors`,
+                isActive ? "text-foreground" : "text-text-secondary",
               )}
               htmlFor={String(name)}
             >
@@ -121,17 +118,18 @@ const InputField = <T extends Record<string, any>>({
               <>
                 <Icon
                   className={cn(
-                    "absolute h-4 w-4 mb-1 pt-[2px]",
-                    isRTL ? "right-3" : "left-3",
-                    "text-text-secondary/40",
-                    disabled ? "text-text-secondary opacity-50" : "",
+                    "pointer-events-none absolute h-4 w-4 start-3",
+                    "text-text-tertiary",
+                    disabled ? "opacity-50" : "",
                   )}
                 />
                 <span
-                  className={`absolute ${isRTL ? "right-10" : "left-10"
-                    } bg-muted h-5 w-0.5  ${disabled ? "text-placeHolder opacity-50" : ""
-                    }`}
-                ></span>
+                  aria-hidden
+                  className={cn(
+                    "bg-border absolute start-10 h-5 w-px",
+                    disabled ? "opacity-50" : "",
+                  )}
+                />
               </>
             )}
             {
@@ -166,15 +164,8 @@ const InputField = <T extends Record<string, any>>({
                 }}
                 defaultValue={defaultValue}
                 value={typeof value === "boolean" ? "" : value}
-                className={cn(
-                  classNameInputExtra,
-                  error?.message
-                    ? "border-text-secondary"
-                    : isActive
-                      ? "border-black/35"
-                      : "",
-                  Icon ? "ps-13" : "",
-                )}
+                aria-invalid={Boolean(error?.message)}
+                className={cn(classNameInputExtra, Icon ? "ps-13" : "")}
                 {...props}
               />
             }
@@ -182,8 +173,7 @@ const InputField = <T extends Record<string, any>>({
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className={`absolute ${isRTL ? "left-4" : "right-4"
-                  } text-text-secondary hover:text-gray-700`}
+                className="text-text-secondary hover:text-foreground absolute end-3 transition-colors"
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -193,12 +183,9 @@ const InputField = <T extends Record<string, any>>({
         </div>
       )}
       {error && error.message && (
-        <p className="mt-2 text-sm font-medium text-destructive">
+        <p className="text-destructive mt-1.5 text-[13px]">
           {tError(error.message)}
         </p>
-        // <p className="mt-2 text-sm font-medium text-destructive">
-        //   {(error.message as string) ?? ""}
-        // </p>
       )}
     </div>
   );

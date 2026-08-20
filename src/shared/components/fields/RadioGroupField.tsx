@@ -93,10 +93,10 @@ export function RadioGroupField({
               className={cn(
                 "cursor-pointer text-lg transition-colors",
                 item.disabled
-                  ? "cursor-not-allowed text-gray-400"
+                  ? "cursor-not-allowed text-text-tertiary"
                   : "cursor-pointer",
-                field?.value === item.id ? "text-white" : "",
-                "text-base"
+                field?.value === item.id && "text-foreground",
+                "text-sm"
               )}
             >
               {item.name}
@@ -107,7 +107,7 @@ export function RadioGroupField({
               className={`${classNameRadioGroupItem} ${
                 error?.message ? `border-destructive` : ""
               } ${
-                field?.value === item.id ? "!border-white" : "border-secondary"
+                field?.value === item.id ? "!border-link" : "border-input"
               } `}
               disabled={item.disabled}
             />
@@ -115,7 +115,7 @@ export function RadioGroupField({
         ))}
       </RadioGroup>
       {error && error.message && (
-        <p className="mt-2 text-sm font-medium text-destructive">
+        <p className="text-destructive mt-1.5 text-[13px]">
           {tError(error.message)}
         </p>
       )}

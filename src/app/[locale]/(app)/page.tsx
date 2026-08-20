@@ -1,5 +1,6 @@
 import { MAIN_NAV } from "@/src/core/config/navigation";
 import { Link } from "@/src/core/i18n/navigation";
+import { AppLogo } from "@/src/shared/components/app-logo";
 import { BasePage } from "@/src/shared/components/base-page";
 import {
   Card,
@@ -20,25 +21,29 @@ export default async function HomePage() {
 
   return (
     <BasePage>
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 p-4 md:p-0">
-        <header className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight">{t("greeting")}</h1>
-          <p className="text-muted-foreground max-w-2xl text-base">
+      <div className="flex w-full flex-col gap-10">
+        {/* Notion's page header: a large icon above a 40px title. */}
+        <header className="flex flex-col gap-3">
+          <AppLogo size={52} priority />
+          <h1 className="text-[40px] leading-tight font-bold tracking-tight">
+            {t("greeting")}
+          </h1>
+          <p className="text-text-secondary notion-prose max-w-2xl">
             {t("subtitle")}
           </p>
         </header>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2">
           {MAIN_NAV.map((item) => (
             <Link key={item.url} href={item.url} className="group">
-              <Card className="hover:border-primary/60 h-full gap-4 transition-colors">
+              <Card className="hover:border-border-strong h-full gap-3 py-4 transition-colors hover:shadow-xs">
                 <CardHeader>
-                  <span className="bg-primary/10 text-primary mb-3 flex size-10 items-center justify-center rounded-lg">
-                    <item.icon className="size-5" />
+                  <span className="bg-accent text-text-secondary group-hover:text-foreground mb-2 flex size-8 items-center justify-center rounded-sm transition-colors">
+                    <item.icon className="size-4" />
                   </span>
-                  <CardTitle className="flex items-center gap-2 text-lg">
+                  <CardTitle className="flex items-center gap-1.5">
                     {tFeatures(`${item.titleKey}.title`)}
-                    <ForwardArrow className="size-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                    <ForwardArrow className="text-text-tertiary size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
                   </CardTitle>
                   <CardDescription>
                     {tFeatures(`${item.titleKey}.description`)}
@@ -49,7 +54,8 @@ export default async function HomePage() {
           ))}
         </div>
 
-        <p className="text-muted-foreground border-t pt-4 text-xs">
+        {/* Notion's gray callout block — a quiet aside, not an alert. */}
+        <p className="bg-tag-gray text-tag-gray-fg rounded-sm px-4 py-3 text-sm leading-relaxed">
           {t("disclaimer")}
         </p>
       </div>
