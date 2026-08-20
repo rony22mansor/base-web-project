@@ -1,0 +1,254 @@
+{
+  "app": {
+    "name": "Monsef",
+    "tagline": "AI legal assistant for Syrian law"
+  },
+  "nav": {
+    "home": "Home",
+    "rulingGenerator": "Preliminary Ruling",
+    "lawSearch": "Law Search",
+    "caseSearch": "Case Law",
+    "contractTemplates": "Contract Templates",
+    "settings": "Settings",
+    "toggleSidebar": "Toggle sidebar"
+  },
+  "common": {
+    "language": "Language",
+    "switchToEnglish": "English",
+    "switchToArabic": "العربية",
+    "theme": "Theme",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "search": "Search",
+    "loading": "Loading…",
+    "comingSoon": "Coming soon",
+    "comingSoonDescription": "This feature has not been built yet."
+  },
+  "home": {
+    "greeting": "Welcome to Monsef",
+    "subtitle": "Search Syrian laws and case law, or get a preliminary ruling for your case.",
+    "disclaimer": "Monsef is an AI-assisted tool and is not a substitute for qualified legal advice.",
+    "openFeature": "Open"
+  },
+  "features": {
+    "rulingGenerator": {
+      "title": "Preliminary Ruling Generator",
+      "description": "Describe an incident and get a preliminary ruling with a confidence score, legal basis, and precedents."
+    },
+    "lawSearch": {
+      "title": "Law Search",
+      "description": "Browse legal articles or search them semantically."
+    },
+    "caseSearch": {
+      "title": "Case Law",
+      "description": "Browse historical cases or find similar ones."
+    },
+    "contractTemplates": {
+      "title": "Contract Templates",
+      "description": "Find a contract template and edit it right in the browser."
+    }
+  },
+  "links": {
+    "home": "Home",
+    "login": "Login"
+  },
+  "login": {
+    "email": "Email",
+    "password": "Password"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for does not exist or has been moved.",
+    "button": "Go Home"
+  },
+  "error": {
+    "message": "Something went wrong!",
+    "action": "Go Home"
+  },
+  "validationErrors": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "minLength6": "Must be at least 6 characters",
+    "file_is_empty": "The file is empty",
+    "file_too_large": "File exceeds {size} MB",
+    "invalid_file_type": "Unsupported file type",
+    "descriptionTooShort": "Description is too short — write at least 40 characters",
+    "descriptionTooLong": "Description exceeds the maximum length"
+  },
+  "general": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "titleconfirm": "Confirm action"
+  },
+  "rulingGenerator": {
+    "title": "Preliminary Ruling Generator",
+    "subtitle": "Describe the incident in detail and Monsef will analyse it and propose a preliminary ruling with its legal basis.",
+    "form": {
+      "descriptionLabel": "Incident description",
+      "descriptionPlaceholder": "Explain what happened in detail: the parties, when and where, the sequence of events, and any available evidence or reports…",
+      "submit": "Analyse case",
+      "clear": "Clear",
+      "charCount": "{count} / {max} characters",
+      "minLengthHint": "Write at least {min} characters for an accurate analysis."
+    },
+    "upload": {
+      "trigger": "or upload a file (.txt or .docx)",
+      "extracting": "Extracting text…",
+      "extracted": "Text extracted from {fileName}. You can edit it before submitting.",
+      "errors": {
+        "unsupportedFileType": "Unsupported file type. Allowed: .txt or .docx",
+        "fileTooLarge": "File exceeds {size} MB",
+        "emptyFile": "The file is empty or contains no text",
+        "extractionFailed": "Could not extract text from the file"
+      }
+    },
+    "loading": {
+      "title": "Analysing your case…",
+      "subtitle": "Monsef is searching the relevant laws and case law. This may take a few seconds."
+    },
+    "result": {
+      "rulingTitle": "Preliminary ruling",
+      "confidenceTitle": "Confidence score",
+      "explanationTitle": "Explanation",
+      "legalBasisTitle": "Legal basis",
+      "precedentsTitle": "Similar precedents",
+      "newQuery": "New case",
+      "yourDescription": "The description you submitted",
+      "disclaimer": "This is an AI-generated preliminary ruling for guidance only. It is not legal advice and not a court judgment.",
+      "confidenceLevel": {
+        "low": "Low confidence",
+        "medium": "Medium confidence",
+        "high": "High confidence"
+      }
+    },
+    "article": {
+      "repealedNote": "This article has been repealed and is no longer in force.",
+      "showText": "Show text",
+      "hideText": "Hide text"
+    },
+    "noMatch": {
+      "title": "No sufficient legal basis found",
+      "description": "Monsef found no laws or precedents matching this incident with enough confidence. To avoid an inaccurate ruling, no result is shown.",
+      "hint": "Try rephrasing with more detail: the acts committed, the standing of each party, and the resulting consequences.",
+      "retry": "Edit description"
+    },
+    "error": {
+      "title": "Analysis could not be completed",
+      "description": "Something went wrong contacting the analysis engine. Please try again.",
+      "retry": "Try again"
+    }
+  },
+  "legal": {
+    "articleStatus": {
+      "regular": "In force",
+      "amended": "Amended",
+      "repealed": "Repealed"
+    },
+    "caseCategory": {
+      "civil": "Civil",
+      "criminal": "Criminal",
+      "commercial": "Commercial"
+    }
+  },
+  "browse": {
+    "filters": {
+      "all": "All",
+      "allTime": "All time"
+    },
+    "summary": {
+      "browsing": "{count} items",
+      "searchResults": "{count} results for your search"
+    },
+    "search": {
+      "submit": "Search",
+      "clear": "Clear search",
+      "hint": "Describe what you are looking for in your own words — a few words or a full scenario. Enter to search, Shift+Enter for a new line.",
+      "errors": {
+        "queryTooShort": "Write at least 3 characters to search",
+        "queryTooLong": "Search text exceeds the maximum length"
+      }
+    },
+    "states": {
+      "loading": "Loading results",
+      "loadMore": "Load more",
+      "errorTitle": "Could not load results",
+      "errorDescription": "Something went wrong contacting the server. Please try again.",
+      "retry": "Try again"
+    }
+  },
+  "lawSearch": {
+    "title": "Law Search",
+    "description": "Browse legal articles by law and status, or describe a situation to retrieve the articles that apply to it.",
+    "searchPlaceholder": "e.g. deliberate assault causing more than ten days off work…",
+    "filters": {
+      "law": "Law",
+      "status": "Status"
+    },
+    "card": {
+      "relevance": "{percent}% match",
+      "repealedNote": "This article has been repealed and is no longer in force."
+    },
+    "empty": {
+      "title": "No articles here",
+      "description": "No article matches the selected filters. Try clearing a filter.",
+      "searchTitle": "No matching articles",
+      "searchDescription": "No article matched your description with enough confidence. Try rephrasing it with more detail, or clear a filter that may be excluding results."
+    }
+  },
+  "caseSearch": {
+    "title": "Case Law",
+    "description": "Browse historical cases by category and period, or describe an incident to find similar ones.",
+    "searchPlaceholder": "e.g. a dispute between neighbours that ended in a mutual fight…",
+    "filters": {
+      "category": "Category",
+      "period": "Period"
+    },
+    "periods": {
+      "recent": "2020 onwards",
+      "past": "2010–2019",
+      "older": "Before 2010"
+    },
+    "card": {
+      "relevance": "{percent}% match",
+      "summary": "Facts",
+      "ruling": "Ruling",
+      "citedArticles": "Cited articles"
+    },
+    "empty": {
+      "title": "No cases here",
+      "description": "No case matches the selected filters. Try clearing a filter.",
+      "searchTitle": "No similar cases found",
+      "searchDescription": "No case matched your description with enough confidence. Try rephrasing it with more detail, or widen the period filter."
+    }
+  },
+  "contractTemplates": {
+    "title": "Contract Templates",
+    "description": "Browse the template library by type, or describe the agreement you need and let Monsef find the closest template.",
+    "searchPlaceholder": "e.g. a one-year lease for a shop with an option to renew…",
+    "filters": {
+      "type": "Type"
+    },
+    "types": {
+      "employment": "Employment",
+      "lease": "Lease",
+      "sale": "Sale",
+      "services": "Services",
+      "partnership": "Partnership",
+      "nonDisclosure": "Non-disclosure"
+    },
+    "card": {
+      "relevance": "{percent}% match",
+      "fields": "{count} fillable fields",
+      "clauses": "{count} clauses",
+      "updated": "Updated {date}",
+      "openEditor": "Open in editor",
+      "editorComingSoon": "The editor is not available yet."
+    },
+    "empty": {
+      "title": "No templates here",
+      "description": "No template matches the selected type. Try clearing the filter.",
+      "searchTitle": "No matching templates",
+      "searchDescription": "No template matched your description with enough confidence. Try describing the agreement in different words."
+    }
+  }
+}
