@@ -23,6 +23,11 @@ export const QUERY_KEYS = {
   /** Cases RAG: server defaults + whether the index is warm. */
   CASE_SEARCH_CONFIG: "caseSearchConfig",
 
+  /** Catalog: one page of browsed cases, keyed by the filters applied. */
+  CASE_CATALOG: "caseCatalog",
+  /** Catalog: one judgment in full, keyed by its case number. */
+  CASE_DOCUMENT: "caseDocument",
+
   /** Instant tools: one run each, keyed by the submitted text. */
   SUMMARIZE: "summarize",
   CLASSIFY: "classify",

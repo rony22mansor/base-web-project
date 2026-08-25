@@ -3,6 +3,7 @@ import type { PagedResult } from "@/src/core/types/pagination";
 import type {
   Law,
   LawArticle,
+  LawArticleBodyLink,
   LawCatalog,
   LawGroup,
   LawHierarchyNode,
@@ -68,6 +69,26 @@ interface LawArticleReferenceDto {
   snippet: string;
 }
 
+interface LawArticleLinkTargetDto {
+  article_id: string;
+  article_number: string;
+  law_id: string;
+  confidence: string;
+}
+
+/**
+ * A citation phrase with its position in the body. `start`/`end` index
+ * `body`/`body_normalized` (identical in the whole corpus) and NOT `body_raw`,
+ * whose different orthography shifts every offset — which is why `text` below
+ * is filled from `body`.
+ */
+interface LawArticleBodyLinkDto {
+  start: number;
+  end: number;
+  text: string;
+  targets: LawArticleLinkTargetDto[];
+}
+
 export interface LawArticleDto {
   article_id: string;
   article_number: string;
@@ -88,6 +109,8 @@ export interface LawArticleDto {
   dependencies: string[];
   references: LawArticleReferenceDto[];
   referenced_by: LawArticleReferenceDto[];
+  /** Citation phrases positioned within `body`. Absent on older payloads. */
+  body_links?: LawArticleBodyLinkDto[];
 }
 
 /** One of a law's internal كتاب/باب/فصل groups, with its articles. */
@@ -166,6 +189,23 @@ const toStatusCounts = (
   return result;
 };
 
+/**
+ * Structural mapping only. Whether an offset actually lands on the phrase it
+ * claims is decided at render time, against the body being displayed — see
+ * `toArticleBodySegments`.
+ */
+const toBodyLink = (dto: LawArticleBodyLinkDto): LawArticleBodyLink => ({
+  start: dto.start,
+  end: dto.end,
+  text: dto.text ?? "",
+  targets: (dto.targets ?? []).map((target) => ({
+    articleId: target.article_id,
+    articleNumber: target.article_number,
+    lawId: target.law_id,
+    confidence: target.confidence,
+  })),
+});
+
 const toHierarchyNode = (dto: LawHierarchyNodeDto): LawHierarchyNode => ({
   type: dto.type ?? null,
   number: dto.number ?? null,
@@ -225,6 +265,7 @@ export const toCatalogArticle = (dto: LawArticleDto): LawArticle => {
     status: toStatus(dto.status),
     citedArticleNumbers: dto.dependencies ?? [],
     citedByArticleNumbers: (dto.referenced_by ?? []).map((ref) => ref.target),
+    bodyLinks: (dto.body_links ?? []).map(toBodyLink),
   };
 };
 

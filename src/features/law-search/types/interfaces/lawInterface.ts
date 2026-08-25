@@ -48,6 +48,47 @@ export interface LawArticle {
   citedArticleNumbers?: string[];
   /** Article numbers that cite this one. */
   citedByArticleNumbers?: string[];
+  /**
+   * Citation phrases located inside `text`, so a reference such as
+   * "المادة الخامسة" can be rendered as a link rather than as prose.
+   *
+   * Offsets index `text` — which the catalog fills from the API's normalized
+   * `body`, the only body field the offsets align with. Absent on semantic
+   * search results: the RAG payload carries no `body_links`, so those bodies
+   * render as plain text.
+   */
+  bodyLinks?: LawArticleBodyLink[];
+}
+
+/**
+ * One citation phrase inside an article body, with the article(s) it points at.
+ *
+ * `start`/`end` are character offsets into `LawArticle.text`. They are the
+ * server's word on where the phrase sits, so anything that slices by them must
+ * check the slice still equals `text` before trusting it — see
+ * `toArticleBodySegments`.
+ */
+export interface LawArticleBodyLink {
+  start: number;
+  end: number;
+  /** The phrase as it appears in the body, e.g. "الماده الخامسه". */
+  text: string;
+  /**
+   * Never empty. One phrase can name several articles ("المواد ال 19 و 20 و
+   * 21") — about a fifth of the corpus's links do — so this is a list and the
+   * UI has to let the reader choose which one to open.
+   */
+  targets: LawArticleLinkTarget[];
+}
+
+/** An article a citation phrase resolves to. */
+export interface LawArticleLinkTarget {
+  /** Composite "{law_name}:{article_number}" id — what fetches the article. */
+  articleId: string;
+  articleNumber: string;
+  lawId: string;
+  /** The extractor's confidence in the match ("high"…). */
+  confidence: string;
 }
 
 /** A related article dragged in because a result cites it. */

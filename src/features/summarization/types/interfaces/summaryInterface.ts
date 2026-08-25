@@ -20,7 +20,7 @@ export interface CaseSummary {
  * matches anything — so absence is `null` or `[]`, never a missing key.
  */
 export interface ExtractedFields {
-  /** First date-looking token in the text, e.g. "12/05/2023". */
+  /** Date tied to the case facts, e.g. "12/05/2023" — not just any date mentioned. */
   date: string | null;
   /** Party labels found ("المتهم الأول"), not names — the corpus is redacted. */
   accused: string[];
@@ -30,7 +30,7 @@ export interface ExtractedFields {
   action: string | null;
   /** Evidence nouns matched in the text (أداة، بصمات، كاميرا…). */
   evidence: string[];
-  /** Pairs like "المتهم: اعترف". */
+  /** Pairs like "المتهم: اعترف", one per accused when the text names more than one. */
   confessionStatus: string[];
   /** The sentence in which the court ruled. */
   ruling: string | null;

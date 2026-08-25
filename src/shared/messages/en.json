@@ -310,32 +310,33 @@
       "loading": "Loading the full text of this law — the whole law is fetched at once so it reads without interruption.",
       "articleCount": "{count} articles",
       "cites": "See also:"
+    },
+    "links": {
+      "articleLabel": "Article {number}",
+      "openArticle": "Open article {number}",
+      "chooseArticle": "This reference names {count} articles — choose one:",
+      "back": "Back to {article}",
+      "trailLabel": "Articles you have followed",
+      "loading": "Loading {article}…",
+      "error": "Could not load {article}."
     }
   },
   "caseSearch": {
     "title": "Precedents",
-    "description": "Describe the facts of an incident and retrieve the past judgments that resemble it, with the charges, the articles relied on and the outcome of each.",
+    "description": "Browse the judgments corpus by the crimes it covers, or describe the facts of an incident to retrieve the past judgments that resemble it.",
     "searchPlaceholder": "e.g. the accused broke into a house at night and took a sum of money…",
     "coldStart": "The precedents index has not been loaded yet, so the first search takes about a minute while the models are prepared. Later searches take a few seconds.",
     "tookSeconds": "Retrieved in {seconds}s",
     "filters": {
       "scope": "Scope",
-      "outcome": "Outcome"
+      "outcome": "Outcome",
+      "year": "Year",
+      "clearAll": "Clear all filters"
     },
     "scopes": {
       "strict": "Close matches",
       "balanced": "Balanced",
       "broad": "Broad"
-    },
-    "intro": {
-      "title": "Start by describing the facts",
-      "description": "Precedents are matched on the substance of an incident, not on keywords — so write it as you would to a colleague: what happened, to whom, and how. The more detail, the closer the matches.",
-      "examplesLabel": "Try one of these",
-      "examples": {
-        "theft": "The accused broke the door of a house at night and stole a sum of money, and confessed to the act.",
-        "assault": "A quarrel between two neighbours ended in a mutual fight that left one of them unable to work for more than ten days.",
-        "fraud": "The accused took a sum of money on the promise of selling a property he did not own."
-      }
     },
     "card": {
       "caseNumber": "Case {number}",
@@ -344,7 +345,8 @@
       "crimes": "Charges:",
       "penalArticles": "Penal code:",
       "otherLaws": "Other statutes:",
-      "open": "Read the judgment"
+      "open": "Read the judgment",
+      "proceedingsArticles": "Procedure:"
     },
     "detail": {
       "title": "Case {number}",
@@ -354,11 +356,28 @@
         "claims": "Charges",
         "reasoning": "Reasoning",
         "judgment": "Ruling"
-      }
+      },
+      "loading": "Loading the judgment…",
+      "error": "Could not load this judgment.",
+      "noSections": "This judgment carries no text sections."
     },
     "empty": {
       "searchTitle": "No similar precedents",
-      "searchDescription": "No judgment matched your description with enough confidence. Try adding detail, or widen the scope to “Broad”."
+      "searchDescription": "No judgment matched your description with enough confidence. Try adding detail, or widen the scope to “Broad”.",
+      "browseTitle": "No judgments here",
+      "browseDescription": "No judgment matches the selected filters. Try clearing one."
+    },
+    "categories": {
+      "title": "Categories ({count})",
+      "all": "All cases",
+      "showAll": "Show {count} more",
+      "showLess": "Show fewer"
+    },
+    "paging": {
+      "label": "Pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "position": "Page {page} of {total}"
     }
   },
   "contractTemplates": {

@@ -5,6 +5,7 @@ import { ArticleStatusBadge } from "@/src/shared/components/legal/ArticleStatusB
 import { useTranslations } from "next-intl";
 import { toDomId } from "../../helpers/lawBookTree";
 import type { LawArticle } from "../../types/interfaces/lawInterface";
+import { ArticleBodyText } from "../ArticleBodyText";
 
 /**
  * One article as it reads inside the book: a numbered heading, the body, and
@@ -34,8 +35,19 @@ export function LawBookArticle({
         <ArticleStatusBadge status={article.status} />
       </header>
 
-      {/* Legal content — rendered exactly as the API returned it. */}
-      <p className="text-sm leading-7 whitespace-pre-line">{article.text}</p>
+      {/* Citations link in place. In the book the whole law is already on the
+          page, so following one scrolls to it rather than fetching it — the
+          reader keeps their position in the document. */}
+      <ArticleBodyText
+        text={article.text}
+        links={article.bodyLinks}
+        onOpenArticle={
+          onJumpToArticle
+            ? (target) => onJumpToArticle(target.articleNumber)
+            : undefined
+        }
+        className="text-sm leading-7"
+      />
 
       {article.status === ArticleStatus.Repealed && (
         <p className="text-destructive mt-2 text-xs font-medium">

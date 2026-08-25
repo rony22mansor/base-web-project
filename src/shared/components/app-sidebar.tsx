@@ -60,7 +60,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       isActive={isNavItemActive(pathname, item.url)}
                       tooltip={{ children: label, side: tooltipSide }}
                     >
-                      <Link href={item.url} onClick={closeOnMobile}>
+                      <Link
+                        href={item.url}
+                        onClick={closeOnMobile}
+                        className="py-5"
+                      >
                         <item.icon className="size-4 opacity-70" />
                         <span>{label}</span>
                       </Link>

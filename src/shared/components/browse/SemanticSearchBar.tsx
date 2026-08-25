@@ -109,12 +109,17 @@ export function SemanticSearchBar({
       >
         <div
           className={cn(
-            "bg-input-filled-color flex items-end gap-2 rounded-md border px-2.5 py-1.5 transition-colors duration-120 ease-gentle",
+            "bg-input-filled-color border-border-strong flex items-end gap-2 rounded-lg border-2 px-3 py-2 shadow-sm transition-colors duration-120 ease-gentle",
             "focus-within:border-link focus-within:ring-2 focus-within:ring-ring/35",
             errorKey && "border-destructive focus-within:ring-destructive/30",
           )}
         >
-          <Search className="text-text-tertiary mt-2.5 size-4 shrink-0" />
+          {/* Fixed-height slot so the icon stays pinned to the bottom-most
+              line — matching the buttons — instead of drifting to the middle
+              of the field once the textarea grows past one line. */}
+          <span className="flex h-11 shrink-0 items-center">
+            <Search className="text-text-tertiary size-4" />
+          </span>
 
           <textarea
             {...queryField}
@@ -126,35 +131,38 @@ export function SemanticSearchBar({
             onKeyDown={handleKeyDown}
             aria-label={placeholder}
             aria-invalid={Boolean(errorKey)}
-            className="placeholder:text-placeHolder max-h-40 min-h-11 flex-1 resize-none bg-transparent py-2 text-sm leading-relaxed outline-none"
+            className="placeholder:text-placeHolder max-h-40 min-h-11 flex-1 resize-none bg-transparent py-2.5 text-sm leading-relaxed outline-none"
           />
 
           {activeQuery && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={handleClear}
-              aria-label={t("clear")}
-              className="mb-1 shrink-0"
-            >
-              <X className="size-4" />
-            </Button>
+            <span className="flex h-11 shrink-0 items-center">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={handleClear}
+                aria-label={t("clear")}
+              >
+                <X className="size-4" />
+              </Button>
+            </span>
           )}
 
-          <Button
-            type="submit"
-            size="sm"
-            disabled={isSearching || isTooShort}
-            className="mb-1 shrink-0 gap-2"
-          >
-            {isSearching ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <Search className="size-4" />
-            )}
-            <span className="hidden sm:inline">{t("submit")}</span>
-          </Button>
+          <span className="flex h-11 shrink-0 items-center">
+            <Button
+              type="submit"
+              size="sm"
+              disabled={isSearching || isTooShort}
+              className="gap-2"
+            >
+              {isSearching ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Search className="size-4" />
+              )}
+              <span className="hidden sm:inline">{t("submit")}</span>
+            </Button>
+          </span>
         </div>
 
         <p

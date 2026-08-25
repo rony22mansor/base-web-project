@@ -27,6 +27,17 @@ export function SummaryResultView({
     ? Math.round((summary.summary.length / originalLength) * 100)
     : 0;
 
+  // Above 7 sentences the API compresses the summary into bullet lines
+  // ("- " per sentence, joined by "\n") instead of a continuous paragraph.
+  // Treat "\n- " as a list separator rather than literal text.
+  const bulletLines = summary.summary
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const isBulleted =
+    bulletLines.length > 1 &&
+    bulletLines.every((line) => line.startsWith("- "));
+
   return (
     <div className="flex flex-col gap-6">
       <section className="flex flex-col gap-3">
@@ -43,11 +54,22 @@ export function SummaryResultView({
           </span>
         </div>
 
-        <Card className="p-5">
-          {/* Sentences selected from the submitted text, unchanged. */}
-          <p dir="rtl" className="text-sm leading-loose whitespace-pre-line">
-            {summary.summary}
-          </p>
+        <Card className="p-2">
+          {isBulleted ? (
+            <ul
+              dir="rtl"
+              className="list-disc pr-5 flex flex-col gap-2 text-sm leading-loose"
+            >
+              {bulletLines.map((line, index) => (
+                <li key={index}>{line.slice(2)}</li>
+              ))}
+            </ul>
+          ) : (
+            /* Sentences selected from the submitted text, unchanged. */
+            <p dir="rtl" className="text-sm leading-loose whitespace-pre-line">
+              {summary.summary}
+            </p>
+          )}
         </Card>
       </section>
     </div>

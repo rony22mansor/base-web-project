@@ -75,15 +75,31 @@ export const API_ENDPOINTS = {
   },
 
   /**
-   * Cases RAG — retrieval over past judgments. There is no browse counterpart
-   * on the Python side: the corpus is only reachable by describing facts, so
-   * this feature is search-only (unlike LAW_SEARCH, which has LAW_CATALOG).
+   * Cases RAG — retrieval over past judgments by describing facts. Pairs with
+   * CASE_CATALOG the way LAW_SEARCH pairs with LAW_CATALOG: this one loads
+   * models and costs ~45s cold, the catalog reads the corpus and is instant.
    */
   CASE_SEARCH: {
     /** POST. FAISS + BM25 + RRF + rerank. ~7-13s warm, ~45s cold. */
     SEMANTIC: "/api/legal/cases/search",
     /** Live defaults, the tunable field names, and whether the index is loaded. */
     CONFIG: "/api/legal/cases/config",
+  },
+
+  /**
+   * Cases catalog — the judgments corpus browsed rather than retrieved. Reads
+   * the corpus server-side, so it answers instantly even while the RAG index is
+   * still cold, and it is what every navigation path should use.
+   */
+  CASE_CATALOG: {
+    /**
+     * Every case, plus the crime/outcome/year facets. Accepts `crime`,
+     * `outcome`, `year`, `q`, `page` and `per_page`.
+     */
+    CASES: "/api/legal/cases",
+    /** One judgment in full, by the court's case number. */
+    CASE: (caseNumber: string) =>
+      `/api/legal/cases/${encodeURIComponent(caseNumber)}`,
   },
 
   /**
