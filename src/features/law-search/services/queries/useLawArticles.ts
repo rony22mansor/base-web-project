@@ -2,38 +2,41 @@
 
 import { QUERY_KEYS } from "@/src/core/network/queryKeysConstants";
 import { useApiInfiniteQuery } from "@/src/core/network/useApiHooks";
-import { DEFAULT_PAGE_SIZE } from "@/src/core/types/pagination";
-import type { LawSearchParams } from "../../types/dtos";
-import { lawSearchService } from "../lawSearchService";
+import type { LawArticlesParams } from "../../types/dtos";
+import { lawCatalogService } from "../lawCatalogService";
 
-/** Everything that identifies a listing, minus the page cursor. */
-export type LawArticlesFilters = Omit<LawSearchParams, "page" | "pageSize">;
+/** Everything that identifies a law's listing, minus the page cursor. */
+export type LawArticlesFilters = Omit<LawArticlesParams, "page" | "pageSize">;
+
+/** Articles per page in the law's list view. */
+export const LAW_ARTICLES_PAGE_SIZE = 20;
 
 /**
- * Browse + semantic search share this one hook, because they are one view:
- * passing a `query` switches the service to the semantic endpoint, and pages
- * are accumulated by React Query rather than in component state.
+ * One law's articles, paginated. This is the list view only — the book reader
+ * deliberately has no paging and uses `useLawBook` instead.
  */
-export function useLawArticles(filters: LawArticlesFilters) {
+export function useLawArticles(filters: LawArticlesFilters, enabled = true) {
   return useApiInfiniteQuery({
     // Every filter is part of the key, so changing one starts a fresh listing.
     queryKey: [
-      QUERY_KEYS.LAW_SEARCH,
-      filters.query ?? "",
-      filters.lawId ?? "",
+      QUERY_KEYS.LAW_ARTICLES,
+      filters.lawId,
       filters.status ?? "",
+      filters.categoryKey ?? "",
+      filters.q ?? "",
     ],
     queryFn: async ({ pageParam }) => {
-      const response = await lawSearchService.search({
+      const response = await lawCatalogService.articles({
         ...filters,
         page: pageParam,
-        pageSize: DEFAULT_PAGE_SIZE,
+        pageSize: LAW_ARTICLES_PAGE_SIZE,
       });
       return response.data;
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.hasMore ? lastPage.page + 1 : undefined,
+    enabled: enabled && filters.lawId.length > 0,
     retry: false,
   });
 }

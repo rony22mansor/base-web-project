@@ -1,53 +1,57 @@
-import { apiClient } from "@/src/core/network/axios";
 import type { ApiResponse } from "@/src/core/network/apiInterfaces";
+import { apiClient } from "@/src/core/network/axios";
 import { API_ENDPOINTS } from "@/src/core/network/endpoints";
-import type { PagedResult } from "@/src/core/types/pagination";
 import type { CaseSearchParams } from "../types/dtos";
 import type {
-  CaseCategoryCount,
-  LegalCase,
+  CaseSearchConfig,
+  CaseSearchResult,
 } from "../types/interfaces/caseInterface";
 import {
-  mockGetCaseCategories,
-  mockSearchCases,
-} from "./mocks/caseSearchMocks";
+  toCaseSearchConfig,
+  toCaseSearchResult,
+  type CasesRagConfigDto,
+  type CasesRagRequest,
+  type CasesRagResponseDto,
+} from "./adapters/casesRagAdapter";
 
 /**
- * The Python backend is not up yet, so every call short-circuits to the mocks.
- * Set NEXT_PUBLIC_USE_MOCKS=false in .env.local to hit the real API — the
- * request code below is already written against it.
+ * Cases RAG — retrieval over past judgments.
+ *
+ * Search-only by design: the Python side exposes no browse or category route
+ * for this corpus, so there is nothing to list until the user has described a
+ * set of facts. The screen says so rather than pretending to have a catalog.
  */
-const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS !== "false";
-
 export const caseSearchService = {
   /**
-   * One call serves both modes in the wireframe's single view: with `query`
-   * set the backend runs semantic retrieval, without it a filtered browse.
+   * Find precedents whose facts resemble the submitted ones. Undefined tuning
+   * fields are dropped from the JSON body, so the server applies its own
+   * defaults — which is what `config()` reports.
    */
   async search(
     params: CaseSearchParams,
-  ): Promise<ApiResponse<PagedResult<LegalCase>>> {
-    if (USE_MOCKS) return mockSearchCases(params);
+  ): Promise<ApiResponse<CaseSearchResult>> {
+    const body: CasesRagRequest = {
+      text: params.query,
+      top_k: params.topK,
+      threshold: params.threshold,
+      hybrid_top_k: params.hybridTopK,
+      rerank_max_length: params.rerankMaxLength,
+    };
 
-    const { query, ...rest } = params;
-    const url = query
-      ? API_ENDPOINTS.CASE_SEARCH.SEMANTIC
-      : API_ENDPOINTS.CASE_SEARCH.LIST;
-
-    const { data } = await apiClient.get<ApiResponse<PagedResult<LegalCase>>>(
-      url,
-      { params: { ...rest, q: query } },
+    const { data } = await apiClient.post<ApiResponse<CasesRagResponseDto>>(
+      API_ENDPOINTS.CASE_SEARCH.SEMANTIC,
+      body,
     );
-    return data;
+
+    return { data: toCaseSearchResult(data.data), succeeded: true };
   },
 
-  /** Category counts, used to build the filter chips. */
-  async categories(): Promise<ApiResponse<CaseCategoryCount[]>> {
-    if (USE_MOCKS) return mockGetCaseCategories();
-
-    const { data } = await apiClient.get<ApiResponse<CaseCategoryCount[]>>(
-      API_ENDPOINTS.CASE_SEARCH.CATEGORIES,
+  /** Live defaults, the overridable field names, and whether the index is warm. */
+  async config(): Promise<ApiResponse<CaseSearchConfig>> {
+    const { data } = await apiClient.get<ApiResponse<CasesRagConfigDto>>(
+      API_ENDPOINTS.CASE_SEARCH.CONFIG,
     );
-    return data;
+
+    return { data: toCaseSearchConfig(data.data), succeeded: true };
   },
 };

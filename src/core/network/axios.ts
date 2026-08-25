@@ -15,6 +15,12 @@ import { CookiesKeys } from "../services/cookies/cookies_keys";
 import { helperClient } from "../utils/functions/helperClient";
 import type { ApiError } from "./apiInterfaces";
 
+/**
+ * The Python backend's failure envelope. It carries the message under `error`
+ * rather than `message`, which is the one place the two contracts disagree.
+ */
+type FlaskError = ApiError & { status?: string; error?: string };
+
 class ApiClientFactory {
   private static instance: AxiosInstance;
   private constructor() {}
@@ -66,11 +72,21 @@ class ApiClientFactory {
 
     this.instance.interceptors.response.use(
       (response: AxiosResponse) => response,
-      async (error: AxiosError<ApiError>) => {
+      async (error: AxiosError<FlaskError>) => {
         // Normalize to the API's error body when the server sent one,
         // otherwise surface the transport error (timeout / network / CORS).
+        //
+        // The Flask side answers `{ status: "error", error: "رسالة عربية" }`,
+        // and that Arabic string is user-facing prose meant to be displayed as
+        // it is. Nothing downstream reads `error`, so it is copied onto
+        // `message` here — otherwise every failure state in the app falls back
+        // to its own generic copy and the server's explanation is thrown away.
         if (error.response?.data) {
-          return Promise.reject(error.response.data);
+          const body = error.response.data;
+          return Promise.reject({
+            ...body,
+            message: body.message ?? body.error ?? error.message,
+          } satisfies ApiError);
         }
         return Promise.reject({
           message: error.message,

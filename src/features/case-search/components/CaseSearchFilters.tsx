@@ -1,52 +1,80 @@
 "use client";
 
-import type { CaseCategory } from "@/src/core/enums/legalDomain";
+import { cn } from "@/src/core/utils/utils";
 import { FilterChipGroup } from "@/src/shared/components/browse/FilterChipGroup";
 import { useTranslations } from "next-intl";
 import {
-  useCaseCategoryOptions,
-  useCasePeriodOptions,
+  toCaseOutcomeOptions,
+  useCaseScopeOptions,
 } from "../config/caseSearchConfig";
-import type { CasePeriod } from "../enums/caseEnums";
+import type { CaseScope } from "../enums/caseEnums";
 
 interface CaseSearchFiltersProps {
-  categoryCounts: Partial<Record<CaseCategory, number>>;
-  category: CaseCategory | null;
-  period: CasePeriod | null;
-  onCategoryChange: (category: CaseCategory | null) => void;
-  onPeriodChange: (period: CasePeriod | null) => void;
+  scope: CaseScope;
+  onScopeChange: (scope: CaseScope) => void;
+  /** Distinct outcomes in the current result set. Empty before the first run. */
+  outcomes: string[];
+  outcomeCounts: Record<string, number>;
+  outcome: string | null;
+  onOutcomeChange: (outcome: string | null) => void;
 }
 
-/** Filter by court category and by date range, per ui-features.md. */
+/**
+ * Two rows that do very different things, which is why they are labelled the
+ * way they are: scope is a retrieval parameter and re-runs the search on the
+ * server, outcome only narrows the set already on screen.
+ */
 export function CaseSearchFilters({
-  categoryCounts,
-  category,
-  period,
-  onCategoryChange,
-  onPeriodChange,
+  scope,
+  onScopeChange,
+  outcomes,
+  outcomeCounts,
+  outcome,
+  onOutcomeChange,
 }: CaseSearchFiltersProps) {
   const t = useTranslations("caseSearch.filters");
   const tBrowse = useTranslations("browse.filters");
-  const categoryOptions = useCaseCategoryOptions(categoryCounts);
-  const periodOptions = useCasePeriodOptions();
+  const scopeOptions = useCaseScopeOptions();
 
   return (
     <>
-      <FilterChipGroup
-        label={t("category")}
-        allLabel={tBrowse("all")}
-        value={category}
-        onChange={onCategoryChange}
-        options={categoryOptions}
-      />
+      {/* No "all" chip here: there is always a threshold in force, so an
+          unset state would be a lie about what the server was asked. */}
+      <div
+        className="flex flex-wrap items-center gap-2"
+        role="group"
+        aria-label={t("scope")}
+      >
+        <span className="notion-label me-1 text-[11px]">{t("scope")}</span>
 
-      <FilterChipGroup
-        label={t("period")}
-        allLabel={tBrowse("allTime")}
-        value={period}
-        onChange={onPeriodChange}
-        options={periodOptions}
-      />
+        {scopeOptions.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => onScopeChange(option.value)}
+            aria-pressed={scope === option.value}
+            className={cn(
+              "duration-120 ease-gentle rounded-sm px-2 py-1 text-xs font-medium transition-colors",
+              scope === option.value
+                ? "bg-tag-blue text-tag-blue-fg"
+                : "bg-tag-gray text-tag-gray-fg hover:bg-accent hover:text-foreground",
+            )}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Only meaningful once something has been retrieved. */}
+      {outcomes.length > 1 && (
+        <FilterChipGroup<string>
+          label={t("outcome")}
+          allLabel={tBrowse("all")}
+          value={outcome}
+          onChange={onOutcomeChange}
+          options={toCaseOutcomeOptions(outcomes, outcomeCounts)}
+        />
+      )}
     </>
   );
 }

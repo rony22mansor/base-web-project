@@ -6,11 +6,13 @@
   "nav": {
     "home": "Home",
     "rulingGenerator": "Preliminary Ruling",
-    "lawSearch": "Law Search",
-    "caseSearch": "Case Law",
+    "lawSearch": "Laws",
+    "caseSearch": "Precedents",
     "contractTemplates": "Contract Templates",
     "settings": "Settings",
-    "toggleSidebar": "Toggle sidebar"
+    "toggleSidebar": "Toggle sidebar",
+    "summarization": "Summarize",
+    "classification": "Classify"
   },
   "common": {
     "language": "Language",
@@ -41,12 +43,20 @@
       "description": "Browse legal articles or search them semantically."
     },
     "caseSearch": {
-      "title": "Case Law",
-      "description": "Browse historical cases or find similar ones."
+      "title": "Precedents",
+      "description": "Describe an incident and retrieve the past judgments that resemble it."
     },
     "contractTemplates": {
       "title": "Contract Templates",
-      "description": "Find a contract template and edit it right in the browser."
+      "description": "Find a template, fill it in, then print or export it."
+    },
+    "summarization": {
+      "title": "Case Summarizer",
+      "description": "Condense a case to its key sentences and pull out the recurring fields."
+    },
+    "classification": {
+      "title": "Crime Classifier",
+      "description": "Name the offences a set of facts describes."
     }
   },
   "links": {
@@ -86,8 +96,8 @@
     "titleconfirm": "Confirm action"
   },
   "rulingGenerator": {
-    "title": "Preliminary Ruling Generator",
-    "subtitle": "Describe the incident in detail and MONSIF will analyse it and propose a preliminary ruling with its legal basis.",
+    "title": "Preliminary Ruling",
+    "subtitle": "Describe the incident and MONSIF will retrieve the statutes and precedents that bear on it, then propose a preliminary ruling — and check its own citations against what it retrieved.",
     "form": {
       "descriptionLabel": "Incident description",
       "descriptionPlaceholder": "Explain what happened in detail: the parties, when and where, the sequence of events, and any available evidence or reports…",
@@ -96,51 +106,107 @@
       "charCount": "{count} / {max} characters",
       "minLengthHint": "Write at least {min} characters for an accurate analysis."
     },
+    "mode": {
+      "label": "Depth of analysis",
+      "thorough": {
+        "label": "Thorough",
+        "hint": "The full pipeline: the facts are reorganised and confusable articles are told apart before the ruling. Up to five model calls — expect about a minute."
+      },
+      "fast": {
+        "label": "Fast",
+        "hint": "One model call. The same statutes and precedents are retrieved, with less deliberation over them — expect a few seconds."
+      }
+    },
     "upload": {
-      "trigger": "or upload a file (.txt or .docx)",
-      "extracting": "Extracting text…",
-      "extracted": "Text extracted from {fileName}. You can edit it before submitting.",
+      "trigger": "or upload a text file (.txt)",
+      "extracting": "Reading the file…",
+      "extracted": "Text read from {fileName}. You can edit it before submitting.",
       "errors": {
-        "unsupportedFileType": "Unsupported file type. Allowed: .txt or .docx",
+        "unsupportedFileType": "Unsupported file type. Only .txt is accepted",
+        "docxUnsupported": "Word files are not supported: the API has no extraction endpoint. Open the file and paste its text, or save it as .txt",
         "fileTooLarge": "File exceeds {size} MB",
         "emptyFile": "The file is empty or contains no text",
-        "extractionFailed": "Could not extract text from the file"
+        "extractionFailed": "Could not read the file"
       }
     },
     "loading": {
       "title": "Analysing your case…",
-      "subtitle": "MONSIF is searching the relevant laws and case law. This may take a few seconds."
+      "subtitle": "MONSIF is retrieving the relevant statutes and precedents, then deliberating over them. This takes about a minute and cannot be shown as it goes.",
+      "subtitleFast": "MONSIF is retrieving the relevant statutes and precedents. In fast mode this takes a few seconds."
     },
     "result": {
       "rulingTitle": "Preliminary ruling",
-      "confidenceTitle": "Confidence score",
-      "explanationTitle": "Explanation",
-      "legalBasisTitle": "Legal basis",
-      "precedentsTitle": "Similar precedents",
+      "nonStandardOutcome": "Outcome outside the standard vocabulary",
+      "penaltyTitle": "Penalty prescribed",
+      "factsTitle": "The facts, as understood",
+      "reasoningTitle": "Reasoning",
+      "reasoning": {
+        "chargesAnalysis": "Why this charge fits",
+        "exclusionNotes": "Why the others were excluded",
+        "precedentAlignment": "How the precedents line up"
+      },
+      "chargesTitle": "Charges considered",
+      "chargesHint": "Including the ones ruled out — the rejected charge is as much a part of the reasoning as the chosen one.",
+      "legalBasisTitle": "Statutes retrieved",
+      "legalBasisHint": "What the model was given to reason from. Open one to read it in full.",
+      "precedentsTitle": "Precedents retrieved",
+      "classifierTitle": "What the classifier suggested",
+      "classifierHint": "A statistical guess made before the model saw anything, shown for comparison. It does not decide the outcome.",
       "newQuery": "New case",
       "yourDescription": "The description you submitted",
       "disclaimer": "This is an AI-generated preliminary ruling for guidance only. It is not legal advice and not a court judgment.",
-      "confidenceLevel": {
-        "low": "Low confidence",
-        "medium": "Medium confidence",
-        "high": "High confidence"
-      }
+      "meta": "Generated by {model} in {seconds}s."
     },
-    "article": {
-      "repealedNote": "This article has been repealed and is no longer in force.",
-      "showText": "Show text",
-      "hideText": "Hide text"
+    "charges": {
+      "article": "Art. {number}",
+      "elementsMatch": "Elements met",
+      "elementsMismatch": "Elements not met",
+      "flaggedFallback": "Flagged during verification."
+    },
+    "verification": {
+      "groundedTitle": "Every citation checks out",
+      "ungroundedTitle": "Some citations could not be verified",
+      "issues": {
+        "unknownStatutes": "Articles cited but not retrieved",
+        "unknownCases": "Precedents cited but not retrieved",
+        "unsupportedQuotes": "Quotes not found in the article they cite",
+        "precedentMismatch": "Precedents whose articles disagree with the chosen charge",
+        "penaltyDoubt": "Penalties that may not come from the cited article"
+      },
+      "mismatchDetail": "Case {caseNumber} turns on article {precedentArticles}, while this ruling settled on {chosenArticles}."
+    },
+    "blocked": {
+      "title": "The analysis engine is unavailable",
+      "description": "No language-model key is configured on the server, so no ruling can be generated.",
+      "testConnection": "Test the connection",
+      "pingOk": "The model answered: {model}",
+      "pingFailed": "The model did not answer. {error}"
     },
     "noMatch": {
-      "title": "No sufficient legal basis found",
-      "description": "MONSIF found no laws or precedents matching this incident with enough confidence. To avoid an inaccurate ruling, no result is shown.",
+      "title": "No usable ruling was produced",
+      "description": "The engine ran but could not reach a prediction it was willing to stand behind. Nothing is shown rather than an unsupported ruling.",
       "hint": "Try rephrasing with more detail: the acts committed, the standing of each party, and the resulting consequences.",
       "retry": "Edit description"
     },
     "error": {
       "title": "Analysis could not be completed",
       "description": "Something went wrong contacting the analysis engine. Please try again.",
-      "retry": "Try again"
+      "retry": "Try again",
+      "salvagedTitle": "What was retrieved before the failure",
+      "salvagedHint": "Retrieval succeeded; only the ruling itself failed. These are the statutes and precedents that were found for your facts — no ruling is attached to them."
+    },
+    "reorganized": {
+      "title": "The facts, broken down",
+      "objectiveBehavior": "The act",
+      "subjectiveMotivation": "The intent",
+      "exPostFactoCircumstances": "What followed"
+    },
+    "discrimination": {
+      "title": "Telling similar articles apart",
+      "hint": "Two articles were close enough to be confused, so the engine wrote down the questions that separate them and answered each from your facts.",
+      "article": "Art. {number}",
+      "overlap": "{percent}% overlap",
+      "pointsTo": "points to {article}"
     }
   },
   "legal": {
@@ -153,6 +219,16 @@
       "civil": "Civil",
       "criminal": "Criminal",
       "commercial": "Commercial"
+    },
+    "redaction": {
+      "party": "{role} {index}",
+      "redactedTitle": "Name removed from the published judgment",
+      "defendant": "Defendant",
+      "plaintiff": "Plaintiff",
+      "witness": "Witness",
+      "judge": "Judge",
+      "lawyer": "Counsel",
+      "person": "Person"
     }
   },
   "browse": {
@@ -179,81 +255,217 @@
       "errorTitle": "Could not load results",
       "errorDescription": "Something went wrong contacting the server. Please try again.",
       "retry": "Try again"
+    },
+    "drawer": {
+      "close": "Close"
     }
   },
   "lawSearch": {
-    "title": "Law Search",
-    "description": "Browse legal articles by law and status, or describe a situation to retrieve the articles that apply to it.",
+    "title": "Laws",
+    "description": "Browse the corpus law by law, read a law as a book, or describe a situation to retrieve the articles that apply to it.",
     "searchPlaceholder": "e.g. deliberate assault causing more than ten days off work…",
     "filters": {
-      "law": "Law",
-      "status": "Status"
+      "group": "Collection",
+      "status": "Status",
+      "namePlaceholder": "Filter laws by name…",
+      "nameLabel": "Filter laws by name"
     },
     "card": {
       "relevance": "{percent}% match",
-      "repealedNote": "This article has been repealed and is no longer in force."
+      "repealedNote": "This article has been repealed and is no longer in force.",
+      "dependencies": "Related articles ({count})",
+      "via": "Cited in {article}",
+      "cites": "Cites:",
+      "open": "Read the article",
+      "repealedShort": "Repealed"
     },
     "empty": {
       "title": "No articles here",
       "description": "No article matches the selected filters. Try clearing a filter.",
       "searchTitle": "No matching articles",
-      "searchDescription": "No article matched your description with enough confidence. Try rephrasing it with more detail, or clear a filter that may be excluding results."
+      "searchDescription": "No article matched your description with enough confidence. Try rephrasing it with more detail, or clear a filter that may be excluding results.",
+      "lawsTitle": "No laws here",
+      "lawsDescription": "No law matches the selected collection or name. Try clearing a filter."
+    },
+    "law": {
+      "backToLaws": "All laws",
+      "articleCount": "{count} articles",
+      "sectionCount": "{count} sections",
+      "flat": "No internal structure",
+      "status": "Status",
+      "viewLabel": "Reading view",
+      "viewList": "Articles",
+      "viewBook": "Read as a book",
+      "articleSearchPlaceholder": "Find an article by number or text…",
+      "articleSearchLabel": "Find an article in this law",
+      "empty": {
+        "title": "No articles here",
+        "description": "No article in this law matches the selected filters."
+      }
+    },
+    "book": {
+      "toc": "Contents",
+      "expandAll": "Expand all",
+      "collapseAll": "Collapse all",
+      "loading": "Loading the full text of this law — the whole law is fetched at once so it reads without interruption.",
+      "articleCount": "{count} articles",
+      "cites": "See also:"
     }
   },
   "caseSearch": {
-    "title": "Case Law",
-    "description": "Browse historical cases by category and period, or describe an incident to find similar ones.",
-    "searchPlaceholder": "e.g. a dispute between neighbours that ended in a mutual fight…",
+    "title": "Precedents",
+    "description": "Describe the facts of an incident and retrieve the past judgments that resemble it, with the charges, the articles relied on and the outcome of each.",
+    "searchPlaceholder": "e.g. the accused broke into a house at night and took a sum of money…",
+    "coldStart": "The precedents index has not been loaded yet, so the first search takes about a minute while the models are prepared. Later searches take a few seconds.",
+    "tookSeconds": "Retrieved in {seconds}s",
     "filters": {
-      "category": "Category",
-      "period": "Period"
+      "scope": "Scope",
+      "outcome": "Outcome"
     },
-    "periods": {
-      "recent": "2020 onwards",
-      "past": "2010–2019",
-      "older": "Before 2010"
+    "scopes": {
+      "strict": "Close matches",
+      "balanced": "Balanced",
+      "broad": "Broad"
+    },
+    "intro": {
+      "title": "Start by describing the facts",
+      "description": "Precedents are matched on the substance of an incident, not on keywords — so write it as you would to a colleague: what happened, to whom, and how. The more detail, the closer the matches.",
+      "examplesLabel": "Try one of these",
+      "examples": {
+        "theft": "The accused broke the door of a house at night and stole a sum of money, and confessed to the act.",
+        "assault": "A quarrel between two neighbours ended in a mutual fight that left one of them unable to work for more than ten days.",
+        "fraud": "The accused took a sum of money on the promise of selling a property he did not own."
+      }
     },
     "card": {
+      "caseNumber": "Case {number}",
       "relevance": "{percent}% match",
-      "summary": "Facts",
-      "ruling": "Ruling",
-      "citedArticles": "Cited articles"
+      "article": "Art. {number}",
+      "crimes": "Charges:",
+      "penalArticles": "Penal code:",
+      "otherLaws": "Other statutes:",
+      "open": "Read the judgment"
+    },
+    "detail": {
+      "title": "Case {number}",
+      "redactionNote": "Names were removed from this judgment before publication; the parties appear as neutral labels.",
+      "sections": {
+        "facts": "Facts",
+        "claims": "Charges",
+        "reasoning": "Reasoning",
+        "judgment": "Ruling"
+      }
     },
     "empty": {
-      "title": "No cases here",
-      "description": "No case matches the selected filters. Try clearing a filter.",
-      "searchTitle": "No similar cases found",
-      "searchDescription": "No case matched your description with enough confidence. Try rephrasing it with more detail, or widen the period filter."
+      "searchTitle": "No similar precedents",
+      "searchDescription": "No judgment matched your description with enough confidence. Try adding detail, or widen the scope to “Broad”."
     }
   },
   "contractTemplates": {
     "title": "Contract Templates",
-    "description": "Browse the template library by type, or describe the agreement you need and let MONSIF find the closest template.",
-    "searchPlaceholder": "e.g. a one-year lease for a shop with an option to renew…",
+    "description": "Browse the templates by category, or describe the contract you need. Then fill in the blanks and print or export it.",
+    "searchPlaceholder": "e.g. a lease for a commercial shop…",
+    "coldStart": "The templates index has not been loaded yet, so the first search takes a moment while it is prepared.",
+    "tookSeconds": "Found in {seconds}s",
     "filters": {
-      "type": "Type"
+      "suggest": "Ask the model to pick",
+      "suggestHint": "Adds one model call and needs a Groq key; without one the search fails rather than degrading.",
+      "category": "Category",
+      "namePlaceholder": "Filter by title or keyword…",
+      "nameLabel": "Filter templates by title or keyword"
     },
-    "types": {
-      "employment": "Employment",
-      "lease": "Lease",
-      "sale": "Sale",
-      "services": "Services",
-      "partnership": "Partnership",
-      "nonDisclosure": "Non-disclosure"
+    "suggestion": {
+      "title": "The model suggests: {subject}",
+      "noneTitle": "The model found none of these suitable"
     },
     "card": {
       "relevance": "{percent}% match",
-      "fields": "{count} fillable fields",
-      "clauses": "{count} clauses",
-      "updated": "Updated {date}",
-      "openEditor": "Open in editor",
-      "editorComingSoon": "The editor is not available yet."
+      "fieldCount": "{count} blanks to fill",
+      "suggested": "Suggested",
+      "open": "Fill this in"
+    },
+    "editor": {
+      "backToSearch": "All templates",
+      "progress": "{filled} of {total} blanks filled",
+      "fieldsTitle": "The blanks",
+      "fieldsHint": "Each blank is labelled with the sentence it belongs to — the templates carry no field names of their own.",
+      "noFields": "This template has no blanks; it can be printed as it is.",
+      "previewTitle": "The document",
+      "goToField": "Go to blank {number}",
+      "print": "Print",
+      "exportWord": "Download for Word",
+      "exportText": "Download as text",
+      "jumpToEmpty": "Next blank",
+      "clear": "Clear the form",
+      "incompleteWarning": "Some blanks are still empty. They will print as ______.",
+      "types": {
+        "text": "Type the text",
+        "number": "Type the number",
+        "datetime": "Pick a date"
+      },
+      "viewLabel": "Filling mode",
+      "views": {
+        "inline": "Fill in the document",
+        "split": "Document and form"
+      },
+      "blankNumber": "Blank {number}"
     },
     "empty": {
-      "title": "No templates here",
-      "description": "No template matches the selected type. Try clearing the filter.",
-      "searchTitle": "No matching templates",
-      "searchDescription": "No template matched your description with enough confidence. Try describing the agreement in different words."
+      "searchTitle": "No matching template",
+      "searchDescription": "No template matched your description. Try saying what the contract is for in plainer terms.",
+      "browseTitle": "No templates here",
+      "browseDescription": "No template matches the selected category or filter. Try clearing one."
     }
+  },
+  "summarization": {
+    "title": "Case Summarizer",
+    "subtitle": "Paste a case and get its key sentences back, along with the fields that recur in every judgment. Instant, and entirely on the server's own rules — nothing is generated.",
+    "form": {
+      "textLabel": "Case text",
+      "textPlaceholder": "Paste the full text of the case: the facts, the parties, the evidence, and the ruling…",
+      "submit": "Summarize",
+      "clear": "Clear",
+      "charCount": "{count} / {max} characters",
+      "minLengthHint": "Paste at least {min} characters — a summarizer needs sentences to choose between."
+    },
+    "result": {
+      "title": "Summary",
+      "compression": "{summary} of {original} characters kept ({percent}%)"
+    },
+    "fields": {
+      "title": "Fields found",
+      "hint": "Each value below is a literal span from your text, matched by rule rather than inferred. An empty row means the text did not state it.",
+      "foundCount": "{found} of {total} found",
+      "notStated": "Not stated in the text",
+      "date": "Date",
+      "accused": "Accused",
+      "victim": "Injured party",
+      "action": "The act",
+      "evidence": "Evidence",
+      "confessionStatus": "Confession",
+      "ruling": "Ruling"
+    },
+    "error": "The text could not be summarized. Please try again."
+  },
+  "classification": {
+    "title": "Crime Classifier",
+    "subtitle": "Describe what happened and a multi-label classifier names the offences it recognises. Instant, and independent of the retrieval features.",
+    "form": {
+      "factsLabel": "The facts",
+      "factsPlaceholder": "Describe what was done, by whom, and how: the acts, the circumstances, and anything seized…",
+      "submit": "Classify",
+      "clear": "Clear",
+      "charCount": "{count} / {max} characters",
+      "minLengthHint": "Write at least {min} characters — a one-line description gives the classifier almost nothing to weigh."
+    },
+    "result": {
+      "title": "Offences recognised",
+      "count": "{count} labels",
+      "disclaimer": "These are the labels that crossed the model's decision threshold. It reports no confidence per label, and the list is neither a charge sheet nor legal advice.",
+      "emptyTitle": "No offence identified",
+      "emptyDescription": "Nothing crossed the classifier's threshold for these facts.",
+      "emptyHint": "That is an answer, not a failure. Try describing the acts themselves in more detail — what was done, how, and with what."
+    },
+    "error": "The facts could not be classified. Please try again."
   }
 }

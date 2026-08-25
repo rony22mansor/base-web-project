@@ -1,11 +1,10 @@
-import { rulingGeneratorService } from "../services/rulingGeneratorService";
-
-export const ACCEPTED_UPLOAD_TYPES = ".txt,.docx";
+export const ACCEPTED_UPLOAD_TYPES = ".txt";
 export const MAX_UPLOAD_SIZE_MB = 5;
 
 /** Message keys under `rulingGenerator.upload.errors`. */
 export type UploadErrorKey =
   | "unsupportedFileType"
+  | "docxUnsupported"
   | "fileTooLarge"
   | "emptyFile"
   | "extractionFailed";
@@ -15,17 +14,25 @@ export type ExtractionResult =
   | { ok: false; errorKey: UploadErrorKey };
 
 /**
- * Turns an uploaded .txt/.docx into plain text for the description textarea.
- * .txt is read in the browser; .docx round-trips to the backend, which owns
- * OOXML parsing. Returns a result object rather than throwing so the caller can
- * map the failure straight onto a translation key.
+ * Turns an uploaded .txt into plain text for the description textarea.
+ *
+ * .docx used to round-trip to the backend for OOXML parsing, but the API has
+ * no upload or extraction route — that request was written against an endpoint
+ * that never existed. Rather than quietly accept a .docx and do nothing useful
+ * with it, the picker now offers .txt only and a dropped .docx gets a straight
+ * answer. Returns a result object rather than throwing so the caller can map
+ * the failure onto a translation key.
  */
 export async function extractTextFromFile(
   file: File,
 ): Promise<ExtractionResult> {
   const name = file.name.toLowerCase();
 
-  if (!name.endsWith(".txt") && !name.endsWith(".docx")) {
+  if (name.endsWith(".docx")) {
+    return { ok: false, errorKey: "docxUnsupported" };
+  }
+
+  if (!name.endsWith(".txt")) {
     return { ok: false, errorKey: "unsupportedFileType" };
   }
 
@@ -38,12 +45,7 @@ export async function extractTextFromFile(
   }
 
   try {
-    const text = name.endsWith(".txt")
-      ? await file.text()
-      : ((await rulingGeneratorService.extractDocumentText(file)).data?.text ??
-        "");
-
-    const trimmed = text.trim();
+    const trimmed = (await file.text()).trim();
     if (!trimmed) return { ok: false, errorKey: "emptyFile" };
 
     return { ok: true, text: trimmed };

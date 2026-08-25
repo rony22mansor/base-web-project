@@ -14,16 +14,22 @@ import {
   RulingFormSchema,
   type RulingFormType,
 } from "../config/rulingGeneratorConfig";
+import { JudgmentMode } from "../enums/rulingEnums";
 import { FileUploadTrigger } from "./FileUploadTrigger";
+import { JudgmentModeToggle } from "./JudgmentModeToggle";
 
 interface RulingInputFormProps {
   defaultDescription?: string;
   onSubmit: (description: string) => void;
+  mode: JudgmentMode;
+  onModeChange: (mode: JudgmentMode) => void;
 }
 
 export function RulingInputForm({
   defaultDescription = "",
   onSubmit,
+  mode,
+  onModeChange,
 }: RulingInputFormProps) {
   const t = useTranslations("rulingGenerator");
   const formData = GetRulingForm();
@@ -87,6 +93,8 @@ export function RulingInputForm({
           {t("form.minLengthHint", { min: MIN_DESCRIPTION_LENGTH })}
         </p>
       )}
+
+      <JudgmentModeToggle mode={mode} onChange={onModeChange} />
 
       <div className="flex items-center gap-3">
         <Button type="submit" disabled={!form.formState.isValid} className="gap-2">

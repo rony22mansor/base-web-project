@@ -323,3 +323,45 @@
     line-height: 1.65;
   }
 }
+
+/*
+ * Printing a filled contract.
+ *
+ * The editor renders the document into `#contract-document`, and that same
+ * element is what the printer gets — there is no second, print-only rendering
+ * to drift out of sync. Everything around it (sidebar, topbar, the field list,
+ * the toolbar) is hidden rather than restyled.
+ */
+@media print {
+  body {
+    background: #fff;
+    overflow: visible;
+    height: auto;
+  }
+
+  /* The app chrome. */
+  [data-slot="sidebar-wrapper"] > [data-slot="sidebar"],
+  [data-slot="sidebar-rail"],
+  header[data-app-topbar] {
+    display: none !important;
+  }
+
+  /* The scroll containers the app nests the page in cannot clip the document. */
+  main,
+  [data-slot="sidebar-inset"] {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  #contract-document {
+    border: 0;
+    padding: 0;
+    font-size: 12pt;
+    line-height: 2;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+}

@@ -18,7 +18,11 @@ export function AppTopbar() {
   const current = MAIN_NAV.find((item) => isNavItemActive(pathname, item.url));
 
   return (
-    <header className="bg-background/85 sticky top-0 z-20 flex h-[45px] shrink-0 items-center gap-1 border-b px-2 backdrop-blur-sm">
+    <header
+      // Marked so the print stylesheet can drop the app chrome and leave only
+      // the document being printed.
+      data-app-topbar
+      className="bg-background/85 sticky top-0 z-20 flex h-[45px] shrink-0 items-center gap-1 border-b px-2 backdrop-blur-sm">
       <SidebarTrigger className="text-text-secondary" />
 
       <nav

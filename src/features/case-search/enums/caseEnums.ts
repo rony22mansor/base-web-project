@@ -1,18 +1,16 @@
 /**
- * `CaseCategory` is shared with the ruling generator, so it lives in
- * `core/enums/legalDomain`. Re-exported here so this feature's imports stay in
- * one place.
+ * How wide a net the retrieval should cast.
+ *
+ * The backend exposes `threshold` (0–1) as a raw similarity cutoff, and its
+ * own docs say to drop it toward 0.3 when short queries come back empty. That
+ * is a real control, not a detail to hide — but "0.42" means nothing to a
+ * lawyer, so the UI offers three named settings and the helper maps them.
  */
-export { CaseCategory } from "@/src/core/enums/legalDomain";
-
-/**
- * Date-range presets for the filter row. ui-features.md asks for a date-range
- * filter but does not specify the control; presets keep it to one chip row
- * instead of two date pickers, and the service still sends real ISO bounds so
- * the backend contract is a plain range.
- */
-export enum CasePeriod {
-  Recent = "recent",
-  Past = "past",
-  Older = "older",
+export enum CaseScope {
+  /** Close matches only. */
+  Strict = "strict",
+  /** The server's own default. */
+  Balanced = "balanced",
+  /** Anything loosely related — the answer to an empty result set. */
+  Broad = "broad",
 }

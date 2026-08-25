@@ -1,65 +1,109 @@
 "use client";
 
-import type { CaseCategory } from "@/src/core/enums/legalDomain";
-import { useState } from "react";
-import type { CasePeriod } from "../enums/caseEnums";
-import { periodToDateRange } from "../helpers/casePeriod";
-import { useCaseCategories } from "../services/queries/useCaseCategories";
-import { useCases } from "../services/queries/useCases";
+import { useMemo, useState } from "react";
+import { CaseScope } from "../enums/caseEnums";
+import { collectOutcomes } from "../helpers/caseOutcome";
+import {
+  DEFAULT_HYBRID_TOP_K,
+  DEFAULT_TOP_K,
+  scopeToThreshold,
+} from "../helpers/caseRetrieval";
+import { useCaseSearchConfig } from "../services/queries/useCaseSearchConfig";
+import { useCaseSemanticSearch } from "../services/queries/useCaseSemanticSearch";
 
 /**
- * Drives the single browse + search view. The query is only applied on submit
- * (semantic retrieval is expensive and the wireframe puts it behind a button),
- * whereas filter chips apply immediately.
+ * Drives the precedents screen.
  *
- * Paging lives in React Query, so there is no accumulated-items state here to
- * fall out of sync with the filters.
+ * Unlike laws, this feature has no browse mode: the cases corpus is reachable
+ * only by describing facts, so with no query the screen explains itself rather
+ * than listing anything. The query applies on submit; the scope chip is a real
+ * request parameter and re-runs retrieval, while the outcome chip only filters
+ * the ranked set already on screen.
  */
 export function useCaseSearchScreen() {
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<CaseCategory | null>(null);
-  const [period, setPeriod] = useState<CasePeriod | null>(null);
+  const [scope, setScope] = useState<CaseScope>(CaseScope.Balanced);
+  const [outcome, setOutcome] = useState<string | null>(null);
 
-  const cases = useCases({
-    query: query || undefined,
-    category: category ?? undefined,
-    ...periodToDateRange(period),
+  const isSearchMode = query.length > 0;
+
+  const search = useCaseSemanticSearch({
+    query,
+    threshold: scopeToThreshold(scope),
+    topK: DEFAULT_TOP_K,
+    hybridTopK: DEFAULT_HYBRID_TOP_K,
   });
+  const config = useCaseSearchConfig();
 
-  const categories = useCaseCategories();
+  const result = search.data?.data;
+  const retrieved = useMemo(() => result?.cases ?? [], [result]);
 
-  const pages = cases.data?.pages ?? [];
-  const items = pages.flatMap((page) => page.items);
-  const total = pages[0]?.total;
+  // Chip values come from the results themselves — there is no facet endpoint
+  // for this corpus, and the chips filter exactly the set on screen.
+  const outcomes = useMemo(
+    () => collectOutcomes(retrieved.map((legalCase) => legalCase.outcomes)),
+    [retrieved],
+  );
 
-  // Shaped for the chip options, which want a lookup rather than a list.
-  const categoryCounts = Object.fromEntries(
-    (categories.data?.data ?? []).map((entry) => [entry.category, entry.count]),
-  ) as Partial<Record<CaseCategory, number>>;
+  const outcomeCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const legalCase of retrieved) {
+      for (const value of legalCase.outcomes) {
+        counts[value] = (counts[value] ?? 0) + 1;
+      }
+    }
+    return counts;
+  }, [retrieved]);
+
+  // A new query rebuilds the chip set, so a selection left over from the last
+  // one is simply not applied — no effect needed to reset it.
+  const activeOutcome = outcome && outcomes.includes(outcome) ? outcome : null;
+
+  const cases = useMemo(
+    () =>
+      activeOutcome
+        ? retrieved.filter((legalCase) =>
+            legalCase.outcomes.includes(activeOutcome),
+          )
+        : retrieved,
+    [retrieved, activeOutcome],
+  );
 
   return {
+    // mode
+    isSearchMode,
+
     // filters
     query,
-    category,
-    period,
-    setCategory,
-    setPeriod,
+    scope,
+    setScope,
+    outcome: activeOutcome,
+    setOutcome,
+    outcomes,
+    outcomeCounts,
     search: setQuery,
     clearSearch: () => setQuery(""),
-    categoryCounts,
 
     // data
-    items,
-    total: cases.isPending ? undefined : total,
+    cases,
+    total: isSearchMode && !search.isPending ? cases.length : undefined,
+    /** The server's own Arabic "nothing matched" prose, when it sent one. */
+    serverMessage: result?.message ?? undefined,
+    tookMs: result?.tookMs,
+
+    /**
+     * False while the models are still on disk. The first search then costs
+     * about a minute, which is worth saying before the user starts waiting.
+     * A completed search is itself proof the index is warm — the config query
+     * is not re-fetched afterwards, so it would otherwise keep claiming cold.
+     */
+    isIndexWarm: (config.data?.data.loaded ?? true) || search.isSuccess,
 
     // request state
-    isLoading: cases.isPending,
-    isSearching: cases.isFetching && !cases.isFetchingNextPage,
-    isError: cases.isError,
-    errorMessage: cases.error?.message,
-    retry: cases.refetch,
-    hasMore: cases.hasNextPage,
-    isLoadingMore: cases.isFetchingNextPage,
-    loadMore: cases.fetchNextPage,
+    isLoading: isSearchMode && search.isPending,
+    isSearching: search.isFetching,
+    isError: search.isError,
+    errorMessage: search.error?.message,
+    retry: search.refetch,
   };
 }

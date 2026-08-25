@@ -1,58 +1,110 @@
 "use client";
 
 import type { ArticleStatus } from "@/src/core/enums/legalDomain";
-import { useState } from "react";
-import { useLawArticles } from "../services/queries/useLawArticles";
-import { useLawCategories } from "../services/queries/useLawCategories";
+import { useMemo, useState } from "react";
+import { useLawCatalog } from "../services/queries/useLawCatalog";
+import { useLawSemanticSearch } from "../services/queries/useLawSemanticSearch";
+import type { Law } from "../types/interfaces/lawInterface";
 
 /**
- * Drives the single browse + search view. The query is only applied on submit
- * (semantic retrieval is expensive and the wireframe puts it behind a button),
- * whereas filter chips apply immediately.
+ * Chip value standing in for the thirteen laws whose group is `null`. `null`
+ * is a real corpus value there, not missing data, so it needs a selectable
+ * identity of its own — and the backend has no filter for it, which is the
+ * other reason grouping is applied here rather than in the request.
+ */
+export const UNGROUPED = "__ungrouped__";
+
+/**
+ * Drives the law screen, which is two modes of one view:
  *
- * Paging lives in React Query, so there is no accumulated-items state here to
- * fall out of sync with the filters.
+ * - no query → the laws catalog (instant, reads the corpus file)
+ * - a query  → semantic retrieval over articles (~45s cold, seconds warm)
+ *
+ * The query only applies on submit, whereas filter chips apply immediately.
+ * Catalog filtering is client-side: it is 25 rows already in memory, so
+ * chip-per-request would be slower and would still not express "ungrouped".
  */
 export function useLawSearchScreen() {
   const [query, setQuery] = useState("");
-  const [lawId, setLawId] = useState<string | null>(null);
+  const [group, setGroup] = useState<string | null>(null);
+  const [nameFilter, setNameFilter] = useState("");
   const [status, setStatus] = useState<ArticleStatus | null>(null);
 
-  const articles = useLawArticles({
+  const isSearchMode = query.length > 0;
+
+  const catalog = useLawCatalog();
+  const search = useLawSemanticSearch({
     query: query || undefined,
-    lawId: lawId ?? undefined,
     status: status ?? undefined,
   });
 
-  const categories = useLawCategories();
+  const allLaws = useMemo(() => catalog.data?.data.laws ?? [], [catalog.data]);
 
-  const pages = articles.data?.pages ?? [];
-  const items = pages.flatMap((page) => page.items);
-  const total = pages[0]?.total;
+  const laws = useMemo(() => {
+    const needle = nameFilter.trim().toLowerCase();
+
+    return allLaws.filter((law) => {
+      if (group !== null && groupIdOf(law) !== group) return false;
+      if (!needle) return true;
+      return matchesName(law, needle);
+    });
+  }, [allLaws, group, nameFilter]);
+
+  const pages = search.data?.pages ?? [];
+  const articles = pages.flatMap((page) => page.items);
 
   return {
+    // mode
+    isSearchMode,
+
     // filters
     query,
-    lawId,
+    group,
+    nameFilter,
     status,
-    setLawId,
+    setGroup,
+    setNameFilter,
     setStatus,
     search: setQuery,
     clearSearch: () => setQuery(""),
 
-    // data
-    items,
-    total: articles.isPending ? undefined : total,
-    categories: categories.data?.data ?? [],
+    // catalog data
+    laws,
+    groups: catalog.data?.data.groups ?? [],
+    totalArticles: catalog.data?.data.totalArticles ?? 0,
 
-    // request state
-    isLoading: articles.isPending,
-    isSearching: articles.isFetching && !articles.isFetchingNextPage,
-    isError: articles.isError,
-    errorMessage: articles.error?.message,
-    retry: articles.refetch,
-    hasMore: articles.hasNextPage,
-    isLoadingMore: articles.isFetchingNextPage,
-    loadMore: articles.fetchNextPage,
+    // search data
+    articles,
+
+    // the summary line counts whichever mode is showing
+    total: isSearchMode
+      ? search.isPending
+        ? undefined
+        : articles.length
+      : catalog.isPending
+        ? undefined
+        : laws.length,
+
+    // request state, taken from whichever query is driving the view
+    isLoading: isSearchMode ? search.isPending : catalog.isPending,
+    isSearching: isSearchMode
+      ? search.isFetching && !search.isFetchingNextPage
+      : catalog.isFetching,
+    isError: isSearchMode ? search.isError : catalog.isError,
+    errorMessage: isSearchMode
+      ? search.error?.message
+      : catalog.error?.message,
+    retry: isSearchMode ? search.refetch : catalog.refetch,
+    hasMore: isSearchMode && search.hasNextPage,
+    isLoadingMore: search.isFetchingNextPage,
+    loadMore: search.fetchNextPage,
   };
 }
+
+/** A law's chip value: its group, or the sentinel for the ungrouped ones. */
+export const groupIdOf = (law: Law): string => law.group ?? UNGROUPED;
+
+/** Same fields the backend's own `?q=` matches, minus the id we never show. */
+const matchesName = (law: Law, needle: string): boolean =>
+  law.name.toLowerCase().includes(needle) ||
+  (law.shortName?.toLowerCase().includes(needle) ?? false);

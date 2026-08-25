@@ -1,8 +1,9 @@
 "use client";
 
+import { Skeleton } from "@/src/shared/components/ui/skeleton";
 import { useTranslations } from "next-intl";
-import { isReliableResult } from "../helpers/confidence";
 import { useRulingGenerator } from "../hooks/useRulingGenerator";
+import { RulingBlockedState } from "./RulingBlockedState";
 import { RulingErrorState } from "./RulingErrorState";
 import { RulingInputForm } from "./RulingInputForm";
 import { RulingLoadingState } from "./RulingLoadingState";
@@ -12,39 +13,52 @@ import { RulingResultView } from "./RulingResultView";
 /** Input -> Loading -> Result, driven entirely by the mutation's status. */
 export function RulingGeneratorContainer() {
   const t = useTranslations("rulingGenerator");
-  const {
-    description,
-    generate,
-    startNewQuery,
-    result,
-    isLoading,
-    isError,
-    error,
-  } = useRulingGenerator();
+  const screen = useRulingGenerator();
 
   const renderStage = () => {
-    if (isLoading) return <RulingLoadingState />;
+    // The availability check is instant; a spinner for it would flash.
+    if (screen.isCheckingAvailability) {
+      return <Skeleton className="h-64 w-full rounded-xl" />;
+    }
 
-    if (isError) {
+    // No model key set — every prediction would fail after a long wait.
+    if (screen.isBlocked) {
+      return <RulingBlockedState reason={screen.blockingReason} />;
+    }
+
+    if (screen.isLoading) return <RulingLoadingState mode={screen.mode} />;
+
+    if (screen.isError) {
       return (
-        <RulingErrorState message={error?.message} onRetry={startNewQuery} />
+        <RulingErrorState
+          message={screen.error?.message}
+          evidence={screen.failedEvidence}
+          onRetry={screen.startNewQuery}
+        />
       );
     }
 
-    if (result) {
-      return isReliableResult(result) ? (
+    if (screen.result) {
+      // `ok: false` is the pipeline saying it could not produce a usable
+      // prediction — the one case where no report is shown at all.
+      return screen.result.ok ? (
         <RulingResultView
-          result={result}
-          description={description}
-          onNewQuery={startNewQuery}
+          prediction={screen.result}
+          description={screen.description}
+          onNewQuery={screen.startNewQuery}
         />
       ) : (
-        <RulingNoMatchState onRetry={startNewQuery} />
+        <RulingNoMatchState onRetry={screen.startNewQuery} />
       );
     }
 
     return (
-      <RulingInputForm defaultDescription={description} onSubmit={generate} />
+      <RulingInputForm
+        defaultDescription={screen.description}
+        onSubmit={screen.generate}
+        mode={screen.mode}
+        onModeChange={screen.setMode}
+      />
     );
   };
 

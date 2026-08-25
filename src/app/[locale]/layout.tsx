@@ -1,4 +1,5 @@
 import { routing } from "@/src/core/i18n/routing";
+import { DirectionProvider } from "@/src/core/providers/DirectionProvider";
 import QueryProvider from "@/src/core/providers/QueryProvider";
 import { ThemeProvider } from "@/src/core/providers/ThemeProvider";
 import { setDirection } from "@/src/core/utils/functions/helperServer";
@@ -57,27 +58,29 @@ export default async function RootLayout({
       <body className="relative flex h-screen flex-col overflow-y-hidden">
         <QueryProvider>
           <NextIntlClientProvider locale={locale}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="light"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                closeButton={false}
-                rtl={setDirection(locale) === "rtl"}
-                theme="colored"
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-              />
-              {children}
-            </ThemeProvider>
+            <DirectionProvider dir={setDirection(locale)}>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <ToastContainer
+                  position="bottom-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick={false}
+                  closeButton={false}
+                  rtl={setDirection(locale) === "rtl"}
+                  theme="colored"
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                />
+                {children}
+              </ThemeProvider>
+            </DirectionProvider>
           </NextIntlClientProvider>
         </QueryProvider>
       </body>

@@ -1,0 +1,1175 @@
+<title>Monsif Legal API</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#FAFAFC;
+  --surface:#FFFFFF;
+  --surface-2:#F2F3F7;
+  --ink:#15171F;
+  --ink-2:#3D4252;
+  --mid:#6A6F80;
+  --faint:#9AA0B0;
+  --rule:#E1E3EB;
+  --rule-strong:#CBCFDB;
+  --accent:#1C6460;
+  --accent-soft:#E4F0EE;
+  --ok:#2C6E4E;
+  --ok-soft:#E2F0E8;
+  --warn:#8A5A12;
+  --warn-soft:#F7EEDD;
+  --bad:#9E3535;
+  --bad-soft:#F7E6E6;
+  --post:#7A4BA8;
+  --post-soft:#F0E9F7;
+  --get:#1C5A8A;
+  --get-soft:#E4EEF7;
+  --shadow:0 1px 2px rgba(21,23,31,.05),0 8px 24px -12px rgba(21,23,31,.12);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#101219;
+    --surface:#171A23;
+    --surface-2:#1E222D;
+    --ink:#EDEEF3;
+    --ink-2:#C3C7D4;
+    --mid:#8D93A4;
+    --faint:#6B7183;
+    --rule:#282D3A;
+    --rule-strong:#3A4052;
+    --accent:#6FC5BD;
+    --accent-soft:#15302E;
+    --ok:#7FCBA3;
+    --ok-soft:#152A20;
+    --warn:#D9A85C;
+    --warn-soft:#2B2214;
+    --bad:#E08A8A;
+    --bad-soft:#2C1A1A;
+    --post:#C0A0E0;
+    --post-soft:#241C30;
+    --get:#87B8E0;
+    --get-soft:#152430;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101219;
+  --surface:#171A23;
+  --surface-2:#1E222D;
+  --ink:#EDEEF3;
+  --ink-2:#C3C7D4;
+  --mid:#8D93A4;
+  --faint:#6B7183;
+  --rule:#282D3A;
+  --rule-strong:#3A4052;
+  --accent:#6FC5BD;
+  --accent-soft:#15302E;
+  --ok:#7FCBA3;
+  --ok-soft:#152A20;
+  --warn:#D9A85C;
+  --warn-soft:#2B2214;
+  --bad:#E08A8A;
+  --bad-soft:#2C1A1A;
+  --post:#C0A0E0;
+  --post-soft:#241C30;
+  --get:#87B8E0;
+  --get-soft:#152430;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans Arabic","Segoe UI",system-ui,sans-serif;
+  font-weight:400;
+  font-size:15.5px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:Newsreader,Georgia,"Times New Roman",serif;font-weight:500;text-wrap:balance;margin:0}
+code,pre,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* ── masthead ─────────────────────────────── */
+.masthead{border-bottom:1px solid var(--rule);background:var(--surface)}
+.masthead .wrap{padding-top:52px;padding-bottom:38px}
+.eyebrow{
+  font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mid);font-weight:500;margin:0 0 14px;
+}
+h1{font-size:clamp(34px,5vw,52px);line-height:1.08;letter-spacing:-.02em;margin-bottom:14px}
+.standfirst{font-size:17.5px;color:var(--ink-2);max-width:62ch;margin:0}
+.meta-row{
+  display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:26px;
+  font-size:13px;color:var(--mid);
+}
+.meta-row b{color:var(--ink);font-weight:500}
+.meta-row .mono{font-size:12.5px}
+
+/* ── layout ───────────────────────────────── */
+.main{display:grid;grid-template-columns:212px minmax(0,1fr);gap:52px;align-items:start;padding:44px 0 96px}
+@media (max-width:940px){.main{grid-template-columns:1fr;gap:0}.toc{display:none}}
+
+.toc{position:sticky;top:22px;font-size:13.5px}
+.toc-label{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:500;margin-bottom:12px}
+.toc a{display:block;padding:5px 0 5px 12px;color:var(--mid);text-decoration:none;border-left:2px solid var(--rule);line-height:1.4}
+.toc a:hover{color:var(--accent);border-left-color:var(--accent)}
+.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+.toc .toc-sub{padding-left:22px;font-size:12.5px}
+
+section{scroll-margin-top:22px}
+section + section{margin-top:56px}
+h2{font-size:27px;letter-spacing:-.01em;margin-bottom:8px}
+.sec-note{color:var(--mid);font-size:14.5px;max-width:66ch;margin:0 0 22px}
+
+/* ── readiness ────────────────────────────── */
+.ready-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:12px;margin-bottom:22px}
+.ready{
+  background:var(--surface);border:1px solid var(--rule);border-radius:7px;
+  padding:15px 16px 14px;box-shadow:var(--shadow);
+  border-top:3px solid var(--rule-strong);
+}
+.ready.ok{border-top-color:var(--ok)}
+.ready.warn{border-top-color:var(--warn)}
+.ready.bad{border-top-color:var(--bad)}
+.ready h4{font-family:"IBM Plex Sans Arabic",sans-serif;font-size:14px;font-weight:600;margin-bottom:5px}
+.ready p{margin:0;font-size:13px;color:var(--mid);line-height:1.5}
+.state{
+  display:inline-block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  font-weight:600;padding:2px 7px;border-radius:3px;margin-bottom:8px;
+}
+.state.ok{background:var(--ok-soft);color:var(--ok)}
+.state.warn{background:var(--warn-soft);color:var(--warn)}
+.state.bad{background:var(--bad-soft);color:var(--bad)}
+
+/* ── callout ──────────────────────────────── */
+.callout{
+  border-left:3px solid var(--accent);background:var(--accent-soft);
+  padding:14px 18px;border-radius:0 6px 6px 0;margin:20px 0;font-size:14px;color:var(--ink-2);
+}
+.callout.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.callout.bad{border-left-color:var(--bad);background:var(--bad-soft)}
+.callout b{color:var(--ink)}
+.callout p{margin:0}
+.callout p + p{margin-top:8px}
+
+/* ── endpoint card ────────────────────────── */
+.ep{
+  background:var(--surface);border:1px solid var(--rule);border-radius:8px;
+  box-shadow:var(--shadow);overflow:hidden;margin-bottom:16px;
+}
+.ep-head{padding:16px 20px;border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:10px;align-items:baseline}
+.verb{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.07em;
+  padding:3px 8px;border-radius:4px;flex:none;
+}
+.verb.post{background:var(--post-soft);color:var(--post)}
+.verb.get{background:var(--get-soft);color:var(--get)}
+.path{font-family:"IBM Plex Mono",monospace;font-size:14.5px;font-weight:500;color:var(--ink);word-break:break-all}
+.ep-tag{margin-left:auto;font-size:11.5px;color:var(--faint);letter-spacing:.04em}
+.ep-body{padding:18px 20px 20px}
+.ep-body > p:first-child{margin-top:0}
+.ep-body p{margin:0 0 14px;color:var(--ink-2);font-size:14.5px}
+.ep-body p:last-child{margin-bottom:0}
+
+h5{
+  font-family:"IBM Plex Sans Arabic",sans-serif;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--faint);font-weight:600;margin:22px 0 9px;
+}
+.ep-body > h5:first-child{margin-top:0}
+
+/* ── tables ───────────────────────────────── */
+.tw{overflow-x:auto;border:1px solid var(--rule);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:440px}
+th{
+  text-align:left;font-weight:600;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--faint);padding:9px 13px;background:var(--surface-2);border-bottom:1px solid var(--rule);
+  white-space:nowrap;
+}
+td{padding:9px 13px;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.mono,td code{font-size:12.5px}
+td:first-child{color:var(--ink);white-space:nowrap}
+.dflt{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--mid);font-variant-numeric:tabular-nums;white-space:nowrap}
+.req{color:var(--bad);font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── code ─────────────────────────────────── */
+pre{
+  background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;
+  padding:14px 16px;overflow-x:auto;margin:0;
+  font-size:12.8px;line-height:1.6;color:var(--ink-2);
+}
+pre[dir="rtl"]{direction:ltr}
+code{background:var(--surface-2);padding:1.5px 5px;border-radius:3px;font-size:12.8px;color:var(--ink)}
+td code,pre code{background:none;padding:0}
+
+/* ── pipeline diagram ─────────────────────── */
+.pipe{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:22px 20px;box-shadow:var(--shadow);margin-bottom:20px}
+.pipe svg{display:block;width:100%;height:auto}
+
+/* ── status table ─────────────────────────── */
+.codes td:first-child{font-family:"IBM Plex Mono",monospace;font-weight:600;font-variant-numeric:tabular-nums}
+
+footer{border-top:1px solid var(--rule);padding:26px 0 44px;color:var(--faint);font-size:13px}
+a{color:var(--accent)}
+</style>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Monsif_Back · Flask · localhost:5000</p>
+    <h1>Monsif Legal API</h1>
+    <p class="standfirst">Browse and search Syrian legal text — 25 laws and 2,278 articles, plus summarization, crime classification, precedent retrieval, judgment prediction, and contract templates. Everything a frontend needs to call them.</p>
+    <div class="meta-row">
+      <span>Base URL <b class="mono">http://127.0.0.1:5000</b></span>
+      <span>CORS <b>open (all origins)</b></span>
+      <span>Encoding <b>UTF-8, Arabic returned raw</b></span>
+      <span>Auth <b>none</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap main">
+  <nav class="toc">
+    <div class="toc-label">Contents</div>
+    <a href="#ready">Readiness</a>
+    <a href="#conventions">Conventions</a>
+    <a href="#pipeline">How features relate</a>
+    <a href="#system">System</a>
+    <a href="#summarize" class="toc-sub">Summarize</a>
+    <a href="#classify" class="toc-sub">Classify</a>
+    <a href="#search" class="toc-sub">Legacy search</a>
+    <a href="#catalog" class="toc-sub">Laws catalog</a>
+    <a href="#laws" class="toc-sub">Laws RAG</a>
+    <a href="#cases" class="toc-sub">Cases RAG</a>
+    <a href="#judgment" class="toc-sub">Judgment</a>
+    <a href="#contracts" class="toc-sub">Contracts</a>
+    <a href="#errors">Errors</a>
+    <a href="#frontend">Frontend notes</a>
+  </nav>
+
+  <main>
+
+  <!-- ══ READINESS ══ -->
+  <section id="ready">
+    <h2>Readiness</h2>
+    <p class="sec-note">Verified by booting the server and calling every endpoint on this machine. The server itself starts in about 2&nbsp;seconds — models load lazily on first use per feature.</p>
+
+    <div class="ready-grid">
+      <div class="ready ok">
+        <span class="state ok">Ready</span>
+        <h4>Environment</h4>
+        <p>Python 3.11.9 venv, all requirements installed. Device resolves to <code>cpu</code>.</p>
+      </div>
+      <div class="ready ok">
+        <span class="state ok">Ready</span>
+        <h4>Shared models</h4>
+        <p>BGE-M3 and BGE-reranker-v2-m3 cached locally in <code>.hf_cache</code> (6.5&nbsp;GB).</p>
+      </div>
+      <div class="ready ok">
+        <span class="state ok">Ready</span>
+        <h4>Laws index</h4>
+        <p>Qdrant collection built, 28&nbsp;MB. Reranker batching now makes searches 2.15× faster: ~7–13&nbsp;s warm.</p>
+      </div>
+      <div class="ready ok">
+        <span class="state ok">Ready</span>
+        <h4>Cases index</h4>
+        <p>FAISS + metadata present. Returns real precedents with full judgment text; ~10&nbsp;s warm after the shared-reranker speedup.</p>
+      </div>
+      <div class="ready ok">
+        <span class="state ok">Ready</span>
+        <h4>Summarize &amp; classify</h4>
+        <p>Both verified end to end. No neural models, no keys — responses are instant.</p>
+      </div>
+      <div class="ready ok">
+        <span class="state ok">New</span>
+        <h4>Laws catalog</h4>
+        <p>Two browse endpoints added and verified: 25 laws, 2,278 articles, grouped by each law's internal hierarchy. No models — instant.</p>
+      </div>
+      <div class="ready warn">
+        <span class="state warn">Being built</span>
+        <h4>Contracts index</h4>
+        <p>Was missing. Building it now downloads <code>multilingual-e5-large</code> (2.2&nbsp;GB) and encodes 211 templates.</p>
+      </div>
+      <div class="ready bad">
+        <span class="state bad">Blocked</span>
+        <h4>GROQ_API_KEY</h4>
+        <p>Empty in <code>.env</code>. Judgment prediction returns 503, and contract suggestion needs <code>suggest:false</code> until it is set.</p>
+      </div>
+      <div class="ready ok">
+        <span class="state ok">Fixed</span>
+        <h4>Judgment classifier</h4>
+        <p>Was reported missing. The four <code>.joblib</code> files already existed under <code>utils/classification_model</code> and were copied into <code>data/classifier</code>.</p>
+      </div>
+    </div>
+
+    <div class="callout bad">
+      <p><b>One thing blocks you.</b> Set <code>GROQ_API_KEY</code> in <code>.env</code> from console.groq.com/keys. Until then, judgment prediction is unavailable and contract search must be called with <code>"suggest": false</code>. Every other endpoint works today.</p>
+    </div>
+    <div class="callout warn">
+      <p><b>Never let the first contract request build the index.</b> With no index on disk, <code>/contracts/search</code> downloads a 2.2&nbsp;GB model and encodes the corpus <em>inside the HTTP request</em> — it hangs for many minutes. Build it once offline: <code>python scripts/build_contracts_index.py</code>.</p>
+    </div>
+    <div class="callout">
+      <p><b>Dead line in <code>.env</code>.</b> <code>MONSIF_WARM = "contracts"</code> is never read — the variable the code looks for is <code>WARMUP</code>, with no spaces around the <code>=</code>. To preload at boot, write <code>WARMUP=laws,cases</code> instead.</p>
+    </div>
+  </section>
+
+  <!-- ══ CONVENTIONS ══ -->
+  <section id="conventions">
+    <h2>Conventions</h2>
+    <p class="sec-note">Uniform across every endpoint, so you can write one fetch wrapper and one error path.</p>
+
+    <h5>Response envelope</h5>
+    <pre>// success — always 200
+{ "status": "success", "data": { ... } }
+
+// failure — 400, 404, 500, 502 or 503
+{ "status": "error", "error": "رسالة بالعربية" }</pre>
+
+    <div class="callout">
+      <p><b>Errors come back in Arabic.</b> The <code>error</code> string is user-facing prose, safe to display directly. Branch on the HTTP status code, not on the message text.</p>
+    </div>
+
+    <h5>Search response shape</h5>
+    <p>All four search endpoints (<code>laws</code>, <code>cases</code>, <code>contracts</code>, and <code>search</code>) return the same outer fields inside <code>data</code>:</p>
+    <div class="tw"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>query</td><td class="dflt">string</td><td>Echo of what you sent — useful for discarding stale responses.</td></tr>
+        <tr><td>found</td><td class="dflt">boolean</td><td>Whether anything passed the threshold.</td></tr>
+        <tr><td>count</td><td class="dflt">integer</td><td>Length of <code>results</code>.</td></tr>
+        <tr><td>results</td><td class="dflt">array</td><td>The hits. Shape differs per endpoint.</td></tr>
+        <tr><td>message</td><td class="dflt">string | null</td><td>Arabic "nothing found" text when <code>found</code> is false. Render it as the empty state.</td></tr>
+        <tr><td>params_used</td><td class="dflt">object</td><td>Every parameter actually applied, defaults included. Ideal for a debug panel.</td></tr>
+        <tr><td>took_ms</td><td class="dflt">integer</td><td>Server-side duration.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout">
+      <p><b><code>found: false</code> is a success, not an error.</b> It arrives as HTTP 200 with an empty <code>results</code> array. Show <code>message</code> rather than an error toast.</p>
+    </div>
+
+    <h5>Parameter precedence</h5>
+    <p>Defaults in <code>config.py</code> are overridden by <code>.env</code>, which is overridden by fields in the request body — and a body field affects only that one request. Send just <code>text</code> and you get server defaults. Every <code>/config</code> endpoint reports the live defaults plus the exact list of names that request bodies may override, so the frontend can build a tuning panel without hardcoding anything.</p>
+  </section>
+
+  <!-- ══ PIPELINE ══ -->
+  <section id="pipeline">
+    <h2>How features relate</h2>
+    <p class="sec-note">Six features are independent. Judgment prediction is not — it calls two of the others internally before it reaches the LLM, which is why it is by far the slowest endpoint.</p>
+
+    <div class="pipe">
+      <svg viewBox="0 0 720 232" role="img" aria-label="Judgment prediction calls Laws RAG and Cases RAG internally, adds the statistical classifier, then makes up to five Groq LLM calls and runs three verification layers.">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--rule-strong)"/>
+          </marker>
+        </defs>
+        <g font-family="IBM Plex Sans Arabic, sans-serif" font-size="12">
+          <!-- facts input -->
+          <rect x="8" y="92" width="118" height="46" rx="6" fill="var(--surface-2)" stroke="var(--rule-strong)"/>
+          <text x="67" y="111" text-anchor="middle" fill="var(--ink)" font-size="12.5" font-weight="600">Case facts</text>
+          <text x="67" y="127" text-anchor="middle" fill="var(--mid)" font-size="11">POST text</text>
+
+          <path d="M130 115 L172 115" stroke="var(--rule-strong)" stroke-width="1.5" marker-end="url(#ar)" fill="none"/>
+
+          <!-- retrieval column -->
+          <rect x="176" y="18" width="150" height="48" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/>
+          <text x="251" y="38" text-anchor="middle" fill="var(--ink)" font-size="12.5" font-weight="600">Laws RAG</text>
+          <text x="251" y="54" text-anchor="middle" fill="var(--mid)" font-size="11">statutes · top_k_laws</text>
+
+          <rect x="176" y="91" width="150" height="48" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/>
+          <text x="251" y="111" text-anchor="middle" fill="var(--ink)" font-size="12.5" font-weight="600">Cases RAG</text>
+          <text x="251" y="127" text-anchor="middle" fill="var(--mid)" font-size="11">precedents · top_k_cases</text>
+
+          <rect x="176" y="164" width="150" height="48" rx="6" fill="var(--surface-2)" stroke="var(--rule-strong)" stroke-dasharray="4 3"/>
+          <text x="251" y="184" text-anchor="middle" fill="var(--ink)" font-size="12.5" font-weight="600">Classifier</text>
+          <text x="251" y="200" text-anchor="middle" fill="var(--mid)" font-size="11">optional signal</text>
+
+          <line x1="172" y1="42" x2="172" y2="188" stroke="var(--rule-strong)" stroke-width="1.5"/>
+          <path d="M172 42 L176 42" stroke="var(--rule-strong)" stroke-width="1.5" marker-end="url(#ar)" fill="none"/>
+          <path d="M172 115 L176 115" stroke="var(--rule-strong)" stroke-width="1.5" marker-end="url(#ar)" fill="none"/>
+          <path d="M172 188 L176 188" stroke="var(--rule-strong)" stroke-width="1.5" marker-end="url(#ar)" fill="none"/>
+
+          <path d="M330 42 L372 42 L372 115" stroke="var(--rule-strong)" stroke-width="1.5" fill="none"/>
+          <path d="M330 115 L372 115" stroke="var(--rule-strong)" stroke-width="1.5" fill="none"/>
+          <path d="M330 188 L372 188 L372 115" stroke="var(--rule-strong)" stroke-width="1.5" fill="none"/>
+          <path d="M372 115 L412 115" stroke="var(--rule-strong)" stroke-width="1.5" marker-end="url(#ar)" fill="none"/>
+
+          <!-- llm -->
+          <rect x="416" y="91" width="140" height="48" rx="6" fill="var(--post-soft)" stroke="var(--post)"/>
+          <text x="486" y="111" text-anchor="middle" fill="var(--ink)" font-size="12.5" font-weight="600">Groq LLM</text>
+          <text x="486" y="127" text-anchor="middle" fill="var(--mid)" font-size="11">up to 5 calls</text>
+
+          <path d="M560 115 L600 115" stroke="var(--rule-strong)" stroke-width="1.5" marker-end="url(#ar)" fill="none"/>
+
+          <!-- verification -->
+          <rect x="604" y="91" width="108" height="48" rx="6" fill="var(--ok-soft)" stroke="var(--ok)"/>
+          <text x="658" y="111" text-anchor="middle" fill="var(--ink)" font-size="12.5" font-weight="600">Verify</text>
+          <text x="658" y="127" text-anchor="middle" fill="var(--mid)" font-size="11">3 layers</text>
+        </g>
+      </svg>
+    </div>
+
+    <p>Because judgment prediction re-runs retrieval itself, you do <em>not</em> need to call <code>/laws/search</code> and <code>/cases/search</code> first and pass the results in. Send the raw facts. The statutes and precedents it used come back in the response under <code>_retrieved_statutes</code> and <code>_retrieved_cases</code>, so you can render the evidence alongside the verdict.</p>
+  </section>
+
+  <!-- ══ SYSTEM ══ -->
+  <section id="system">
+    <h2>System</h2>
+    <p class="sec-note">No models, no keys, instant. Use these for liveness and for driving loading states.</p>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb get">GET</span><span class="path">/</span><span class="ep-tag">instant</span></div>
+      <div class="ep-body">
+        <p>Static index of available endpoints with Arabic descriptions. Handy as a liveness probe.</p>
+      </div>
+    </div>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb get">GET</span><span class="path">/api/health</span><span class="ep-tag">instant</span></div>
+      <div class="ep-body">
+        <p>Reports which shared models and which features are currently loaded. This is <em>not</em> wrapped in the standard envelope — it returns its fields at the top level.</p>
+        <h5>Response</h5>
+        <pre>{
+  "status": "ok",
+  "models": {
+    "bgem3_flag_loaded": false,
+    "dense_encoder_loaded": false,
+    "reranker_loaded": false,
+    "device": "cpu",
+    "fp16": false
+  },
+  "features": {
+    "laws_rag_loaded": false,
+    "cases_rag_loaded": false,
+    "contracts_rag_loaded": false
+  },
+  "warmup_on_start": []
+}</pre>
+        <div class="callout">
+          <p><b>Use this to warn users before a cold call.</b> When <code>laws_rag_loaded</code> is false, the next search will take roughly 45 seconds while weights load. Show "preparing the model" rather than a spinner that looks stuck.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SUMMARIZE ══ -->
+  <section id="summarize">
+    <h2>Summarization</h2>
+    <p class="sec-note">Extractive summary plus regex-extracted case fields. Pure Python — no model load, no key, no wait.</p>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb post">POST</span><span class="path">/api/legal/summarize</span><span class="ep-tag">instant</span></div>
+      <div class="ep-body">
+        <h5>Request</h5>
+        <div class="tw"><table>
+          <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>text</td><td class="dflt">string</td><td><span class="req">Required</span> &nbsp;Case text. Under 10 characters returns 400.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h5>Response — verified</h5>
+        <pre>{
+  "status": "success",
+  "data": {
+    "summary": "بتاريخ 12/05/2023 تقدم المدعي بشكوى ...",
+    "original_length": 251,
+    "extracted_fields": {
+      "date": "12/05/2023",
+      "accused": ["المتهم الأول", "المتهم"],
+      "victim": "المدعي",
+      "action": "سرقة مبلغ مالي قدره خمسمئة ألف ليرة.",
+      "evidence": ["أداة الكسر", "بصمات"],
+      "confession_status": ["المتهم: اعترف"],
+      "ruling": "قررت المحكمة إدانة المتهم."
+    }
+  }
+}</pre>
+        <p><code>extracted_fields</code> always has all seven keys. Missing values are <code>null</code>; list fields (<code>accused</code>, <code>evidence</code>, <code>confession_status</code>) are <code>[]</code>. Safe to destructure without guards.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CLASSIFY ══ -->
+  <section id="classify">
+    <h2>Crime classification</h2>
+    <p class="sec-note">Multi-label SVM over normalized Arabic. Loads at server boot, so it is fast from the first call.</p>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb post">POST</span><span class="path">/api/legal/classify</span><span class="ep-tag">instant</span></div>
+      <div class="ep-body">
+        <div class="callout warn">
+          <p><b>The field is <code>facts</code>, not <code>text</code>.</b> This is the only endpoint that names its input differently — every other one takes <code>text</code>.</p>
+        </div>
+
+        <h5>Request</h5>
+        <div class="tw"><table>
+          <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>facts</td><td class="dflt">string</td><td><span class="req">Required</span> &nbsp;Must be a non-empty string, or you get 400.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h5>Response — labels found</h5>
+        <pre>{ "status": "success",
+  "data": { "classified": true, "crimes": ["السرقة", "الأذى"] } }</pre>
+
+        <h5>Response — nothing passed the threshold (verified)</h5>
+        <pre>{ "status": "success",
+  "data": {
+    "classified": false,
+    "crimes": [],
+    "message": "المعطيات المقدمة لا تكفي لتصنيف القضية."
+  } }</pre>
+        <p>Both are HTTP 200. Branch on <code>classified</code> and render <code>message</code> when it is false.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ LEGACY SEARCH ══ -->
+  <section id="search">
+    <h2>Legacy search</h2>
+    <p class="sec-note">The older FAISS index covering articles and jurisprudence together. Kept for compatibility — prefer Laws RAG for new work.</p>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb post">POST</span><span class="path">/api/legal/search</span><span class="ep-tag">cold ~30s</span></div>
+      <div class="ep-body">
+        <h5>Request</h5>
+        <div class="tw"><table>
+          <thead><tr><th>Field</th><th>Default</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>text</td><td class="dflt">—</td><td><span class="req">Required</span> &nbsp;Query.</td></tr>
+            <tr><td>top_k</td><td class="dflt">3</td><td>Hits per section.</td></tr>
+            <tr><td>mode</td><td class="dflt">auto</td><td><code>articles</code>, <code>jurisprudence</code>, <code>both</code>, or omit to auto-detect from the query. Any other value returns 400.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h5>Response</h5>
+        <p>Unlike the other search endpoints, results are split into two named objects rather than one flat <code>results</code> array — and each is present only if the effective <code>mode</code> included it.</p>
+        <pre>{ "status": "success",
+  "data": {
+    "query": "السرقة الموصوفة",
+    "mode": "both",
+    "articles": {
+      "found": true,
+      "results": [{
+        "article_number": "622",
+        "law_name": "...",
+        "law_category": "...",
+        "status": "معدلة",
+        "body": "...",
+        "similarity_score": 71.4
+      }]
+    },
+    "jurisprudence": {
+      "found": true,
+      "results": [{
+        "jtihad_text": "...",
+        "article_number": "622",
+        "law_name": "...",
+        "law_category": "...",
+        "status": "...",
+        "article_body": "...",
+        "similarity_score": 68.2
+      }]
+    }
+  } }</pre>
+        <p>When a section finds nothing it becomes <code>{ "found": false, "message": "..." }</code> with no <code>results</code> key — check <code>found</code> before reading it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ LAWS CATALOG ══ -->
+  <section id="catalog">
+    <h2>Laws catalog</h2>
+    <p class="sec-note">Browsing rather than searching: list the laws, then open one and read its articles grouped into that law's own internal structure. Reads the corpus file directly — no models, no Qdrant lock, so every call is instant even on a cold server.</p>
+
+    <div class="callout">
+      <p><b>The corpus holds 25 laws and 2,278 articles.</b> Each law carries an internal hierarchy of كتاب › باب › فصل — that is what "category" means here. It is structure <em>within</em> a law, not a classification of laws. Twelve of the amnesty decrees additionally carry a top-level <code>category</code> of <code>تشريعات العفو العام</code>; the other thirteen have <code>null</code>.</p>
+    </div>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb get">GET</span><span class="path">/api/legal/laws</span><span class="ep-tag">instant</span></div>
+      <div class="ep-body">
+        <p>Every law with its article count, internal category count, and status breakdown. Sorted by article count, largest first.</p>
+
+        <h5>Query parameters</h5>
+        <div class="tw"><table>
+          <thead><tr><th>Param</th><th>Default</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>q</td><td class="dflt">—</td><td>Substring match against law name, short name, or id. <b>This is what you want to search laws by name.</b></td></tr>
+            <tr><td>category</td><td class="dflt">—</td><td>Exact top-level category. The only value present in the corpus is <code>تشريعات العفو العام</code>.</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout warn">
+          <p><b><code>category</code> is not a law name.</b> Only 12 amnesty decrees carry a category; the other 13 laws have <code>null</code>. Passing a law's name as <code>category</code> correctly matches nothing — to find a law by name use <code>?q=</code>, and to open one use the articles endpoint. Every response lists the valid values in <code>available_categories</code>, and a filter that matches nothing returns an Arabic <code>message</code> explaining why rather than a bare empty list.</p>
+        </div>
+
+        <div class="callout">
+          <p><b>Stray quotes are tolerated.</b> Typing <code>?category="…"</code> straight into a browser makes the quote marks part of the value, which silently matches nothing. The API now strips surrounding <code>"</code>, <code>'</code>, <code>«»</code> and curly quotes from <code>q</code>, <code>category</code>, <code>status</code>, <code>law_id</code>, and <code>article_id</code>. Note that percent-encoding like <code>%D9%82%D8%A7</code> in the address bar is normal and correct — Arabic URLs always look like that, and the server decodes them fine.</p>
+        </div>
+
+        <h5>Response — verified</h5>
+        <pre>{ "status": "success",
+  "data": {
+    "count": 25,
+    "total_articles": 2278,
+    "laws": [{
+      "law_id": "مرسوم تشريعي رقم 148 لعام 1949 - قانون العقوبات العام",
+      "law_name": "مرسوم تشريعي رقم 148 لعام 1949 - قانون العقوبات العام",
+      "short_name": null,
+      "category": null,
+      "article_count": 747,
+      "category_count": 226,
+      "has_categories": true,
+      "status_counts": { "عادية": 473, "معدلة": 255, "ملغاة": 19 },
+      "first_article_number": "1",
+      "last_article_number": "756"
+    }],
+    "categories": [
+      { "category": null, "category_label": "بدون تصنيف",
+        "law_count": 13, "article_count": 2138, "law_ids": [...] },
+      { "category": "تشريعات العفو العام", "category_label": "تشريعات العفو العام",
+        "law_count": 12, "article_count": 140, "law_ids": [...] }
+    ],
+    "available_categories": ["تشريعات العفو العام"],
+    "filters_used": { "q": null, "category": null }
+  } }</pre>
+
+        <div class="callout">
+          <p><b>Display <code>law_name</code>, never <code>law_id</code>.</b> Thirteen laws use their full name as the id, but twelve amnesty decrees have opaque ids like <code>Law-446817254466011</code>. <code>law_name</code> is always human-readable, and <code>short_name</code> gives a compact label for those twelve — perfect for a card title with the long name beneath.</p>
+          <p><b><code>status_counts</code> is free UI.</b> It gives you a repealed/amended badge count per law without fetching a single article.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb get">GET</span><span class="path">/api/legal/laws/&lt;law_id&gt;/articles</span><span class="ep-tag">instant</span></div>
+      <div class="ep-body">
+        <p>Every article of one law with all its information, grouped into that law's internal categories.</p>
+
+        <div class="callout warn">
+          <p><b>URL-encode the id.</b> It contains Arabic, spaces, and in one case a comma. Use <code>encodeURIComponent(law_id)</code>. If your client mangles encoded path segments, use the identical query-parameter form: <code>GET /api/legal/laws/articles?law_id=…</code></p>
+          <p>The lookup is lenient — it accepts the <code>law_id</code>, the full <code>law_name</code>, or the <code>short_name</code>.</p>
+        </div>
+
+        <h5>Query parameters</h5>
+        <div class="tw"><table>
+          <thead><tr><th>Param</th><th>Default</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>grouped</td><td class="dflt">true</td><td>Group into categories. <code>false</code> returns a flat <code>articles</code> array instead.</td></tr>
+            <tr><td>include_body</td><td class="dflt">true</td><td><b>Set false for list views.</b> Drops all three body fields — the penal code goes from 1.9&nbsp;MB to 1.2&nbsp;MB.</td></tr>
+            <tr><td>status</td><td class="dflt">—</td><td>Exact match: <code>عادية</code>, <code>معدلة</code>, or <code>ملغاة</code>.</td></tr>
+            <tr><td>category</td><td class="dflt">—</td><td>Exact <code>category_key</code> from a previous response.</td></tr>
+            <tr><td>q</td><td class="dflt">—</td><td>Substring match on article number or body text.</td></tr>
+            <tr><td>page</td><td class="dflt">1</td><td>1-based page number.</td></tr>
+            <tr><td>per_page</td><td class="dflt">—</td><td>Omit to get every article in one response.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h5>Response — verified</h5>
+        <pre>{ "status": "success",
+  "data": {
+    "law": {
+      "law_id": "...", "law_name": "...", "short_name": null, "category": null,
+      "article_count": 747,
+      "status_counts": { "عادية": 473, "معدلة": 255, "ملغاة": 19 }
+    },
+    "count": 747,
+    "total_matched": 747,
+    "grouped": true,
+    "category_count": 226,
+    "pagination": { "page": 1, "per_page": null, "total_pages": 1, "total": 747 },
+    "filters_used": { "status": null, "category": null, "q": null, "include_body": true },
+    "categories": [{
+      "category_key": "01. الكتاب الأول - الأحكام العامة\\01. الباب الأول - القانون الجزائي\\...",
+      "category_label": "الأحكام العامة › القانون الجزائي › ... › قانونية الجرائم",
+      "hierarchy": [
+        { "type": "كتاب", "number": 1, "ordinal": "الأول",
+          "name": "الأحكام العامة", "raw": "01. الكتاب الأول - الأحكام العامة" },
+        { "type": "باب", "number": 1, "ordinal": "الأول",
+          "name": "القانون الجزائي", "raw": "01. الباب الأول - القانون الجزائي" }
+      ],
+      "article_count": 5,
+      "articles": [ /* see below */ ]
+    }]
+  } }</pre>
+
+        <h5>Article object</h5>
+        <div class="tw"><table>
+          <thead><tr><th>Field</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>article_id</td><td>Composite <code>"{law_name}:{article_number}"</code>. The same id Laws RAG returns and the judgment endpoint cites — so catalog and search results link up directly.</td></tr>
+            <tr><td>article_number</td><td>String, not a number. Mostly numeric, but a few are descriptive titles.</td></tr>
+            <tr><td>status</td><td><code>عادية</code>, <code>معدلة</code>, <code>ملغاة</code>. Worth a badge.</td></tr>
+            <tr><td>category_key</td><td>Raw backslash-separated path. Opaque — use it as a filter value, don't display it.</td></tr>
+            <tr><td>category_label</td><td>Readable path joined with <code>›</code>. Display this.</td></tr>
+            <tr><td>hierarchy</td><td>Structured breadcrumb: <code>type</code> (كتاب/باب/فصل), <code>number</code>, <code>ordinal</code>, <code>name</code>. Build a real tree from it rather than splitting strings.</td></tr>
+            <tr><td>body</td><td>The text to render — normalized, falling back to raw.</td></tr>
+            <tr><td>body_raw</td><td>Original text with original line breaks.</td></tr>
+            <tr><td>body_normalized</td><td>Cleaned text used for indexing.</td></tr>
+            <tr><td>references</td><td><code>[{target, resolved, type, confidence, paragraph, snippet}]</code> — outgoing citations found in the text. Only 272 of 2,278 articles have any.</td></tr>
+            <tr><td>referenced_by</td><td>Incoming citations. 371 articles have some.</td></tr>
+            <tr><td>dependencies</td><td>Flat list of referenced article numbers — the simplest way to render "see also" links.</td></tr>
+            <tr><td>law_id · law_name · short_name</td><td>Repeated on every article so a detached article still knows its law.</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout">
+          <p><b>Three fields make a good browse UI.</b> <code>hierarchy</code> builds the sidebar tree, <code>category_label</code> titles each group, and <code>dependencies</code> turns article bodies into a cross-linked document. Fetch with <code>include_body=false</code> for the tree, then load one category with bodies on demand.</p>
+        </div>
+
+        <h5>Errors</h5>
+        <p>Unknown law id → <b>404</b>. Non-numeric <code>page</code> or <code>per_page</code> → <b>400</b>. Missing <code>law_id</code> on the query-parameter form → <b>400</b>.</p>
+      </div>
+    </div>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb get">GET</span><span class="path">/api/legal/laws/article/&lt;article_id&gt;</span><span class="ep-tag">instant</span></div>
+      <div class="ep-body">
+        <p>A single article by its full composite id, in the shape above. Use it to resolve an entry from another article's <code>dependencies</code> into a linked view without refetching the whole law. URL-encode the id — it contains Arabic and a colon. Unknown id returns 404.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ LAWS RAG ══ -->
+  <section id="laws">
+    <h2>Laws RAG</h2>
+    <p class="sec-note">Hybrid dense + sparse retrieval over 2,278 articles in Qdrant, fused with RRF, reranked by a cross-encoder, then merged with each hit's linked articles.</p>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb post">POST</span><span class="path">/api/legal/laws/search</span><span class="ep-tag">CPU-bound · ~7–13s warm</span></div>
+      <div class="ep-body">
+        <h5>Request</h5>
+        <div class="tw"><table>
+          <thead><tr><th>Field</th><th>Default</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>text</td><td class="dflt">—</td><td><span class="req">Required</span> &nbsp;The facts or legal question.</td></tr>
+            <tr><td>top_n</td><td class="dflt">7</td><td>Articles in the final result.</td></tr>
+            <tr><td>hybrid_top_k</td><td class="dflt">15</td><td><b>The only real speed dial.</b> Candidates entering the reranker — cost is roughly linear in this number. 15→10 saves about a third.</td></tr>
+            <tr><td>exclude_repealed</td><td class="dflt">false</td><td>Drop articles marked ملغاة.</td></tr>
+            <tr><td>min_score</td><td class="dflt">0.05</td><td>Absolute floor; hits below are discarded. <b>Your <code>.env</code> pins this to 0.0</b>, which overrides the default — the two relative cutoffs below do the filtering instead.</td></tr>
+            <tr><td>min_score_ratio</td><td class="dflt">0.15</td><td>Relative floor: drop anything below <code>ratio × top score</code>. Adapts to the query — a strong match raises the bar, a weak one lowers it. <code>0</code> disables.</td></tr>
+            <tr><td>score_drop_ratio</td><td class="dflt">0.5</td><td>Cut the tail at the first sharp fall: when an article scores below <code>ratio ×</code> the one above it, it and everything after are dropped. <code>0</code> disables.</td></tr>
+            <tr><td>with_dependencies</td><td class="dflt">true</td><td>Attach the articles each hit references.</td></tr>
+            <tr><td>dep_depth</td><td class="dflt">2</td><td>1 = direct references only; 2 = also their references.</td></tr>
+            <tr><td>dep_max</td><td class="dflt">12</td><td>Cap on merged articles per hit.</td></tr>
+            <tr><td>dep_dedupe_vs_hits</td><td class="dflt">true</td><td>Don't repeat an article that is already a top-level hit.</td></tr>
+            <tr><td>decompose</td><td class="dflt">false</td><td>Split long facts into separate legal issues. Needs <code>GOOGLE_API_KEY</code>; adds an LLM call.</td></tr>
+            <tr><td>rerank_max_length</td><td class="dflt">512</td><td>Cross-encoder window. <b>Barely affects speed here</b> — article bodies are short (typically 50–600 characters), so they rarely reach even 256 tokens. Measured: 256, 512 and 1024 all take the same time.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h5>Why it is slower than Colab</h5>
+        <p>Measured on this machine, warm, for one query with <code>hybrid_top_k=15</code>:</p>
+        <div class="tw"><table>
+          <thead><tr><th>Stage</th><th>Time</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td>BGE-M3 encode (dense + sparse)</td><td class="dflt">0.23 s</td><td>~3%</td></tr>
+            <tr><td>Qdrant hybrid search + RRF</td><td class="dflt">0.30 s</td><td>~4%</td></tr>
+            <tr><td><b>Cross-encoder rerank</b></td><td class="dflt"><b>7–13 s</b></td><td><b>~93%</b></td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout warn">
+          <p><b>The reranker is the whole cost, and the difference is GPU versus CPU.</b> <code>bge-reranker-v2-m3</code> is a 568M-parameter cross-encoder that runs one full forward pass per candidate. Colab gave it a GPU; this machine has none (<code>cuda: False</code>, so fp16 is off too). The same 15 forward passes that take a fraction of a second on a T4 take several seconds on CPU. Nothing in the retrieval code changed between the notebook and here — the hardware did.</p>
+          <p>If you get a GPU, set <code>DEVICE=cuda</code> in <code>.env</code> and this drops back to notebook speed immediately.</p>
+        </div>
+        <p>Two things were tried and rejected: int8 dynamic quantization gave only 1.29× and wrecked the ranking (rank agreement 0.2 against the fp32 scores), and shortening the rerank window does nothing because the bodies are already short. What <em>did</em> work is length-bucketed batching — see below.</p>
+
+        <h5>The 2.15× speedup that was applied</h5>
+        <p>The reranker padded every pair in a batch to the length of the longest one, so a single long article forced all 15 through a full-width forward pass. Sorting candidates by body length and using small batches (4 on CPU) groups similar lengths together and cuts the padding waste.</p>
+        <div class="tw"><table>
+          <thead><tr><th>Batching</th><th>4 queries</th><th>Speedup</th></tr></thead>
+          <tbody>
+            <tr><td>Before — one batch of 16, unsorted</td><td class="dflt">70.75 s</td><td class="dflt">1.00×</td></tr>
+            <tr><td>After — batches of 4, length-sorted</td><td class="dflt">32.84 s</td><td class="dflt">2.15×</td></tr>
+          </tbody>
+        </table></div>
+        <p><b>Scores are bit-identical</b> — this changes only how work is grouped, never what is computed, and results come back in the original order. Cases RAG shares the same reranker and gets the same speedup for free.</p>
+
+        <h5>Result cutoffs</h5>
+        <p>Three filters run after reranking, in order. The top hit always survives if it clears the absolute floor.</p>
+        <div class="tw"><table>
+          <thead><tr><th>Query</th><th>All reranked scores</th><th>Returned</th></tr></thead>
+          <tbody>
+            <tr><td>عقوبة الرشوة</td><td class="dflt">.915 .863 .840 .770 .760 .716 .661</td><td class="dflt">all 7 — gradual, nothing dropped</td></tr>
+            <tr><td>القتل العمد</td><td class="dflt">.481 .413 .384 .360 .245 .169 <b>.060</b></td><td class="dflt">6 — cut before .060</td></tr>
+            <tr><td>السرقة الموصوفة</td><td class="dflt">.356 .238 .192 .127 <b>.054 .011 .008</b></td><td class="dflt">4 — cut before .054</td></tr>
+            <tr><td>شروط الإفلاس</td><td class="dflt">.326 <b>.132</b> .127 .093 .091 .055 .046</td><td class="dflt">1 — the drop is immediate</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout">
+          <p><b>The last row is the behaviour working as intended, not a bug.</b> The top article scores 0.326 and the next only 0.132 — a fall of more than half — so everything after the first is judged unrelated. If that is too aggressive for your UI, raise <code>score_drop_ratio</code> toward 0.3 to tolerate bigger falls, or send <code>0</code> to switch the rule off for that request.</p>
+        </div>
+
+        <h5>Response — verified, abbreviated</h5>
+        <pre>{ "status": "success",
+  "data": {
+    "query": "السرقة الموصوفة ليلاً مع الكسر",
+    "found": true,
+    "count": 3,
+    "issues": null,
+    "message": null,
+    "took_ms": 43120,
+    "params_used": { "top_n": 3, "hybrid_top_k": 15, ... },
+    "results": [
+      {
+        "article_id": "مرسوم تشريعي رقم 148 لعام 1949 - قانون العقوبات العام:622",
+        "article_number": "622",
+        "law_name": "مرسوم تشريعي رقم 148 لعام 1949 - قانون العقوبات العام",
+        "status": "معدلة",
+        "score": 0.3562,
+        "similarity_score": 35.62,
+        "body": "تستوجب عقوبة السجن المؤبد أو المؤقت ...",
+        "dependencies": [
+          {
+            "article_id": "...:623",
+            "article_number": "623",
+            "law_name": "...",
+            "status": "نافذة",
+            "body": "...",
+            "depth": 1,
+            "via": "622"
+          }
+        ]
+      }
+    ]
+  } }</pre>
+
+        <div class="tw"><table>
+          <thead><tr><th>Result field</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>article_id</td><td>Composite <code>"{law_name}:{article_number}"</code>. Contains Arabic and a colon — <b>URL-encode it</b> if you ever put it in a path. This is the id the judgment endpoint cites.</td></tr>
+            <tr><td>score</td><td>Raw reranker score, 0–1, rounded to 4 places.</td></tr>
+            <tr><td>similarity_score</td><td>The same number as a percentage. Display this one.</td></tr>
+            <tr><td>status</td><td>Arabic lifecycle label — <code>نافذة</code>, <code>معدلة</code>, <code>ملغاة</code>. Worth a colored badge; flag <code>ملغاة</code> (repealed) clearly.</td></tr>
+            <tr><td>dependencies</td><td>Linked articles pulled in for context. <code>depth</code> is 1 or 2 and <code>via</code> names the article that referenced it — enough to render a nested tree. Empty array when <code>with_dependencies</code> is false.</td></tr>
+            <tr><td>issues</td><td>Only non-null when <code>decompose</code> is on and the query split into more than one issue.</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb get">GET</span><span class="path">/api/legal/laws/config</span><span class="ep-tag">instant</span></div>
+      <div class="ep-body">
+        <p>Returns <code>defaults</code>, <code>tunable_in_request</code> (the exact field names the body accepts), <code>loaded</code>, and the corpus and index paths. Every feature has one; they are the cleanest way to build a settings UI that stays in sync with the backend.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CASES RAG ══ -->
+  <section id="cases">
+    <h2>Cases RAG</h2>
+    <p class="sec-note">FAISS plus BM25 over past judgments, RRF-fused, reranked, then cut by a similarity threshold.</p>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb post">POST</span><span class="path">/api/legal/cases/search</span><span class="ep-tag">CPU-bound · ~7–13s warm</span></div>
+      <div class="ep-body">
+        <h5>Request</h5>
+        <div class="tw"><table>
+          <thead><tr><th>Field</th><th>Default</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>text</td><td class="dflt">—</td><td><span class="req">Required</span> &nbsp;Case facts.</td></tr>
+            <tr><td>top_k</td><td class="dflt">5</td><td>Precedents returned.</td></tr>
+            <tr><td>hybrid_top_k</td><td class="dflt">15</td><td>Candidates before reranking.</td></tr>
+            <tr><td>threshold</td><td class="dflt">0.50</td><td>Similarity cutoff, 0–1. <b>Lower it to ~0.3</b> if short queries come back empty.</td></tr>
+            <tr><td>rerank_max_length</td><td class="dflt">2048</td><td>Cross-encoder window. Raise toward 8192 for long facts at a real speed cost.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h5>Response — verified, abbreviated</h5>
+        <pre>{ "status": "success",
+  "data": {
+    "query": "قام المتهم بكسر باب المنزل ليلاً ...",
+    "found": true, "count": 1, "took_ms": 43510,
+    "params_used": { "top_k": 2, "threshold": 0.3, ... },
+    "results": [{
+      "case_number": "711",
+      "file_name": "711_verified_pickpocketing.docx",
+      "similarity_score": 0.42,
+      "decision_year": "2022",
+      "outcome": "إدانة",
+      "crimes": ["النشل"],
+      "penal_code_articles": ["629"],
+      "other_laws": [],
+      "facts_text": "بتاريخ 11/9/2022 حركت النيابة العامة ...",
+      "claims_text": "النشل بدلالة المادة 629 من قانون العقوبات العام.",
+      "reasoning_text": "...",
+      "judgment_text": "حبس المدعى عليها &lt;DEFENDANT_1&gt; لمدة سنة واحدة ..."
+    }]
+  } }</pre>
+
+        <div class="callout">
+          <p><b>Names are already redacted.</b> Judgment text contains placeholders such as <code>&lt;DEFENDANT_1&gt;</code>. Either render them literally or substitute a neutral Arabic label — do not treat them as a template to fill.</p>
+          <p><b>Note the scale difference.</b> Here <code>similarity_score</code> is 0–1; in Laws RAG it is 0–100. Don't share one formatter between them.</p>
+        </div>
+        <p>The four long text fields — <code>facts_text</code>, <code>claims_text</code>, <code>reasoning_text</code>, <code>judgment_text</code> — are full documents. They map naturally onto tabs or an accordion rather than one wall of text. <code>outcome</code> arrives as a single string, already joined with <code>" | "</code> when the source held several values.</p>
+      </div>
+    </div>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb get">GET</span><span class="path">/api/legal/cases/config</span><span class="ep-tag">instant</span></div>
+      <div class="ep-body"><p>Defaults, tunable field names, <code>loaded</code>, and the index path.</p></div>
+    </div>
+  </section>
+
+  <!-- ══ JUDGMENT ══ -->
+  <section id="judgment">
+    <h2>Judgment prediction</h2>
+    <p class="sec-note">The flagship feature and the slowest: it runs both retrieval pipelines, optionally consults the statistical classifier, makes up to five LLM calls, then verifies that every citation genuinely appears in the retrieved context.</p>
+
+    <div class="callout bad">
+      <p><b>Blocked until <code>GROQ_API_KEY</code> is set.</b> Without it this endpoint returns 503 with an Arabic message. Check <code>groq_api_key_set</code> on <code>/judgment/config</code> at app startup and hide or disable the feature rather than letting users hit a wall.</p>
+    </div>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb post">POST</span><span class="path">/api/legal/judgment/predict</span><span class="ep-tag">slowest · minutes</span></div>
+      <div class="ep-body">
+        <h5>Request</h5>
+        <p>Only <code>text</code> is top-level. <b>All tuning goes inside a nested <code>config</code> object</b> — parameters sent at the top level are silently ignored.</p>
+        <pre>{
+  "text": "بتاريخ 12/05/2023 أقدم المتهم على كسر باب منزل ...",
+  "config": {
+    "use_fact_reorganization": false,
+    "use_statute_discrimination": false
+  }
+}</pre>
+
+        <div class="tw"><table>
+          <thead><tr><th>config field</th><th>Default</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>top_k_laws</td><td class="dflt">5</td><td>Statutes given to the LLM.</td></tr>
+            <tr><td>top_k_cases</td><td class="dflt">3</td><td>Precedents given to the LLM.</td></tr>
+            <tr><td>case_threshold</td><td class="dflt">0.45</td><td>Precedent similarity cutoff.</td></tr>
+            <tr><td>exclude_repealed_laws</td><td class="dflt">true</td><td>Keep repealed articles out of the context.</td></tr>
+            <tr><td>min_law_score</td><td class="dflt">0.0</td><td>Statute score cutoff.</td></tr>
+            <tr><td>use_fact_reorganization</td><td class="dflt">true</td><td>Restructure facts before retrieval. <b>Costs an extra LLM call</b> — set false for speed.</td></tr>
+            <tr><td>use_statute_discrimination</td><td class="dflt">true</td><td>Disambiguate confusable articles. <b>One LLM call per pair</b> — set false for speed.</td></tr>
+            <tr><td>use_domain_classifier</td><td class="dflt">true</td><td>Add the statistical charge signal. Self-disables if files are absent.</td></tr>
+            <tr><td>max_quote_words</td><td class="dflt">12</td><td>Cap on each charge's supporting quote.</td></tr>
+            <tr><td>groq_model</td><td class="dflt">qwen/qwen3.6-27b</td><td>Groq model id.</td></tr>
+            <tr><td>temperature</td><td class="dflt">0.1</td><td>Sampling temperature.</td></tr>
+            <tr><td>max_output_tokens</td><td class="dflt">3072</td><td>Output cap.</td></tr>
+          </tbody>
+        </table></div>
+        <p>Also accepted: <code>top_k_classifier_labels</code>, <code>classifier_min_score</code>, <code>precedent_pool_size</code>, <code>show_reorganized_facts_to_llm</code>, <code>confusable_overlap_threshold</code>, <code>max_confusable_pairs</code>, <code>discrimination_max_tokens</code>, <code>fact_reorg_max_tokens</code>. <code>text</code> must be at least 20 characters or you get 400.</p>
+
+        <div class="callout warn">
+          <p><b>Turning both LLM flags off saves up to four calls</b> and is the difference between a response users will wait for and one they won't. Consider defaulting your UI to the fast path and offering "thorough analysis" as an explicit opt-in.</p>
+        </div>
+
+        <h5>Response — the model's verdict</h5>
+        <pre>{
+  "facts_summary": "...",
+  "candidate_charges": [{
+    "charge": "السرقة الموصوفة",
+    "article_id": "... قانون العقوبات العام:622",
+    "supporting_quote": "اقتباس حرفي قصير من نص المادة",
+    "elements_match": true
+  }],
+  "reasoning": {
+    "charges_analysis": "...",
+    "exclusion_notes": "...",
+    "precedent_alignment": "..."
+  },
+  "outcome": "إدانة",
+  "final_charge": "السرقة الموصوفة",
+  "cited_statutes": ["...:622"],
+  "cited_precedents": ["711"],
+  "suggested_penalty_range": "...",
+  "confidence_note": "..."
+}</pre>
+        <p><code>outcome</code> is one of <code>إدانة</code> (conviction), <code>براءة</code> (acquittal) or <code>إسقاط دعوى</code> (dismissal). <code>final_charge</code> and <code>suggested_penalty_range</code> are <code>null</code> for the latter two.</p>
+
+        <h5>Response — diagnostic fields</h5>
+        <p>The same <code>data</code> object also carries underscore-prefixed keys. They are the whole reason this feature is trustworthy, so surface them rather than hiding them.</p>
+        <div class="tw"><table>
+          <thead><tr><th>Field</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>_verification</td><td>The grounding audit. See below — read this before displaying a verdict.</td></tr>
+            <tr><td>_retrieved_statutes</td><td>Full statute objects the LLM saw, in Laws RAG result shape.</td></tr>
+            <tr><td>_retrieved_cases</td><td>Full precedent objects the LLM saw, in Cases RAG result shape.</td></tr>
+            <tr><td>_classifier_candidates</td><td><code>[{label, score, predicted}]</code> from the statistical classifier; empty when disabled.</td></tr>
+            <tr><td>_reorganized_facts</td><td>Restructured facts, when that step ran.</td></tr>
+            <tr><td>_discrimination_results</td><td>Confusable-article comparisons, when that step ran.</td></tr>
+            <tr><td>_retrieval_text</td><td>The text actually used as the retrieval query.</td></tr>
+            <tr><td>_config_used</td><td>Every config value applied, defaults included.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h5>_verification</h5>
+        <pre>{
+  "grounded": true,
+  "fully_grounded": true,
+  "unknown_statute_citations": [],
+  "unknown_case_citations": [],
+  "possible_penalty_hallucination_in": [],
+  "unsupported_charge_quotes": [],
+  "precedent_article_mismatches": []
+}</pre>
+        <div class="callout">
+          <p><b><code>fully_grounded</code> is the single flag to gate your UI on.</b> It is true only when every citation resolves, every supporting quote really appears in its article, and no precedent contradicts the chosen article. When it is false, the non-empty arrays tell you exactly which claims to mark unverified — show the verdict with a warning rather than suppressing it.</p>
+        </div>
+
+        <h5>Failure modes</h5>
+        <p>If the LLM returns unparseable output you get <b>HTTP 502</b> with <code>status: "error"</code> <em>and</em> a <code>data</code> object still containing <code>retrieved_statutes</code> and <code>retrieved_cases</code>. You can still show the retrieved context and offer a retry.</p>
+      </div>
+    </div>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb get">GET</span><span class="path">/api/legal/judgment/config</span><span class="ep-tag">instant</span></div>
+      <div class="ep-body">
+        <p>Beyond defaults, this reports <code>groq_api_key_set</code>, <code>classifier_available</code>, and a <code>depends_on</code> object showing whether Laws RAG and Cases RAG are already loaded — everything you need for a feature-availability check at startup.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CONTRACTS ══ -->
+  <section id="contracts">
+    <h2>Contract templates</h2>
+    <p class="sec-note">Semantic search across 211 contract templates, then retrieval of the full document. Deliberately two steps: the suggestion layer recommends, the user decides.</p>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb post">POST</span><span class="path">/api/legal/contracts/search</span><span class="ep-tag">step 1</span></div>
+      <div class="ep-body">
+        <h5>Request</h5>
+        <div class="tw"><table>
+          <thead><tr><th>Field</th><th>Default</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>text</td><td class="dflt">—</td><td><span class="req">Required</span> &nbsp;What kind of contract the user wants.</td></tr>
+            <tr><td>top_k</td><td class="dflt">5</td><td>Candidates returned.</td></tr>
+            <tr><td>min_score</td><td class="dflt">0.0</td><td>Cosine cutoff, 0–1.</td></tr>
+            <tr><td>suggest</td><td class="dflt">true</td><td>LLM picks the best candidate. <b>One Groq call — needs the key.</b> Set false for pure semantic search.</td></tr>
+            <tr><td>groq_model</td><td class="dflt">llama-3.1-8b-instant</td><td>Model for the suggestion.</td></tr>
+            <tr><td>suggest_max_tokens</td><td class="dflt">200</td><td>Suggestion output cap.</td></tr>
+            <tr><td>temperature</td><td class="dflt">0.1</td><td>Sampling temperature.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h5>Response</h5>
+        <pre>{ "status": "success",
+  "data": {
+    "query": "بدي عقد ايجار محل تجاري",
+    "found": true, "count": 5, "took_ms": 820,
+    "params_used": { ... },
+    "results": [{
+      "doc_id": "...",
+      "category": "عقود الإيجار",
+      "subject": "عقد إيجار محل تجاري",
+      "index_keywords": ["..."],
+      "placeholders_count": 14,
+      "score": 0.8123
+    }],
+    "suggestion": {
+      "choice": 1,
+      "doc_id": "...",
+      "subject": "عقد إيجار محل تجاري",
+      "reason": "..."
+    }
+  } }</pre>
+
+        <div class="tw"><table>
+          <thead><tr><th>Suggestion state</th><th>Shape</th></tr></thead>
+          <tbody>
+            <tr><td>Recommended</td><td><code>choice</code> is the <b>1-based</b> index into <code>results</code>, with <code>doc_id</code>, <code>subject</code>, <code>reason</code>.</td></tr>
+            <tr><td>No good match</td><td><code>{ "choice": null, "reason": "..." }</code> — the model declined. Show the candidates unranked.</td></tr>
+            <tr><td>LLM call failed</td><td><code>{ "choice": null, "reason": null, "error": "..." }</code> — degrade quietly to plain search results.</td></tr>
+            <tr><td>Disabled or no hits</td><td><code>suggestion</code> is <code>null</code>.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout">
+          <p><b><code>choice</code> is 1-based.</b> Use <code>results[choice - 1]</code>. And since the suggestion never decides for the user, present it as a highlighted recommendation among the candidates, not as the answer.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb post">POST</span><span class="path">/api/legal/contracts/get</span><span class="ep-tag">step 2</span></div>
+      <div class="ep-body">
+        <p>Send <code>{"doc_id": "..."}</code> — or <code>{"subject": "..."}</code>, which must match a search result exactly. Sending neither is 400; matching nothing is 404.</p>
+        <h5>Response</h5>
+        <pre>{ "status": "success",
+  "data": {
+    "doc_id": "...",
+    "category": "عقود الإيجار",
+    "subject": "عقد إيجار محل تجاري",
+    "index_keywords": ["..."],
+    "placeholders": ["..."],
+    "placeholders_count": 14,
+    "body": "نص العقد مع وسوم [[1:اسم المؤجر]] ...",
+    "raw_body": "..."
+  } }</pre>
+        <div class="callout">
+          <p><b><code>placeholders</code> is your form.</b> The template <code>body</code> carries inline tags of the form <code>[[n:label]]</code>. Parse them into labelled inputs, let the user fill them, and substitute back — that turns this endpoint into a contract generator rather than a viewer. <code>raw_body</code> is the untagged original if you would rather show clean text.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb get">GET</span><span class="path">/api/legal/contracts/&lt;doc_id&gt;</span><span class="ep-tag">alias</span></div>
+      <div class="ep-body">
+        <p>GET-style equivalent of the previous endpoint. <b>URL-encode the id.</b> Note that <code>/contracts/config</code> resolves to the config route, so a template whose id is literally <code>config</code> is unreachable here — use the POST form.</p>
+      </div>
+    </div>
+
+    <div class="ep">
+      <div class="ep-head"><span class="verb get">GET</span><span class="path">/api/legal/contracts/config</span><span class="ep-tag">instant</span></div>
+      <div class="ep-body">
+        <p>Defaults, tunable names, <code>embedding_model</code>, and <code>loaded</code>. Once the index is loaded it also returns <code>total_contracts</code> and <code>categories</code> — a category-to-count map that makes an excellent browse-by-category landing view without any extra endpoint.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ERRORS ══ -->
+  <section id="errors">
+    <h2>Errors</h2>
+    <p class="sec-note">Same envelope everywhere. The status code tells you how to react; the Arabic <code>error</code> string is safe to show as-is.</p>
+    <div class="tw"><table class="codes">
+      <thead><tr><th>Code</th><th>Means</th><th>What the frontend should do</th></tr></thead>
+      <tbody>
+        <tr><td>400</td><td>Missing or empty <code>text</code> / <code>facts</code>, text too short, bad <code>mode</code>, uncastable parameter.</td><td>Validate before sending; show the message inline on the field.</td></tr>
+        <tr><td>404</td><td>No contract matches the <code>doc_id</code> or <code>subject</code>.</td><td>Send the user back to search results.</td></tr>
+        <tr><td>500</td><td>Unexpected server error.</td><td>Generic retry.</td></tr>
+        <tr><td>502</td><td>Judgment only — the LLM returned unparseable output.</td><td>Offer retry; <code>data</code> still holds the retrieved context, so show that.</td></tr>
+        <tr><td>503</td><td>Feature unavailable: index not built, or <code>GROQ_API_KEY</code> missing.</td><td>Not transient — retrying won't help. Disable the feature and surface the message to whoever runs the server.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ══ FRONTEND NOTES ══ -->
+  <section id="frontend">
+    <h2>Frontend notes</h2>
+    <p class="sec-note">Things that will bite you if you discover them during integration instead of now.</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Concern</th><th>What to do</th></tr></thead>
+      <tbody>
+        <tr><td>Timeouts</td><td>Default <code>fetch</code> behaviour is fine for instant endpoints, but a warm RAG call still takes ~7–13&nbsp;s on this CPU-only machine (first call adds ~7&nbsp;s of model loading), and judgment can run for minutes. Set generous per-endpoint timeouts and never a single global 30&nbsp;s.</td></tr>
+        <tr><td>Cold start</td><td>Poll <code>/api/health</code> on load. If the feature is not loaded, say the model is being prepared and give a realistic estimate instead of an ambiguous spinner. Expect roughly 7&nbsp;s of loading, then 7–13&nbsp;s per query.</td></tr>
+        <tr><td>Concurrency</td><td>The server is threaded but CPU-bound, and Qdrant takes an exclusive lock. Two heavy searches at once will both crawl — queue requests client-side rather than firing in parallel.</td></tr>
+        <tr><td>RTL</td><td>Content is Arabic; set <code>dir="rtl"</code> on containers rendering it. Keep <code>article_id</code>, <code>doc_id</code>, and JSON debug output LTR, or mixed Arabic-and-punctuation ids will display scrambled.</td></tr>
+        <tr><td>Score scales</td><td>Laws RAG gives <code>similarity_score</code> as 0–100; Cases and Contracts give 0–1. Don't share one formatter.</td></tr>
+        <tr><td>Input field name</td><td>Every endpoint takes <code>text</code> except <code>/classify</code>, which takes <code>facts</code>.</td></tr>
+        <tr><td>Ids in URLs</td><td><code>article_id</code> and <code>doc_id</code> contain Arabic and colons. Always <code>encodeURIComponent</code> them, or prefer the POST variants.</td></tr>
+        <tr><td>Empty results</td><td><code>found: false</code> arrives as HTTP 200. Render <code>message</code> as an empty state, not an error.</td></tr>
+        <tr><td>Browse vs search</td><td>Use the catalog endpoints for navigation — they are instant and need no models. Reserve <code>/laws/search</code> for actual semantic queries, since it costs several seconds even warm. Both return the same <code>article_id</code>, so results link together.</td></tr>
+        <tr><td>Debug panel</td><td>Every search echoes <code>params_used</code> and <code>took_ms</code>. A collapsible panel showing them makes tuning thresholds vastly easier during development.</td></tr>
+        <tr><td>Feature flags</td><td>Call the four <code>/config</code> endpoints once at startup. They tell you what is loaded, whether the Groq key is set, and which parameters the UI may expose — no need to hardcode any of it.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">Verified against the running server on 23 August 2026 — branch <code>master</code>. An importable Postman collection covering all 19 requests lives at <code>Monsif_API.postman_collection.json</code> in the repo root.</div>
+</footer>

@@ -1,16 +1,19 @@
-import type { CaseCategory } from "@/src/core/enums/legalDomain";
-import type { PageParams } from "@/src/core/types/pagination";
-
 /**
- * Query for the case list. One endpoint serves both modes: with `query` set the
- * backend runs semantic retrieval, without it a filtered browse.
+ * Query for the cases RAG endpoint. `query` is required — the corpus has no
+ * browse endpoint, so there is nothing to list without one.
+ *
+ * Every tuning field is optional; omitted ones fall back to the server's own
+ * defaults, which `GET /api/legal/cases/config` reports.
  */
-export interface CaseSearchParams extends PageParams {
-  /** Semantic query. Empty/absent while browsing. */
-  query?: string;
-  category?: CaseCategory;
-  /** Inclusive ISO date lower bound. */
-  dateFrom?: string;
-  /** Exclusive ISO date upper bound. */
-  dateTo?: string;
+export interface CaseSearchParams {
+  /** The facts to match against. Sent as `text`. */
+  query: string;
+  /** Precedents returned. Server default 5. */
+  topK?: number;
+  /** Similarity cutoff, 0–1. Server default 0.5. */
+  threshold?: number;
+  /** Candidates fused before reranking. Server default 15. */
+  hybridTopK?: number;
+  /** Cross-encoder window. Server default 2048; higher is slower. */
+  rerankMaxLength?: number;
 }

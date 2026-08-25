@@ -63,6 +63,13 @@ export function SemanticSearchBar({
     el.style.height = `${Math.min(Math.max(el.scrollHeight, MIN_ROWS_PX), MAX_ROWS_PX)}px`;
   }, [query]);
 
+  // The query can also be set from outside the bar — the example chips on the
+  // precedents screen submit one directly — so mirror it back into the field.
+  // It only ever changes on submit or clear, where the field already agrees.
+  useEffect(() => {
+    form.reset({ query: activeQuery });
+  }, [activeQuery, form]);
+
   const { ref: registerRef, ...queryField } = form.register("query");
 
   // react-hook-form owns the element ref; keep our own alongside it for sizing.

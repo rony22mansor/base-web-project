@@ -2,10 +2,17 @@ import * as React from "react";
 
 import { cn } from "@/src/core/utils/utils";
 
+/**
+ * `dir="auto"` by default, overridable per usage: this is a bilingual app and
+ * the long-form fields take Arabic case facts even when the interface is in
+ * English. Without it the first strong character decides nothing and Arabic
+ * typed into an LTR box strands its punctuation at the wrong end.
+ */
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
   return (
     <textarea
       data-slot="textarea"
+      dir="auto"
       className={cn(
         "bg-input-filled-color text-foreground placeholder:text-placeHolder",
         "flex field-sizing-content min-h-16 w-full rounded-sm border border-input px-3 py-2 text-base md:text-sm",
