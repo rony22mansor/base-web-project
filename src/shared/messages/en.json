@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "MONSIF",
-    "tagline": "AI legal assistant for Syrian law"
+    "tagline": "Intelligent judicial system"
   },
   "nav": {
     "home": "Home",
@@ -106,17 +106,6 @@
       "charCount": "{count} / {max} characters",
       "minLengthHint": "Write at least {min} characters for an accurate analysis."
     },
-    "mode": {
-      "label": "Depth of analysis",
-      "thorough": {
-        "label": "Thorough",
-        "hint": "The full pipeline: the facts are reorganised and confusable articles are told apart before the ruling. Up to five model calls — expect about a minute."
-      },
-      "fast": {
-        "label": "Fast",
-        "hint": "One model call. The same statutes and precedents are retrieved, with less deliberation over them — expect a few seconds."
-      }
-    },
     "upload": {
       "trigger": "or upload a text file (.txt)",
       "extracting": "Reading the file…",
@@ -131,8 +120,7 @@
     },
     "loading": {
       "title": "Analysing your case…",
-      "subtitle": "MONSIF is retrieving the relevant statutes and precedents, then deliberating over them. This takes about a minute and cannot be shown as it goes.",
-      "subtitleFast": "MONSIF is retrieving the relevant statutes and precedents. In fast mode this takes a few seconds."
+      "subtitle": "MONSIF is retrieving the relevant statutes and precedents, then deliberating over them. This takes about a minute and cannot be shown as it goes."
     },
     "result": {
       "rulingTitle": "Preliminary ruling",
@@ -207,6 +195,12 @@
       "article": "Art. {number}",
       "overlap": "{percent}% overlap",
       "pointsTo": "points to {article}"
+    },
+    "notification": {
+      "successTitle": "Your ruling is ready",
+      "successBody": "MONSIF finished analysing the case you submitted.",
+      "errorTitle": "The ruling could not be generated",
+      "errorBody": "Something went wrong while analysing your case."
     }
   },
   "legal": {
@@ -251,14 +245,15 @@
     },
     "states": {
       "loading": "Loading results",
-      "loadMore": "Load more",
       "errorTitle": "Could not load results",
       "errorDescription": "Something went wrong contacting the server. Please try again.",
-      "retry": "Try again"
+      "retry": "Try again",
+      "loadingMore": "Loading more…"
     },
     "drawer": {
       "close": "Close"
-    }
+    },
+    "scrollToTop": "Scroll to top"
   },
   "lawSearch": {
     "title": "Laws",
@@ -319,6 +314,12 @@
       "trailLabel": "Articles you have followed",
       "loading": "Loading {article}…",
       "error": "Could not load {article}."
+    },
+    "notification": {
+      "successTitle": "Search results ready",
+      "successBody": "MONSIF finished retrieving articles for your query.",
+      "errorTitle": "The search failed",
+      "errorBody": "Something went wrong while retrieving articles."
     }
   },
   "caseSearch": {
@@ -328,15 +329,9 @@
     "coldStart": "The precedents index has not been loaded yet, so the first search takes about a minute while the models are prepared. Later searches take a few seconds.",
     "tookSeconds": "Retrieved in {seconds}s",
     "filters": {
-      "scope": "Scope",
       "outcome": "Outcome",
       "year": "Year",
       "clearAll": "Clear all filters"
-    },
-    "scopes": {
-      "strict": "Close matches",
-      "balanced": "Balanced",
-      "broad": "Broad"
     },
     "card": {
       "caseNumber": "Case {number}",
@@ -373,11 +368,11 @@
       "showAll": "Show {count} more",
       "showLess": "Show fewer"
     },
-    "paging": {
-      "label": "Pagination",
-      "previous": "Previous",
-      "next": "Next",
-      "position": "Page {page} of {total}"
+    "notification": {
+      "successTitle": "Precedents ready",
+      "successBody": "MONSIF finished retrieving judgments for your description.",
+      "errorTitle": "The search failed",
+      "errorBody": "Something went wrong while retrieving precedents."
     }
   },
   "contractTemplates": {

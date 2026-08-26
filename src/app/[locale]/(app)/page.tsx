@@ -21,16 +21,16 @@ export default async function HomePage() {
 
   return (
     <BasePage>
-      <div className="flex w-full flex-col gap-10">
+      <div className="flex w-full flex-col gap-7">
         {/* Notion's page header: a large icon above a 40px title. */}
         <header className="flex flex-col gap-3">
           <AppLogo size={52} priority />
           <h1 className="text-[40px] leading-tight font-bold tracking-tight">
             {t("greeting")}
           </h1>
-          <p className="text-text-secondary notion-prose max-w-2xl">
+          {/* <p className="text-text-secondary notion-prose max-w-2xl">
             {t("subtitle")}
-          </p>
+          </p> */}
         </header>
 
         <div className="grid gap-3 sm:grid-cols-2">

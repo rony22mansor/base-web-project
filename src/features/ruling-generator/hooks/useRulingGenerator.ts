@@ -1,7 +1,7 @@
 "use client";
 
+import { requestNotificationPermission } from "@/src/core/services/notifications/browserNotifications";
 import { useMemo, useState } from "react";
-import { JudgmentMode } from "../enums/rulingEnums";
 import { toFailedEvidence } from "../services/adapters/judgmentAdapter";
 import { usePredictJudgment } from "../services/mutations/usePredictJudgment";
 import { useJudgmentConfig } from "../services/queries/useJudgmentConfig";
@@ -18,14 +18,18 @@ import { useJudgmentConfig } from "../services/queries/useJudgmentConfig";
  */
 export function useRulingGenerator() {
   const [description, setDescription] = useState("");
-  const [mode, setMode] = useState<JudgmentMode>(JudgmentMode.Thorough);
 
   const config = useJudgmentConfig();
   const prediction = usePredictJudgment();
 
   const generate = (nextDescription: string) => {
+    // Asked for here, inside the click that starts the ~40-90s wait: browsers
+    // only show the permission prompt in response to a user gesture, and a
+    // request made later — once the mutation is already in flight — is
+    // silently ignored.
+    requestNotificationPermission();
     setDescription(nextDescription);
-    prediction.mutate({ text: nextDescription, mode });
+    prediction.mutate({ text: nextDescription });
   };
 
   const availability = config.data?.data;
@@ -43,8 +47,6 @@ export function useRulingGenerator() {
   return {
     // input
     description,
-    mode,
-    setMode,
     generate,
     /** Back to the input screen, keeping the previous description. */
     startNewQuery: prediction.reset,
@@ -60,6 +62,7 @@ export function useRulingGenerator() {
     // result
     result: prediction.data?.data,
     isLoading: prediction.isPending,
+    isSuccess: prediction.isSuccess,
     isError: prediction.isError,
     error: prediction.error,
     failedEvidence,

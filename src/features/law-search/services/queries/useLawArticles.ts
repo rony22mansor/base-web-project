@@ -9,7 +9,7 @@ import { lawCatalogService } from "../lawCatalogService";
 export type LawArticlesFilters = Omit<LawArticlesParams, "page" | "pageSize">;
 
 /** Articles per page in the law's list view. */
-export const LAW_ARTICLES_PAGE_SIZE = 20;
+export const LAW_ARTICLES_PAGE_SIZE = 40;
 
 /**
  * One law's articles, paginated. This is the list view only — the book reader

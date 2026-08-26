@@ -1,6 +1,7 @@
 "use client";
 
 import type { ArticleStatus } from "@/src/core/enums/legalDomain";
+import { requestNotificationPermission } from "@/src/core/services/notifications/browserNotifications";
 import { useMemo, useState } from "react";
 import { useLawCatalog } from "../services/queries/useLawCatalog";
 import { useLawSemanticSearch } from "../services/queries/useLawSemanticSearch";
@@ -65,7 +66,13 @@ export function useLawSearchScreen() {
     setGroup,
     setNameFilter,
     setStatus,
-    search: setQuery,
+    // Asked for here, inside the click that starts the search: browsers only
+    // show the permission prompt in response to a user gesture, and a request
+    // made later — once retrieval is already in flight — is silently ignored.
+    search: (next: string) => {
+      requestNotificationPermission();
+      setQuery(next);
+    },
     clearSearch: () => setQuery(""),
 
     // catalog data
@@ -90,6 +97,9 @@ export function useLawSearchScreen() {
     isSearching: isSearchMode
       ? search.isFetching && !search.isFetchingNextPage
       : catalog.isFetching,
+    // Scoped to search mode only, unlike `isError` below: browsing the
+    // catalog "succeeding" is not an event worth a notification about.
+    isSuccess: isSearchMode && search.isSuccess,
     isError: isSearchMode ? search.isError : catalog.isError,
     errorMessage: isSearchMode
       ? search.error?.message

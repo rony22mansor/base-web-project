@@ -1,6 +1,8 @@
 "use client";
 
+import { ScrollToTopButton } from "@/src/shared/components/scroll-to-top-button";
 import { useTranslations } from "next-intl";
+import { useRef } from "react";
 import { SemanticSearchBar } from "./SemanticSearchBar";
 
 interface BrowseScreenProps {
@@ -44,10 +46,14 @@ export function BrowseScreen({
   onClearSearch,
 }: BrowseScreenProps) {
   const t = useTranslations("browse");
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex-1 overflow-y-auto px-4 pt-8 md:px-6 md:pt-12 lg:px-8">
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto px-3 pt-8 md:px-5 md:pt-12 lg:px-6"
+      >
         <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 pb-6">
           <header className="flex flex-col gap-2">
             <h1 className="text-[32px] leading-tight font-bold tracking-tight">
@@ -80,6 +86,10 @@ export function BrowseScreen({
         onSubmit={onSearch}
         onClear={onClearSearch}
       />
+
+      {/* Raised clear of the search bar above — its textarea can grow to
+          160px, so the default `bottom-6` would sit underneath it. */}
+      <ScrollToTopButton containerRef={scrollRef} className="bottom-32" />
     </div>
   );
 }

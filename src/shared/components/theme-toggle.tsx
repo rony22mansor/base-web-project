@@ -14,6 +14,7 @@ export function ThemeToggle() {
 
   return (
     <SidebarMenuButton
+      className="h-9"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       tooltip={{ children: t("theme"), side: tooltipSide }}
     >
@@ -23,8 +24,10 @@ export function ThemeToggle() {
       */}
       <Sun className="hidden size-4 dark:block" />
       <Moon className="size-4 dark:hidden" />
-      <span className="hidden dark:inline">{t("lightMode")}</span>
-      <span className="dark:hidden">{t("darkMode")}</span>
+      <span className="hidden dark:inline leading-relaxed">
+        {t("lightMode")}
+      </span>
+      <span className="dark:hidden leading-relaxed">{t("darkMode")}</span>
     </SidebarMenuButton>
   );
 }

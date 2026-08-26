@@ -15,7 +15,8 @@ export function LocaleSwitcher() {
   const [isPending, startTransition] = useTransition();
 
   const nextLocale = locale === "ar" ? "en" : "ar";
-  const label = nextLocale === "ar" ? t("switchToArabic") : t("switchToEnglish");
+  const label =
+    nextLocale === "ar" ? t("switchToArabic") : t("switchToEnglish");
   // The sidebar sits on the side the locale reads from, so the tooltip goes opposite.
   const tooltipSide = setSide(locale) === "right" ? "left" : "right";
 
@@ -26,6 +27,7 @@ export function LocaleSwitcher() {
       }
       disabled={isPending}
       tooltip={{ children: label, side: tooltipSide }}
+      className="h-9"
     >
       <Languages className="size-4" />
       <span>{label}</span>

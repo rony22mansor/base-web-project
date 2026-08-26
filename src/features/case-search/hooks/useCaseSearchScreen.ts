@@ -1,5 +1,6 @@
 "use client";
 
+import { requestNotificationPermission } from "@/src/core/services/notifications/browserNotifications";
 import { useMemo, useState } from "react";
 import { CaseScope } from "../enums/caseEnums";
 import { collectOutcomes } from "../helpers/caseOutcome";
@@ -16,20 +17,22 @@ import { useCaseSemanticSearch } from "../services/queries/useCaseSemanticSearch
  *
  * Unlike laws, this feature has no browse mode: the cases corpus is reachable
  * only by describing facts, so with no query the screen explains itself rather
- * than listing anything. The query applies on submit; the scope chip is a real
- * request parameter and re-runs retrieval, while the outcome chip only filters
- * the ranked set already on screen.
+ * than listing anything. The query applies on submit; the outcome chip only
+ * filters the ranked set already on screen.
+ *
+ * Scope (the similarity threshold) used to be a chip the user picked; it is
+ * now fixed at Balanced — the server's own default — rather than exposed as a
+ * choice. See `CaseScope` for what the other settings meant.
  */
 export function useCaseSearchScreen() {
   const [query, setQuery] = useState("");
-  const [scope, setScope] = useState<CaseScope>(CaseScope.Balanced);
   const [outcome, setOutcome] = useState<string | null>(null);
 
   const isSearchMode = query.length > 0;
 
   const search = useCaseSemanticSearch({
     query,
-    threshold: scopeToThreshold(scope),
+    threshold: scopeToThreshold(CaseScope.Broad),
     topK: DEFAULT_TOP_K,
     hybridTopK: DEFAULT_HYBRID_TOP_K,
   });
@@ -75,13 +78,17 @@ export function useCaseSearchScreen() {
 
     // filters
     query,
-    scope,
-    setScope,
     outcome: activeOutcome,
     setOutcome,
     outcomes,
     outcomeCounts,
-    search: setQuery,
+    // Asked for here, inside the click that starts the search: browsers only
+    // show the permission prompt in response to a user gesture, and a request
+    // made later — once retrieval is already in flight — is silently ignored.
+    search: (next: string) => {
+      requestNotificationPermission();
+      setQuery(next);
+    },
     clearSearch: () => setQuery(""),
 
     // data
@@ -102,6 +109,7 @@ export function useCaseSearchScreen() {
     // request state
     isLoading: isSearchMode && search.isPending,
     isSearching: search.isFetching,
+    isSuccess: search.isSuccess,
     isError: search.isError,
     errorMessage: search.error?.message,
     retry: search.refetch,

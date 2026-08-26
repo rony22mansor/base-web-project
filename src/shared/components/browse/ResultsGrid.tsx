@@ -4,6 +4,7 @@ import { Button } from "@/src/shared/components/ui/button";
 import { Skeleton } from "@/src/shared/components/ui/skeleton";
 import { AlertTriangle, Loader2, SearchX } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useEffect, useRef } from "react";
 
 interface ResultsGridProps<T> {
   items: T[];
@@ -43,6 +44,32 @@ export function ResultsGrid<T>({
   emptyDescription,
 }: ResultsGridProps<T>) {
   const t = useTranslations("browse");
+
+  // The next page loads itself once this row scrolls into view, rather than
+  // waiting for a click — a thin sentinel the observer watches instead of a
+  // button the reader has to find and press.
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoadingMore) onLoadMore();
+      },
+      // Start the fetch a little before the sentinel is actually visible, so
+      // the next page is usually there by the time the reader scrolls to it.
+      { rootMargin: "400px" },
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+    // Rebuilt whenever `isLoadingMore` flips: the callback above closes over
+    // it, so without this a page still in flight could not stop a second one
+    // firing while the sentinel stays in view, and a page that just finished
+    // would not resume watching for the next one.
+  }, [hasMore, isLoadingMore, onLoadMore]);
 
   if (isLoading) {
     return (
@@ -99,16 +126,18 @@ export function ResultsGrid<T>({
       </div>
 
       {hasMore && (
-        <div className="flex justify-center pt-2">
-          <Button
-            variant="outline"
-            onClick={() => onLoadMore()}
-            disabled={isLoadingMore}
-            className="gap-2"
-          >
-            {isLoadingMore && <Loader2 className="size-4 animate-spin" />}
-            {t("states.loadMore")}
-          </Button>
+        <div
+          ref={sentinelRef}
+          className="flex justify-center py-2"
+          role="status"
+          aria-live="polite"
+        >
+          {isLoadingMore && (
+            <span className="text-text-tertiary flex items-center gap-2 text-xs">
+              <Loader2 className="size-3.5 animate-spin" />
+              {t("states.loadingMore")}
+            </span>
+          )}
         </div>
       )}
     </div>

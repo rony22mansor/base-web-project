@@ -33,7 +33,7 @@ class ApiClientFactory {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        timeout: 120000, // RAG + LLM calls are slow; see ruling generator
+        timeout: 240000, // RAG + LLM calls are slow; see ruling generator
       });
 
       this.initializeInterceptors();

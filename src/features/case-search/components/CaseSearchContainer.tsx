@@ -2,6 +2,7 @@
 
 import { BrowseScreen } from "@/src/shared/components/browse/BrowseScreen";
 import { ResultsGrid } from "@/src/shared/components/browse/ResultsGrid";
+import { useTaskCompletionNotification } from "@/src/shared/hooks/useTaskCompletionNotification";
 import { Clock, Info } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCaseBrowseScreen } from "../hooks/useCaseBrowseScreen";
@@ -14,7 +15,6 @@ import { CaseBrowseFilters } from "./CaseBrowseFilters";
 import { CaseCard } from "./CaseCard";
 import { CaseCatalogCard } from "./CaseCatalogCard";
 import { CaseCategoryPanel } from "./CaseCategoryPanel";
-import { CasePagination } from "./CasePagination";
 import { CaseSearchFilters } from "./CaseSearchFilters";
 
 /**
@@ -35,6 +35,19 @@ export function CaseSearchContainer() {
   const browse = useCaseBrowseScreen();
   const { isSearchMode } = search;
 
+  // Cold retrieval costs ~45s — long enough that a reader who described their
+  // facts and switched tabs should find out the moment results are back.
+  useTaskCompletionNotification({
+    isLoading: search.isLoading,
+    isSuccess: search.isSuccess,
+    isError: search.isError,
+    tag: "case-search",
+    successTitle: t("notification.successTitle"),
+    successBody: t("notification.successBody"),
+    errorTitle: t("notification.errorTitle"),
+    errorBody: t("notification.errorBody"),
+  });
+
   return (
     <BrowseScreen
       title={t("title")}
@@ -48,8 +61,6 @@ export function CaseSearchContainer() {
       filters={
         isSearchMode ? (
           <CaseSearchFilters
-            scope={search.scope}
-            onScopeChange={search.setScope}
             outcomes={search.outcomes}
             outcomeCounts={search.outcomeCounts}
             outcome={search.outcome}
@@ -117,31 +128,22 @@ export function CaseSearchContainer() {
           )}
         </>
       ) : (
-        <>
-          <ResultsGrid<CaseSummary>
-            items={browse.cases}
-            getKey={(legalCase) => legalCase.id}
-            renderItem={(legalCase) => (
-              <CaseCatalogCard legalCase={legalCase} />
-            )}
-            isLoading={browse.isLoading}
-            isError={browse.isError}
-            errorMessage={browse.errorMessage}
-            onRetry={browse.retry}
-            hasMore={false}
-            isLoadingMore={false}
-            onLoadMore={() => {}}
-            emptyTitle={t("empty.browseTitle")}
-            emptyDescription={t("empty.browseDescription")}
-          />
-
-          <CasePagination
-            page={browse.page}
-            totalPages={browse.totalPages}
-            isFetching={browse.isFetching}
-            onGoToPage={browse.goToPage}
-          />
-        </>
+        <ResultsGrid<CaseSummary>
+          items={browse.cases}
+          getKey={(legalCase) => legalCase.id}
+          renderItem={(legalCase) => (
+            <CaseCatalogCard legalCase={legalCase} />
+          )}
+          isLoading={browse.isLoading}
+          isError={browse.isError}
+          errorMessage={browse.errorMessage}
+          onRetry={browse.retry}
+          hasMore={browse.hasMore}
+          isLoadingMore={browse.isLoadingMore}
+          onLoadMore={browse.loadMore}
+          emptyTitle={t("empty.browseTitle")}
+          emptyDescription={t("empty.browseDescription")}
+        />
       )}
     </BrowseScreen>
   );

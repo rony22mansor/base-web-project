@@ -3,15 +3,14 @@
 import { Skeleton } from "@/src/shared/components/ui/skeleton";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { JudgmentMode } from "../enums/rulingEnums";
 
 /**
  * The wait is the defining feature of this screen: both retrieval pipelines,
  * the classifier and up to five LLM calls, returned in one piece with no
- * streaming. So it names the real duration for the mode that was chosen —
- * about a minute, or seconds — rather than showing an unbounded spinner.
+ * streaming, and the pipeline always runs in full — so this names that real
+ * duration, about a minute, rather than showing an unbounded spinner.
  */
-export function RulingLoadingState({ mode }: { mode: JudgmentMode }) {
+export function RulingLoadingState() {
   const t = useTranslations("rulingGenerator.loading");
 
   return (
@@ -25,7 +24,7 @@ export function RulingLoadingState({ mode }: { mode: JudgmentMode }) {
         <Loader2 className="text-text-tertiary size-8 animate-spin" />
         <h2 className="text-lg font-semibold">{t("title")}</h2>
         <p className="text-muted-foreground max-w-md text-sm">
-          {mode === JudgmentMode.Fast ? t("subtitleFast") : t("subtitle")}
+          {t("subtitle")}
         </p>
       </div>
 

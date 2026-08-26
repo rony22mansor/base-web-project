@@ -3,12 +3,9 @@
 import { useState } from "react";
 import { useCaseCatalog } from "../services/queries/useCaseCatalog";
 
-/** Cases per page in the browse grid. Two columns, so an even number. */
-const PAGE_SIZE = 10;
-
 /**
  * Drives the browse half of the precedents screen: the whole corpus, narrowed
- * by crime, outcome and year.
+ * by crime, outcome and year, loaded a page at a time as the reader scrolls.
  *
  * Every filter is a real request parameter, so the counts the server reports
  * always describe the set actually on screen. That is the opposite of the
@@ -19,54 +16,44 @@ export function useCaseBrowseScreen() {
   const [crime, setCrime] = useState<string | null>(null);
   const [outcome, setOutcome] = useState<string | null>(null);
   const [year, setYear] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
 
-  const query = useCaseCatalog({
-    crime,
-    outcome,
-    year,
-    page,
-    pageSize: PAGE_SIZE,
-  });
-  const catalog = query.data?.data;
-
-  /** Changing a filter invalidates the current page number. */
-  const applyFilter = (apply: () => void) => {
-    apply();
-    setPage(1);
-  };
+  const query = useCaseCatalog({ crime, outcome, year });
+  const pages = query.data?.pages ?? [];
+  // The facets are identical on every page of the same filter set — the
+  // server repeats them rather than paginating them — so the first page is
+  // enough and there is no "current page" of facets to reconcile.
+  const firstPage = pages[0];
 
   return {
     // filters
     crime,
-    setCrime: (value: string | null) => applyFilter(() => setCrime(value)),
+    setCrime,
     outcome,
-    setOutcome: (value: string | null) => applyFilter(() => setOutcome(value)),
+    setOutcome,
     year,
-    setYear: (value: string | null) => applyFilter(() => setYear(value)),
-    clearFilters: () =>
-      applyFilter(() => {
-        setCrime(null);
-        setOutcome(null);
-        setYear(null);
-      }),
+    setYear,
+    clearFilters: () => {
+      setCrime(null);
+      setOutcome(null);
+      setYear(null);
+    },
     hasFilters: !!(crime || outcome || year),
 
     // facets
-    categories: catalog?.categories ?? [],
-    outcomes: catalog?.availableOutcomes ?? [],
-    years: catalog?.availableYears ?? [],
+    categories: firstPage?.categories ?? [],
+    outcomes: firstPage?.availableOutcomes ?? [],
+    years: firstPage?.availableYears ?? [],
 
     // data
-    cases: catalog?.cases ?? [],
-    total: query.isPending ? undefined : catalog?.totalMatched,
-    totalCases: catalog?.totalCases ?? 0,
+    cases: pages.flatMap((page) => page.cases),
+    total: query.isPending ? undefined : firstPage?.totalMatched,
+    totalCases: firstPage?.totalCases ?? 0,
 
-    // paging. The corpus is served in pages rather than appended to, so the
-    // grid gets explicit page controls instead of "load more".
-    page: catalog?.page ?? page,
-    totalPages: catalog?.totalPages ?? 1,
-    goToPage: setPage,
+    // paging — the grid loads the next page itself as the reader scrolls to
+    // the end of the current one, rather than a page-number control.
+    hasMore: query.hasNextPage,
+    isLoadingMore: query.isFetchingNextPage,
+    loadMore: query.fetchNextPage,
 
     // request state
     isLoading: query.isPending,

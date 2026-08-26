@@ -59,14 +59,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       asChild
                       isActive={isNavItemActive(pathname, item.url)}
                       tooltip={{ children: label, side: tooltipSide }}
+                      // The default h-7 clips Arabic descenders (the dots
+                      // under ي) against the button's overflow-hidden — a
+                      // couple more px of height and line-height give them
+                      // room.
+                      className="h-9"
                     >
-                      <Link
-                        href={item.url}
-                        onClick={closeOnMobile}
-                        className="py-5"
-                      >
+                      <Link href={item.url} onClick={closeOnMobile}>
                         <item.icon className="size-4 opacity-70" />
-                        <span>{label}</span>
+                        <span className="leading-relaxed">{label}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

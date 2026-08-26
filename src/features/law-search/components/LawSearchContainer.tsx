@@ -2,6 +2,7 @@
 
 import { BrowseScreen } from "@/src/shared/components/browse/BrowseScreen";
 import { ResultsGrid } from "@/src/shared/components/browse/ResultsGrid";
+import { useTaskCompletionNotification } from "@/src/shared/hooks/useTaskCompletionNotification";
 import { useTranslations } from "next-intl";
 import { useLawSearchScreen } from "../hooks/useLawSearchScreen";
 import type { Law, LawArticle } from "../types/interfaces/lawInterface";
@@ -21,6 +22,21 @@ export function LawSearchContainer() {
   const t = useTranslations("lawSearch");
   const screen = useLawSearchScreen();
   const { isSearchMode } = screen;
+
+  // Cold retrieval costs ~45s — long enough that a reader who typed a query
+  // and switched tabs should find out the moment results are back. Guarded to
+  // search mode only: browsing the catalog is instant and not what this is
+  // for, even though `screen.isLoading` already covers that on its own.
+  useTaskCompletionNotification({
+    isLoading: isSearchMode && screen.isLoading,
+    isSuccess: isSearchMode && screen.isSuccess,
+    isError: isSearchMode && screen.isError,
+    tag: "law-search",
+    successTitle: t("notification.successTitle"),
+    successBody: t("notification.successBody"),
+    errorTitle: t("notification.errorTitle"),
+    errorBody: t("notification.errorBody"),
+  });
 
   return (
     <BrowseScreen

@@ -15,6 +15,12 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       className={cn(
         "bg-input-filled-color text-foreground placeholder:text-placeHolder selection:bg-link-bg file:text-foreground",
         "flex h-9 w-full min-w-0 rounded-sm border border-input ps-3 pe-3 text-base md:text-sm",
+        // Placeholder alignment follows the site's own direction — not the
+        // field's `dir`, which for `dir="auto"` fields defaults to LTR while
+        // empty and would otherwise left-align an Arabic placeholder in an
+        // RTL interface. `rtl:`/`ltr:` key off the page's `dir`, so this holds
+        // regardless of what the field itself resolves to once typed into.
+        "placeholder:text-left rtl:placeholder:text-right",
         "transition-[color,border-color,box-shadow] duration-120 ease-gentle outline-none",
         "hover:border-border-strong focus-visible:border-link focus-visible:ring-2 focus-visible:ring-ring/35",
         "file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium",

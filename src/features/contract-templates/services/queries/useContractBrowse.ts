@@ -8,8 +8,8 @@ import { contractTemplatesService } from "../contractTemplatesService";
 /** Everything that identifies a listing, minus the page cursor. */
 export type ContractBrowseFilters = Omit<ContractBrowseParams, "page">;
 
-/** Rows per page. The corpus is 211 templates, so this is four pages of grid. */
-const PAGE_SIZE = 24;
+/** Rows per page. The corpus is 211 templates, so this is about six loads. */
+const PAGE_SIZE = 40;
 
 /**
  * The browse listing.

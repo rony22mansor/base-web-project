@@ -105,7 +105,7 @@ export function SemanticSearchBar({
     <div className="bg-background shrink-0 border-t">
       <form
         onSubmit={submit}
-        className="mx-auto flex w-full max-w-4xl flex-col gap-1.5 px-4 py-3 md:px-6 lg:px-8"
+        className="mx-auto flex w-full max-w-4xl flex-col gap-1.5 px-3 py-3 md:px-5 lg:px-6"
       >
         <div
           className={cn(
@@ -131,7 +131,7 @@ export function SemanticSearchBar({
             onKeyDown={handleKeyDown}
             aria-label={placeholder}
             aria-invalid={Boolean(errorKey)}
-            className="placeholder:text-placeHolder max-h-40 min-h-11 flex-1 resize-none bg-transparent py-2.5 text-sm leading-relaxed outline-none"
+            className="placeholder:text-placeHolder max-h-40 min-h-11 flex-1 resize-none bg-transparent py-2.5 text-sm leading-relaxed outline-none placeholder:text-left rtl:placeholder:text-right"
           />
 
           {activeQuery && (

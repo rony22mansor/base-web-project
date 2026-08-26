@@ -5,6 +5,7 @@ import { AppRoutes } from "@/src/core/routing/app_routes";
 import { cn } from "@/src/core/utils/utils";
 import { FilterChipGroup } from "@/src/shared/components/browse/FilterChipGroup";
 import { ResultsGrid } from "@/src/shared/components/browse/ResultsGrid";
+import { ScrollToTopButton } from "@/src/shared/components/scroll-to-top-button";
 import { Button } from "@/src/shared/components/ui/button";
 import { Input } from "@/src/shared/components/ui/input";
 import { Skeleton } from "@/src/shared/components/ui/skeleton";
@@ -16,6 +17,7 @@ import {
   Search,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRef } from "react";
 import { useLawStatusOptions } from "../config/lawSearchConfig";
 import { useLawScreen, type LawView } from "../hooks/useLawScreen";
 import type { LawArticle } from "../types/interfaces/lawInterface";
@@ -33,9 +35,13 @@ export function LawDetailContainer({ lawId }: { lawId: string }) {
   const screen = useLawScreen(lawId);
   const statusOptions = useLawStatusOptions();
   const { law } = screen;
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 pt-8 md:px-6 md:pt-12 lg:px-8">
+    <div
+      ref={scrollRef}
+      className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 pt-8 md:px-5 md:pt-12 lg:px-6"
+    >
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 pb-16">
         <Link
           href={AppRoutes.lawSearch}
@@ -129,6 +135,8 @@ export function LawDetailContainer({ lawId }: { lawId: string }) {
           <BookPane screen={screen} />
         )}
       </div>
+
+      <ScrollToTopButton containerRef={scrollRef} />
     </div>
   );
 }

@@ -1,8 +1,7 @@
 import type { ApiResponse } from "@/src/core/network/apiInterfaces";
 import { apiClient } from "@/src/core/network/axios";
 import { API_ENDPOINTS } from "@/src/core/network/endpoints";
-import { JudgmentMode } from "../enums/rulingEnums";
-import type { JudgmentConfigOverrides, PredictJudgmentDto } from "../types/dtos";
+import type { PredictJudgmentDto } from "../types/dtos";
 import type {
   JudgmentConfig,
   JudgmentPrediction,
@@ -24,16 +23,6 @@ import {
  * that survivable; nothing here should be given a shorter one.
  */
 
-/**
- * The two stages the mode toggle controls. Thorough sends no overrides at all,
- * so the server's own defaults apply and stay authoritative — hard-coding
- * `true` here would silently pin the UI to today's defaults.
- */
-const modeToConfig = (mode: JudgmentMode): JudgmentConfigOverrides =>
-  mode === JudgmentMode.Fast
-    ? { use_fact_reorganization: false, use_statute_discrimination: false }
-    : {};
-
 export const rulingGeneratorService = {
   /**
    * Predict a preliminary ruling from a description of the facts.
@@ -41,13 +30,16 @@ export const rulingGeneratorService = {
    * On 502 the model returned unparseable output; the error body still carries
    * `data.evidence`, so a caller could show the retrieved context — the axios
    * interceptor keeps the whole body on the rejection for that reason.
+   *
+   * No `config` overrides are sent, so the server's own defaults apply — the
+   * full pipeline, every stage.
    */
   async predict(
     payload: PredictJudgmentDto,
   ): Promise<ApiResponse<JudgmentPrediction>> {
     const { data } = await apiClient.post<ApiResponse<JudgmentPredictionDto>>(
       API_ENDPOINTS.RULING_GENERATOR.PREDICT,
-      { text: payload.text, config: modeToConfig(payload.mode) },
+      { text: payload.text },
     );
 
     return { data: toJudgmentPrediction(data.data), succeeded: true };

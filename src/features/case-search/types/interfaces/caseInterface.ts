@@ -122,6 +122,9 @@ export interface CaseCatalogParams {
   pageSize?: number;
 }
 
+/** The catalog's filters, minus the page cursor — what identifies a listing. */
+export type CaseCatalogFilters = Omit<CaseCatalogParams, "page" | "pageSize">;
+
 /** One titled part of a judgment, e.g. "في الوقائع". */
 export interface CaseDocumentSection {
   /** The corpus's own Arabic heading — never translated. */

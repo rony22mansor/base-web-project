@@ -1,6 +1,7 @@
 "use client";
 
 import { Skeleton } from "@/src/shared/components/ui/skeleton";
+import { useTaskCompletionNotification } from "@/src/shared/hooks/useTaskCompletionNotification";
 import { useTranslations } from "next-intl";
 import { useRulingGenerator } from "../hooks/useRulingGenerator";
 import { RulingBlockedState } from "./RulingBlockedState";
@@ -15,6 +16,19 @@ export function RulingGeneratorContainer() {
   const t = useTranslations("rulingGenerator");
   const screen = useRulingGenerator();
 
+  // The wait is 40-90s of a single LLM-and-retrieval pass with no streaming
+  // — exactly the kind of gap a reader switches tabs during.
+  useTaskCompletionNotification({
+    isLoading: screen.isLoading,
+    isSuccess: screen.isSuccess,
+    isError: screen.isError,
+    tag: "ruling-generator",
+    successTitle: t("notification.successTitle"),
+    successBody: t("notification.successBody"),
+    errorTitle: t("notification.errorTitle"),
+    errorBody: t("notification.errorBody"),
+  });
+
   const renderStage = () => {
     // The availability check is instant; a spinner for it would flash.
     if (screen.isCheckingAvailability) {
@@ -26,7 +40,7 @@ export function RulingGeneratorContainer() {
       return <RulingBlockedState reason={screen.blockingReason} />;
     }
 
-    if (screen.isLoading) return <RulingLoadingState mode={screen.mode} />;
+    if (screen.isLoading) return <RulingLoadingState />;
 
     if (screen.isError) {
       return (
@@ -56,8 +70,6 @@ export function RulingGeneratorContainer() {
       <RulingInputForm
         defaultDescription={screen.description}
         onSubmit={screen.generate}
-        mode={screen.mode}
-        onModeChange={screen.setMode}
       />
     );
   };
