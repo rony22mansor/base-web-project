@@ -9,6 +9,12 @@ import {
   type LawsRagRequest,
   type LawsRagResponseDto,
 } from "./adapters/lawsRagAdapter";
+import {
+  toLegacyResult,
+  type LegacySearchRequest,
+  type LegacySearchResponseDto,
+  type LegacySearchResult,
+} from "./adapters/legacySearchAdapter";
 
 /**
  * Retrieval params sent with every semantic search. The server has its own
@@ -48,5 +54,23 @@ export const lawSearchService = {
     );
 
     return { data: toPagedResult(data.data, pageSize), succeeded: true };
+  },
+
+  /**
+   * جتهاد-only retrieval, via the legacy endpoint — the only one that covers
+   * jurisprudence at all. Used only when the reader turns that toggle on, in
+   * place of `search` above rather than alongside it.
+   */
+  async searchJurisprudence(
+    query: string,
+  ): Promise<ApiResponse<LegacySearchResult>> {
+    const body: LegacySearchRequest = { text: query, mode: "jurisprudence" };
+
+    const { data } = await apiClient.post<ApiResponse<LegacySearchResponseDto>>(
+      API_ENDPOINTS.LAW_SEARCH.LEGACY,
+      body,
+    );
+
+    return { data: toLegacyResult(data.data), succeeded: true };
   },
 };

@@ -1,11 +1,17 @@
 "use client";
 
+import { Link } from "@/src/core/i18n/navigation";
+import { AppRoutes } from "@/src/core/routing/app_routes";
 import { BrowseScreen } from "@/src/shared/components/browse/BrowseScreen";
 import { ResultsGrid } from "@/src/shared/components/browse/ResultsGrid";
+import { Label } from "@/src/shared/components/ui/label";
+import { Switch } from "@/src/shared/components/ui/switch";
 import { useTaskCompletionNotification } from "@/src/shared/hooks/useTaskCompletionNotification";
+import { Waypoints } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useLawSearchScreen } from "../hooks/useLawSearchScreen";
 import type { Law, LawArticle } from "../types/interfaces/lawInterface";
+import { JurisprudenceCard } from "./JurisprudenceCard";
 import { LawArticleCard } from "./LawArticleCard";
 import { LawCard } from "./LawCard";
 import { LawSearchFilters } from "./LawSearchFilters";
@@ -48,6 +54,33 @@ export function LawSearchContainer() {
       isSearching={screen.isSearching}
       onSearch={screen.search}
       onClearSearch={screen.clearSearch}
+      searchExtra={
+        <div className="flex items-center gap-2 px-1">
+          <Switch
+            id="include-jurisprudence"
+            checked={screen.includeJurisprudence}
+            onCheckedChange={screen.setIncludeJurisprudence}
+          />
+          <Label
+            htmlFor="include-jurisprudence"
+            className="text-text-secondary text-xs font-normal"
+          >
+            {t("jurisprudence.toggle")}
+          </Label>
+        </div>
+      }
+      headerAction={
+        // Only the penal code and the code of criminal procedure carry any
+        // internal citations, but the graph screen itself is what explains
+        // that — this is just the door to it.
+        <Link
+          href={AppRoutes.lawCitationGraph}
+          className="text-text-secondary hover:text-foreground hover:bg-accent inline-flex shrink-0 items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors"
+        >
+          <Waypoints className="size-4" />
+          {t("graph.navLabel")}
+        </Link>
+      }
       filters={
         <LawSearchFilters
           isSearchMode={isSearchMode}
@@ -62,20 +95,37 @@ export function LawSearchContainer() {
       }
     >
       {isSearchMode ? (
-        <ResultsGrid<LawArticle>
-          items={screen.articles}
-          getKey={(article) => article.id}
-          renderItem={(article) => <LawArticleCard article={article} />}
-          isLoading={screen.isLoading}
-          isError={screen.isError}
-          errorMessage={screen.errorMessage}
-          onRetry={screen.retry}
-          hasMore={screen.hasMore}
-          isLoadingMore={screen.isLoadingMore}
-          onLoadMore={screen.loadMore}
-          emptyTitle={t("empty.searchTitle")}
-          emptyDescription={t("empty.searchDescription")}
-        />
+        screen.isJurisprudenceMode ? (
+          <ResultsGrid<(typeof screen.jurisprudence)[number]>
+            items={screen.jurisprudence}
+            getKey={(item) => item.id}
+            renderItem={(item) => <JurisprudenceCard jurisprudence={item} />}
+            isLoading={screen.isLoading}
+            isError={screen.isError}
+            errorMessage={screen.errorMessage}
+            onRetry={screen.retry}
+            hasMore={false}
+            isLoadingMore={false}
+            onLoadMore={() => {}}
+            emptyTitle={t("jurisprudence.emptyTitle")}
+            emptyDescription={t("jurisprudence.emptyDescription")}
+          />
+        ) : (
+          <ResultsGrid<LawArticle>
+            items={screen.articles}
+            getKey={(article) => article.id}
+            renderItem={(article) => <LawArticleCard article={article} />}
+            isLoading={screen.isLoading}
+            isError={screen.isError}
+            errorMessage={screen.errorMessage}
+            onRetry={screen.retry}
+            hasMore={screen.hasMore}
+            isLoadingMore={screen.isLoadingMore}
+            onLoadMore={screen.loadMore}
+            emptyTitle={t("empty.searchTitle")}
+            emptyDescription={t("empty.searchDescription")}
+          />
+        )
       ) : (
         <ResultsGrid<Law>
           items={screen.laws}

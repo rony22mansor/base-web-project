@@ -274,6 +274,14 @@
       "open": "Read the article",
       "repealedShort": "Repealed"
     },
+    "jurisprudence": {
+      "toggle": "Jurisprudence only (اجتهادات)",
+      "open": "Read the interpretation",
+      "jtihadLabel": "Interpretation",
+      "articleLabel": "Interpreted article",
+      "emptyTitle": "No jurisprudence found",
+      "emptyDescription": "No judicial interpretation matched your description with enough confidence. Try rephrasing it with more detail."
+    },
     "empty": {
       "title": "No articles here",
       "description": "No article matches the selected filters. Try clearing a filter.",
@@ -320,6 +328,23 @@
       "successBody": "MONSIF finished retrieving articles for your query.",
       "errorTitle": "The search failed",
       "errorBody": "Something went wrong while retrieving articles."
+    },
+    "graph": {
+      "backToLaws": "All laws",
+      "title": "Citation graph",
+      "description": "How this law's own articles cite each other. Only the penal code and the code of criminal procedure carry any internal citations in this corpus — every other law's graph would have nodes and no connections.",
+      "lawSwitch": "Law",
+      "includeIsolated": "Show uncited articles",
+      "searchPlaceholder": "Article number…",
+      "nodeCount": "{shown} of {total} articles shown",
+      "errorTitle": "Could not load this law's articles",
+      "errorDescription": "Something went wrong contacting the server. Please try again.",
+      "canvasLabel": "Citation graph — drag to pan, scroll to zoom, click an article to open it",
+      "degree": "Cites {cites} · Cited by {citedBy}",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "legendHint": "Larger circle = more citations. Click an article to open it.",
+      "navLabel": "Citation graph"
     }
   },
   "caseSearch": {

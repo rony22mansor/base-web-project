@@ -9,6 +9,8 @@ export const QUERY_KEYS = {
   JUDGMENT_CONFIG: "judgmentConfig",
 
   LAW_SEARCH: "lawSearch",
+  /** Legacy combined search: articles + جتهاد, used only when that toggle is on. */
+  LAW_SEARCH_JURISPRUDENCE: "lawSearchJurisprudence",
   LAW_ARTICLE: "lawArticle",
   LAW_CATEGORIES: "lawCategories",
   /** Catalog: the list of laws + their group roll-up. */

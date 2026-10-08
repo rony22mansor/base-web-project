@@ -53,6 +53,11 @@ export const API_ENDPOINTS = {
     SEMANTIC: "/api/legal/laws/search",
     /** Server defaults, the request-tunable names, and `loaded`. */
     CONFIG: "/api/legal/laws/config",
+    /**
+     * Legacy combined FAISS search — the only endpoint that also covers
+     * جتهاد (jurisprudence). POST, see services/adapters/legacySearchAdapter.ts.
+     */
+    LEGACY: "/api/legal/search",
   },
 
   /**

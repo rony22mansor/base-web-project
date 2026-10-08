@@ -52,7 +52,9 @@ export function RulingVerdictCard({
         <div className="bg-accent/50 flex items-start gap-2.5 rounded-md p-3">
           <Scale className="text-text-secondary mt-0.5 size-4 shrink-0" />
           <div className="flex min-w-0 flex-col gap-0.5">
-            <span className="notion-label text-[11px]">{t("penaltyTitle")}</span>
+            <span className="notion-label text-[11px]">
+              {t("penaltyTitle")}
+            </span>
             <p dir="rtl" className="text-sm leading-relaxed">
               {prediction.suggestedPenaltyRange}
             </p>

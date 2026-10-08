@@ -38,10 +38,8 @@ export interface CompletionNotificationOptions {
 }
 
 /**
- * Notify that a task finished — but only if the reader is not already looking
- * at it: permission must be granted, and the tab must be hidden or the
- * window unfocused. A notification for a result already on screen would just
- * duplicate what the reader can see.
+ * Notify that a task finished. Fires whenever permission is granted,
+ * regardless of whether the tab is currently visible/focused.
  */
 export function notifyTaskComplete({
   title,
@@ -49,7 +47,6 @@ export function notifyTaskComplete({
   tag,
 }: CompletionNotificationOptions): void {
   if (!isSupported() || Notification.permission !== "granted") return;
-  if (document.visibilityState === "visible" && document.hasFocus()) return;
 
   const notification = new Notification(title, { body, tag });
 

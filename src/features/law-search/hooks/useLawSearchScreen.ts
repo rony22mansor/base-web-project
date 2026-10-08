@@ -4,6 +4,7 @@ import type { ArticleStatus } from "@/src/core/enums/legalDomain";
 import { requestNotificationPermission } from "@/src/core/services/notifications/browserNotifications";
 import { useMemo, useState } from "react";
 import { useLawCatalog } from "../services/queries/useLawCatalog";
+import { useLawJurisprudenceSearch } from "../services/queries/useLawJurisprudenceSearch";
 import { useLawSemanticSearch } from "../services/queries/useLawSemanticSearch";
 import type { Law } from "../types/interfaces/lawInterface";
 
@@ -30,14 +31,24 @@ export function useLawSearchScreen() {
   const [group, setGroup] = useState<string | null>(null);
   const [nameFilter, setNameFilter] = useState("");
   const [status, setStatus] = useState<ArticleStatus | null>(null);
+  const [includeJurisprudence, setIncludeJurisprudence] = useState(false);
 
   const isSearchMode = query.length > 0;
+  const isJurisprudenceMode = isSearchMode && includeJurisprudence;
 
   const catalog = useLawCatalog();
+  // The rich retrieval path (dependencies, pagination, the repealed filter) —
+  // stays the default. Only skipped while the jurisprudence toggle is on,
+  // since that trades this endpoint for the legacy one below.
   const search = useLawSemanticSearch({
-    query: query || undefined,
+    query: isJurisprudenceMode ? undefined : query || undefined,
     status: status ?? undefined,
   });
+  // The legacy combined endpoint is the only one that also covers جتهاد, so
+  // it takes over entirely while the toggle is on — see legacySearchAdapter.
+  const jurisprudenceSearch = useLawJurisprudenceSearch(
+    isJurisprudenceMode ? query : "",
+  );
 
   const allLaws = useMemo(() => catalog.data?.data.laws ?? [], [catalog.data]);
 
@@ -54,18 +65,26 @@ export function useLawSearchScreen() {
   const pages = search.data?.pages ?? [];
   const articles = pages.flatMap((page) => page.items);
 
+  // Jurisprudence-only: the toggle replaces article retrieval entirely
+  // rather than adding to it, so there is never an "articles" side to show
+  // alongside it.
+  const jurisprudence = jurisprudenceSearch.data?.data.jurisprudence ?? [];
+
   return {
     // mode
     isSearchMode,
+    isJurisprudenceMode,
 
     // filters
     query,
     group,
     nameFilter,
     status,
+    includeJurisprudence,
     setGroup,
     setNameFilter,
     setStatus,
+    setIncludeJurisprudence,
     // Asked for here, inside the click that starts the search: browsers only
     // show the permission prompt in response to a user gesture, and a request
     // made later — once retrieval is already in flight — is silently ignored.
@@ -82,30 +101,53 @@ export function useLawSearchScreen() {
 
     // search data
     articles,
+    jurisprudence,
 
     // the summary line counts whichever mode is showing
     total: isSearchMode
-      ? search.isPending
+      ? (isJurisprudenceMode ? jurisprudenceSearch.isPending : search.isPending)
         ? undefined
-        : articles.length
+        : isJurisprudenceMode
+          ? jurisprudence.length
+          : articles.length
       : catalog.isPending
         ? undefined
         : laws.length,
 
     // request state, taken from whichever query is driving the view
-    isLoading: isSearchMode ? search.isPending : catalog.isPending,
+    isLoading: isSearchMode
+      ? isJurisprudenceMode
+        ? jurisprudenceSearch.isPending
+        : search.isPending
+      : catalog.isPending,
     isSearching: isSearchMode
-      ? search.isFetching && !search.isFetchingNextPage
+      ? isJurisprudenceMode
+        ? jurisprudenceSearch.isFetching
+        : search.isFetching && !search.isFetchingNextPage
       : catalog.isFetching,
     // Scoped to search mode only, unlike `isError` below: browsing the
     // catalog "succeeding" is not an event worth a notification about.
-    isSuccess: isSearchMode && search.isSuccess,
-    isError: isSearchMode ? search.isError : catalog.isError,
+    isSuccess: isSearchMode
+      ? isJurisprudenceMode
+        ? jurisprudenceSearch.isSuccess
+        : search.isSuccess
+      : false,
+    isError: isSearchMode
+      ? isJurisprudenceMode
+        ? jurisprudenceSearch.isError
+        : search.isError
+      : catalog.isError,
     errorMessage: isSearchMode
-      ? search.error?.message
+      ? isJurisprudenceMode
+        ? jurisprudenceSearch.error?.message
+        : search.error?.message
       : catalog.error?.message,
-    retry: isSearchMode ? search.refetch : catalog.refetch,
-    hasMore: isSearchMode && search.hasNextPage,
+    retry: isSearchMode
+      ? isJurisprudenceMode
+        ? jurisprudenceSearch.refetch
+        : search.refetch
+      : catalog.refetch,
+    hasMore: isSearchMode && !isJurisprudenceMode && search.hasNextPage,
     isLoadingMore: search.isFetchingNextPage,
     loadMore: search.fetchNextPage,
   };

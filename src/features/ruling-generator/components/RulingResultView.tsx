@@ -48,6 +48,14 @@ export function RulingResultView({
 
   return (
     <div className="flex flex-col gap-6">
+      <details className="text-muted-foreground rounded-md border p-4 text-sm">
+        <summary className="cursor-pointer font-medium">
+          {t("yourDescription")}
+        </summary>
+        <p dir="rtl" className="mt-3 leading-relaxed whitespace-pre-line">
+          {description}
+        </p>
+      </details>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-bold">{t("rulingTitle")}</h2>
         <Button variant="outline" onClick={onNewQuery} className="gap-2">
@@ -155,15 +163,6 @@ export function RulingResultView({
           </ul>
         </details>
       )}
-
-      <details className="text-muted-foreground rounded-md border p-4 text-sm">
-        <summary className="cursor-pointer font-medium">
-          {t("yourDescription")}
-        </summary>
-        <p dir="rtl" className="mt-3 leading-relaxed whitespace-pre-line">
-          {description}
-        </p>
-      </details>
 
       <p className="text-muted-foreground flex items-start gap-2 border-t pt-4 text-xs">
         <Info className="mt-0.5 size-4 shrink-0" />

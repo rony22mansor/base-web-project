@@ -24,6 +24,8 @@ interface SemanticSearchBarProps {
   onSubmit: (query: string) => void;
   /** Drop the query and go back to plain browsing. */
   onClear: () => void;
+  /** Extra controls rendered under the input, above the hint — e.g. a toggle. */
+  belowInput?: React.ReactNode;
 }
 
 const MIN_ROWS_PX = 44;
@@ -41,6 +43,7 @@ export function SemanticSearchBar({
   isSearching,
   onSubmit,
   onClear,
+  belowInput,
 }: SemanticSearchBarProps) {
   const t = useTranslations("browse.search");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -164,6 +167,8 @@ export function SemanticSearchBar({
             </Button>
           </span>
         </div>
+
+        {belowInput}
 
         <p
           className={cn(

@@ -20,6 +20,10 @@
     {
       "key": "article_id",
       "value": "مرسوم تشريعي رقم 148 لعام 1949 - قانون العقوبات العام:622"
+    },
+    {
+      "key": "case_uid",
+      "value": "400_verified_illegal_entry.docx"
     }
   ],
   "item": [
@@ -303,7 +307,7 @@
                 }
               ]
             },
-            "description": "Every article of one law with all its info, grouped into that law's internal كتاب/باب/فصل categories. Set the law_id collection variable from the /laws response — it contains Arabic and spaces, so URL-encode it. Accepts the law_id, the full law_name, or the short_name."
+            "description": "Every article of one law with all its info, grouped into that law's internal كتاب/باب/فصل categories. Set the law_id collection variable from the /laws response — it contains Arabic and spaces, so URL-encode it. Accepts the law_id, the full law_name, or the short_name. Each article now also includes 'body_links': character-offset spans into 'body' marking reference phrases, each with a 'targets' list (article_id/article_number/law_id) to build clickable in-text links."
           }
         },
         {
@@ -352,7 +356,87 @@
                 "{{article_id}}"
               ]
             },
-            "description": "One article by its full composite id. Use it to resolve entries in another article's 'dependencies' list into a linked-article view."
+            "description": "One article by its full composite id. Use it to resolve entries in another article's 'dependencies' list into a linked-article view. Includes 'body_links': character-offset spans into 'body' marking reference phrases, each with a 'targets' list (article_id/article_number/law_id) to build clickable in-text links."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4b. Cases catalog (browse)",
+      "item": [
+        {
+          "name": "GET /api/legal/cases — all cases",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/legal/cases",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "legal",
+                "cases"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "نشل",
+                  "disabled": true,
+                  "description": "Search case number, crimes or text preview"
+                },
+                {
+                  "key": "crime",
+                  "value": "النشل",
+                  "disabled": true,
+                  "description": "Filter by crime/category (see 'categories' in the response)"
+                },
+                {
+                  "key": "year",
+                  "value": "2022",
+                  "disabled": true,
+                  "description": "Filter by decision_year"
+                },
+                {
+                  "key": "outcome",
+                  "value": "إدانة",
+                  "disabled": true,
+                  "description": "Filter by outcome"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "per_page",
+                  "value": "20",
+                  "disabled": true,
+                  "description": "Omit to get every case"
+                }
+              ]
+            },
+            "description": "Summary of every case (302) with pagination and filters. Reads standard_cases.json only — no models, no FAISS, instant. Returns a 'categories' roll-up (crimes with counts) plus 'available_years' and 'available_outcomes' you can use to build a browse/filter UI, the same way /laws does for law categories."
+          }
+        },
+        {
+          "name": "GET /api/legal/cases/:case_uid — one case",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/legal/cases/{{case_uid}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "legal",
+                "cases",
+                "{{case_uid}}"
+              ],
+              "query": []
+            },
+            "description": "One case with every section (facts, claims, reasoning, judgment, etc). Set the case_uid collection variable from the /cases response (its 'case_uid' field, i.e. file_name). Also accepts a bare case_number as fallback."
           }
         }
       ]

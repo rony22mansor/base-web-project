@@ -26,7 +26,7 @@ export function CaseOutcomeBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-sm px-1.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center rounded-sm px-1.5 py-0.5 text-lg font-medium",
         TONE_STYLES[outcomeTone(outcome)],
         className,
       )}

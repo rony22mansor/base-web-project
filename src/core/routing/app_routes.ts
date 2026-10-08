@@ -22,6 +22,12 @@ export class AppRoutes {
   static law = (lawId: string) => `/law-search/${encodeURIComponent(lawId)}`;
   /** Same law, read straight through as a book (chapters + sections). */
   static lawBook = (lawId: string) => `${AppRoutes.law(lawId)}?view=book`;
+  /**
+   * How the penal code's and the criminal procedure code's own articles cite
+   * each other, as a graph. A static segment, not `AppRoutes.law` — it picks
+   * between exactly those two laws itself rather than opening one by id.
+   */
+  static lawCitationGraph = "/law-search/graph";
   static caseDetail = (id: string) => `/case-search/${id}`;
   /**
    * The fill-in editor for one template. Doc ids carry a `#`
